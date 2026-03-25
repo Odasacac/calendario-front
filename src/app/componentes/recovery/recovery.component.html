@@ -1,0 +1,18 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <h1 class="title">Recuperar contraseña</h1>
+
+    <form #forgotForm="ngForm" (ngSubmit)="recoverPassword(forgotForm)">
+
+      <label for="user">Correo electrónico o usuario</label>
+      <input id="user" name="user" type="text" [(ngModel)]="userEmail" required />
+      <div class="error" *ngIf="forgotForm.submitted && !userEmail">Este campo es obligatorio</div>
+
+      <button type="submit">Recuperar</button>
+      <button type="button" class="secondary" (click)="goLogin()">Volver al login</button>
+
+    </form>
+
+  </div>
+</div>

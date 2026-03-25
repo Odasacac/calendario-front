@@ -1,0 +1,30 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <h1 class="title">Crear nueva cuenta</h1>
+
+    <form #registerForm="ngForm" (ngSubmit)="createAccount(registerForm)">
+
+      <label for="nombre">Nombre</label>
+      <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" required />
+      <div class="error" *ngIf="registerForm.submitted && !nombre">Este campo es obligatorio</div>
+
+      <label for="apellido">Primer apellido</label>
+      <input id="apellido" name="apellido" type="text" [(ngModel)]="apellido" required />
+      <div class="error" *ngIf="registerForm.submitted && !apellido">Este campo es obligatorio</div>
+
+      <label for="correo">Correo electrónico</label>
+      <input id="correo" name="correo" type="email" [(ngModel)]="correo" required />
+      <div class="error" *ngIf="registerForm.submitted && !correo">Este campo es obligatorio</div>
+
+      <label for="fecha">Fecha de nacimiento</label>
+      <input id="fecha" name="fecha" type="date" [(ngModel)]="fecha" required />
+      <div class="error" *ngIf="registerForm.submitted && !fecha">Este campo es obligatorio</div>
+
+      <button type="submit">Crear nueva cuenta</button>
+      <button type="button" class="secondary" (click)="goLogin()">Volver al login</button>
+
+    </form>
+
+  </div>
+</div>

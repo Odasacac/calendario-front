@@ -1,0 +1,100 @@
+/* Fondo general */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1b5e20, #81c784);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Tarjeta */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  width: 360px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.login-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Títulos */
+.title {
+  font-size: 20px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+label {
+  text-align: left;
+  font-size: 14px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+/* Input */
+input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #a5d6a7;
+  outline: none;
+  background: #f1f8e9;
+  color: #1b5e20;
+  transition: all 0.2s;
+}
+
+input:focus {
+  border-color: #66bb6a;
+  background: #ffffff;
+  box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+}
+
+/* Botones */
+button {
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #fb8c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+button:hover {
+  background: #ef6c00;
+  transform: translateY(-2px);
+}
+
+/* Botón secundario */
+button.secondary {
+  background: #e0e0e0;
+  color: #1b5e20;
+  margin-top: 8px;
+}
+
+button.secondary:hover {
+  background: #cfcfcf;
+  transform: translateY(-2px);
+}
+
+.error {
+  color: #d32f2f; /* rojo */
+  font-size: 12px;
+  margin-top: 2px;
+  text-align: left;
+}

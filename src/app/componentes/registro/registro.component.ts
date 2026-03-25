@@ -4,35 +4,29 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-registro',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './registro.component.html',
+  styleUrl: './registro.component.css'
 })
-export class LoginComponent {
-  user = '';
-  password = '';
+export class RegistroComponent {
+ nombre = '';
+  apellido = '';
+  correo = '';
+  fecha = '';
+
   constructor(private router: Router) {}
 
-  goHome(form: NgForm) {
+  createAccount(form: NgForm) {
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
-    else{
-      // TO DO
-      this.router.navigate(['/home']);
-    }
-  
+    // TO DO
   }
 
-  goRegister() {
-    this.router.navigate(['/register']);
+  goLogin() {
+    this.router.navigate(['/login']);
   }
-
-  goRecovery() {
-    this.router.navigate(['/recovery']);
-  }
-
 }

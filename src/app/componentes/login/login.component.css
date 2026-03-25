@@ -1,0 +1,155 @@
+/* Fondo general */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1b5e20, #81c784); /* verde más suave hacia claro */
+  font-family: 'Arial', sans-serif;
+}
+
+/* Tarjeta */
+.login-card {
+  background: rgba(255, 255, 255, 0.95); /* un poquito más luminosa */
+  padding: 40px;
+  border-radius: 20px; /* bordes un poco más redondeados */
+  width: 360px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15); /* sombra más suave */
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.login-card:hover {
+  transform: translateY(-3px); /* efecto muy sutil de “levitar” */
+}
+
+/* Títulos */
+.title {
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+.subtitle {
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: #ef6c00;
+  font-weight: 500;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+label {
+  text-align: left;
+  font-size: 14px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+/* Inputs */
+input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #a5d6a7;
+  outline: none;
+  background: #f1f8e9;
+  color: #1b5e20;
+  transition: all 0.2s;
+}
+
+input:focus {
+  border-color: #66bb6a;
+  background: #ffffff;
+  box-shadow: 0 0 5px rgba(102, 187, 106, 0.5); /* brillo verde suave */
+}
+
+/* Botón */
+button {
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #fb8c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+button:hover {
+  background: #ef6c00;
+  transform: translateY(-2px);
+}
+
+/* Texto extra */
+.forgot-password,
+.switch {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef6c00;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.forgot-password:hover,
+.switch:hover {
+  color: #bf360c;
+  text-decoration: underline;
+  transform: translateY(-1px);
+}
+
+.switch:active {
+  transform: scale(0.97);
+}
+
+.switch::after {
+  content: " →";
+  transition: 0.2s;
+}
+
+.switch:hover::after {
+  margin-left: 5px;
+}
+
+.forgot-password,
+.switch {
+  display: block;        /* se asegura que cada uno ocupe su línea */
+  margin-top: 15px;      /* espacio desde el elemento anterior */
+  margin-bottom: 0;      /* opcional, limpia margenes extra */
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef6c00;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.forgot-password:hover,
+.switch:hover {
+  color: #bf360c;
+  text-decoration: underline;
+  transform: translateY(-1px);
+}
+
+.switch::after {
+  content: " →";
+  transition: 0.2s;
+}
+
+.switch:hover::after {
+  margin-left: 5px;
+}
+
+.error {
+  color: #d32f2f; /* rojo */
+  font-size: 12px;
+  margin-top: 2px;
+  text-align: left;
+}

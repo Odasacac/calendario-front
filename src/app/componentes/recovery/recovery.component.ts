@@ -4,35 +4,27 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-recovery',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './recovery.component.html',
+  styleUrl: './recovery.component.css'
 })
-export class LoginComponent {
-  user = '';
-  password = '';
+export class RecoveryComponent {
+
+ userEmail = '';
+
   constructor(private router: Router) {}
 
-  goHome(form: NgForm) {
+  recoverPassword(form: NgForm) {
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
-    else{
-      // TO DO
-      this.router.navigate(['/home']);
-    }
-  
+    // TO DO
   }
 
-  goRegister() {
-    this.router.navigate(['/register']);
+  goLogin() {
+    this.router.navigate(['/login']);
   }
-
-  goRecovery() {
-    this.router.navigate(['/recovery']);
-  }
-
 }
