@@ -1,0 +1,34 @@
+<div class="date-vau-container">
+
+  <h2 class="date-title" *ngIf="fecha">{{ formatFecha(fecha) }}</h2>
+
+  <!-- Spinner mientras carga -->
+  <div *ngIf="loading" class="spinner">
+    Cargando datos...
+  </div>
+
+  <!-- Mostrar datos solo si no está cargando -->
+  <div *ngIf="!loading && data">
+
+    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>
+    <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
+    <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
+    <p><strong>Mes:</strong> {{ data.month.name }}</p>
+    <p><strong>Semana:</strong> {{ data.week }}</p>
+    <p><strong>Día:</strong> {{ data.day }}</p>
+    <p *ngIf="data.notableEvent"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
+
+    <button (click)="toggleMore()">
+  {{ showMore ? 'Menos' : 'Mas' }}
+</button>
+
+    <div *ngIf="showMore">
+      <p><strong>Eclipses absolutos desde el eclípeno:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
+      <div *ngIf="data.casalero">
+        <p><strong>Casalero:</strong> {{ data.casalero.tipo }}</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>

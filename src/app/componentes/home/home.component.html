@@ -1,1 +1,37 @@
-<p>home works!</p>
+<div class="home-container">
+  <div class="home-card">
+
+    <h1 class="title">Calendario para vivir en armonía con el universo</h1>
+
+    <div class="date-section">
+      <!-- Componente de fecha -->
+      <app-date-vau [fecha]="fecha"></app-date-vau>
+
+      <!-- Botón “Hoy”, solo si la fecha no es hoy -->
+      <button 
+        *ngIf="fecha !== today" 
+        (click)="volverHoy()" 
+        class="today-btn">
+        Hoy
+      </button>
+    </div>
+
+    <!-- Botones principales -->
+    <div class="actions">
+      <button (click)="openPdf()">PDF explicativo</button>
+      <button (click)="buscarFecha()">Buscar una fecha</button>
+    </div>
+
+    <!-- Calendario oculto -->
+    <input
+      *ngIf="showDatePicker"
+      type="date"
+      [value]="fecha"
+      (change)="onFechaSeleccionada($event)"
+    />
+
+    <!-- Footer -->
+    <p class="author">Por Carlos Casado Aguilera</p>
+
+  </div>
+</div>

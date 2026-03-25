@@ -1,0 +1,106 @@
+/* Fondo general */
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1b5e20, #81c784);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Tarjeta principal */
+.home-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  width: 380px;
+  max-width: 90%;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  /* No hay hover en toda la tarjeta */
+}
+
+/* Título */
+.title {
+  font-size: 22px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+/* Contenedor de fecha y botón Hoy */
+.date-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* Botón “Hoy” */
+.today-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #43a047;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.today-btn:hover {
+  background: #2e7d32;
+  transform: translateY(-2px);
+}
+
+/* Botones principales */
+.actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.actions button {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #fb8c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.actions button:hover {
+  background: #ef6c00;
+  transform: translateY(-2px);
+}
+
+/* Calendario input */
+input[type="date"] {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #a5d6a7;
+  outline: none;
+  background: #f1f8e9;
+  color: #1b5e20;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+input[type="date"]:focus {
+  border-color: #66bb6a;
+  background: #ffffff;
+  box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+}
+
+/* Footer */
+.author {
+  margin-top: 20px;
+  color: #1b5e20;
+  font-size: 13px;
+  opacity: 0.8;
+}
