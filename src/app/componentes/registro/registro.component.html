@@ -6,19 +6,23 @@
     <form #registerForm="ngForm" (ngSubmit)="createAccount(registerForm)">
 
       <label for="nombre">Nombre</label>
-      <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" required />
+      <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" required #nombreCtrl="ngModel"/>
       <div class="error" *ngIf="registerForm.submitted && !nombre">Este campo es obligatorio</div>
 
       <label for="apellido">Primer apellido</label>
-      <input id="apellido" name="apellido" type="text" [(ngModel)]="apellido" required />
+      <input id="apellido" name="apellido" type="text" [(ngModel)]="apellido" required #apellidoCtrl="ngModel"/>
       <div class="error" *ngIf="registerForm.submitted && !apellido">Este campo es obligatorio</div>
 
       <label for="correo">Correo electrónico</label>
-      <input id="correo" name="correo" type="email" [(ngModel)]="correo" required />
+      <input id="correo" name="correo" type="text" [(ngModel)]="correo" required
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" #correoCtrl="ngModel"/>
       <div class="error" *ngIf="registerForm.submitted && !correo">Este campo es obligatorio</div>
+      <div class="error" *ngIf="registerForm.submitted && correo && correoCtrl.errors?.['pattern']">
+        Introduce un email válido
+      </div>
 
       <label for="fecha">Fecha de nacimiento</label>
-      <input id="fecha" name="fecha" type="date" [(ngModel)]="fecha" required />
+      <input id="fecha" name="fecha" type="date" [(ngModel)]="fecha" required #fechaCtrl="ngModel"/>
       <div class="error" *ngIf="registerForm.submitted && !fecha">Este campo es obligatorio</div>
 
       <button type="submit">Crear nueva cuenta</button>
