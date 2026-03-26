@@ -153,9 +153,15 @@ button:hover {
   height: 40px;
   margin: 0 auto;
   border: 4px solid #c8e6c9;       /* borde gris claro */
-  border-top: 4px solid #2e7d32;   /* borde verde */
+  border-top: 4px solid #2e7d32;    /* borde verde */
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite; /* esto hace que gire */
+}
+
+/* Animación de giro */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Texto debajo del spinner */
