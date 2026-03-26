@@ -25,7 +25,7 @@
     <p *ngIf="data.notableEvent"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
 
     <button (click)="toggleMore()">
-      {{ showMore ? 'Menos' : 'Mas' }}
+      {{ showMore ? 'Menos detalles' : 'Más detalles' }}
     </button>
 
     <div *ngIf="showMore" class="more">
