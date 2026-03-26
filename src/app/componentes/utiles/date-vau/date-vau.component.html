@@ -3,9 +3,10 @@
   <h2 class="date-title" *ngIf="fecha">{{ formatFecha(fecha) }}</h2>
 
   <!-- Spinner mientras carga -->
-  <div *ngIf="loading" class="spinner">
-    Cargando datos...
-  </div>
+<div *ngIf="loading" class="spinner-container">
+  <div class="spinner"></div>
+  <p>Cargando datos...</p>
+</div>
 
   <!-- Mostrar datos solo si no está cargando -->
   <div *ngIf="!loading && data">
