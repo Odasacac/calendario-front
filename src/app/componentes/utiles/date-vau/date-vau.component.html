@@ -2,9 +2,9 @@
 
   <!-- Título con flechas -->
 <div class="date-header">
-  <button class="arrow-btn" (click)="cambiarFecha(-1)">&larr;</button>
+  <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(-1)">&larr;</button>
   <h2 class="date-title" *ngIf="fechaActual">{{ formatFecha(fechaActual) }}</h2>
-  <button class="arrow-btn" (click)="cambiarFecha(1)">&rarr;</button>
+  <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(1)">&rarr;</button>
 </div>
 
   <!-- Spinner mientras carga -->
@@ -36,5 +36,10 @@
     </div>
 
   </div>
+
+ <div *ngIf="!data && !loading" class="error-message">
+  <p>No se han podido obtener los datos</p>
+  <button class="retry-btn" (click)="cargarDatos(fechaActual)">Reintentar</button>
+</div>
 
 </div>
