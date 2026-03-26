@@ -1,12 +1,17 @@
 <div class="date-vau-container">
 
-  <h2 class="date-title" *ngIf="fecha">{{ formatFecha(fecha) }}</h2>
+  <!-- Título con flechas -->
+<div class="date-header">
+  <button class="arrow-btn" (click)="cambiarFecha(-1)">&larr;</button>
+  <h2 class="date-title" *ngIf="fechaActual">{{ formatFecha(fechaActual) }}</h2>
+  <button class="arrow-btn" (click)="cambiarFecha(1)">&rarr;</button>
+</div>
 
   <!-- Spinner mientras carga -->
-<div *ngIf="loading" class="spinner-container">
-  <div class="spinner"></div>
-  <p>Cargando datos...</p>
-</div>
+  <div *ngIf="loading" class="spinner-container">
+    <div class="spinner"></div>
+    <p>Cargando datos...</p>
+  </div>
 
   <!-- Mostrar datos solo si no está cargando -->
   <div *ngIf="!loading && data">
@@ -15,15 +20,15 @@
     <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
     <p><strong>Mes:</strong> {{ data.month.name }}</p>
-    <p><strong>Semana:</strong> {{ data.week }}</p>
+    <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p *ngIf="data.notableEvent"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
 
     <button (click)="toggleMore()">
-  {{ showMore ? 'Menos' : 'Mas' }}
-</button>
+      {{ showMore ? 'Menos' : 'Mas' }}
+    </button>
 
-    <div *ngIf="showMore">
+    <div *ngIf="showMore" class="more">
       <p><strong>Eclipses absolutos desde el eclípeno:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
       <div *ngIf="data.casalero">
         <p><strong>Casalero:</strong> {{ data.casalero.tipo }}</p>

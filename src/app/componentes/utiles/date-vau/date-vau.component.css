@@ -170,3 +170,38 @@ button:hover {
   color: #2e7d32;
   font-weight: bold;
 }
+
+.date-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* espacio debajo del header */
+  gap: 5px;
+}
+
+/* Flechas pequeñas con menos margen lateral y algo de padding vertical */
+.arrow-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2em;
+  color: #2e7d32;
+  cursor: pointer;
+  padding: 4px 4px;  /* menos horizontal, un poco vertical */
+  line-height: 1.2;
+  transition: color 0.2s;
+}
+
+.arrow-btn:hover {
+  color: #1b5e20;
+}
+
+/* Título centrado y con más espacio vertical */
+.date-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #1b5e20;
+  margin: 0 5px;      /* menos espacio lateral con las flechas */
+  padding: 4px 0;     /* un poco de espacio vertical */
+  white-space: nowrap; /* que no se rompa en varias líneas */
+}

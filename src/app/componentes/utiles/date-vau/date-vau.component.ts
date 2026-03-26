@@ -14,6 +14,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
 
   @Input() fecha!: string;
 
+  fechaActual!: string;
   data?: VAUResponse;
   showMore = false;
   loading = false; // <-- nuevo flag
@@ -21,17 +22,18 @@ export class DateVAUComponent implements OnInit, OnChanges {
   constructor(private dateService: DatesService) {}
 
   ngOnInit(): void {
-    if (this.fecha) {
-      this.cargarDatos(this.fecha);
-    }
+  this.fechaActual = this.fecha; // inicializamos desde el input
+  if (this.fechaActual) {
+    this.cargarDatos(this.fechaActual);
   }
-
+}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
-      this.cargarDatos(this.fecha);
-    }
-    this.showMore=false;
+  if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
+    this.fechaActual = this.fecha;
+    this.cargarDatos(this.fechaActual);
+    this.showMore = false;
   }
+}
 
   cargarDatos(fecha: string) {
     this.loading = true; // inicio del spinner
@@ -56,4 +58,28 @@ export class DateVAUComponent implements OnInit, OnChanges {
     const [year, month, day] = fecha.split('-');
     return `${day}-${month}-${year}`;
   }
+
+cambiarFecha(dias: number) {
+  if (!this.fechaActual) return;
+
+  // Parseamos la fecha actual como UTC
+  const [year, month, day] = this.fechaActual.split('-').map(Number);
+  const fechaObj = new Date(Date.UTC(year, month - 1, day));
+
+  // Sumamos o restamos días
+  fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
+
+  // Convertimos de nuevo a yyyy-mm-dd
+  this.fechaActual = [
+    fechaObj.getUTCFullYear(),
+    String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
+    String(fechaObj.getUTCDate()).padStart(2, '0')
+  ].join('-');
+
+  // Recargamos los datos con la nueva fecha
+  this.cargarDatos(this.fechaActual);
+
+  // Cerramos sección "más"
+  this.showMore = false;
+}
 }
