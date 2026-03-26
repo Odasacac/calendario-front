@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatesService } from '../../../servicios/dates.service';
 import { VAUResponse } from '../../../interfaces/vau-response';
@@ -13,39 +13,41 @@ import { VAUResponse } from '../../../interfaces/vau-response';
 export class DateVAUComponent implements OnInit, OnChanges {
 
   @Input() fecha!: string;
+  @Output() fechaChange = new EventEmitter<string>(); // <-- emitimos cambios al padre
 
   fechaActual!: string;
   data?: VAUResponse;
   showMore = false;
-  loading = false; // <-- nuevo flag
+  loading = false;
 
   constructor(private dateService: DatesService) {}
 
   ngOnInit(): void {
-  this.fechaActual = this.fecha; // inicializamos desde el input
-  if (this.fechaActual) {
-    this.cargarDatos(this.fechaActual);
-  }
-}
-  ngOnChanges(changes: SimpleChanges): void {
-  if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
     this.fechaActual = this.fecha;
-    this.cargarDatos(this.fechaActual);
-    this.showMore = false;
+    if (this.fechaActual) {
+      this.cargarDatos(this.fechaActual);
+    }
   }
-}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
+      this.fechaActual = this.fecha;
+      this.cargarDatos(this.fechaActual);
+      this.showMore = false;
+    }
+  }
 
   cargarDatos(fecha: string) {
-    this.loading = true; // inicio del spinner
-    this.data = undefined; // limpiar datos antiguos
+    this.loading = true;
+    this.data = undefined;
     this.dateService.getVAU(fecha).subscribe({
       next: (res) => {
         this.data = res;
-        this.loading = false; // fin del spinner
+        this.loading = false;
       },
       error: (err) => {
         console.error(err);
-        this.loading = false; // fin del spinner también en error
+        this.loading = false;
       }
     });
   }
@@ -59,27 +61,24 @@ export class DateVAUComponent implements OnInit, OnChanges {
     return `${day}-${month}-${year}`;
   }
 
-cambiarFecha(dias: number) {
-  if (!this.fechaActual) return;
+  cambiarFecha(dias: number) {
+    if (!this.fechaActual) return;
 
-  // Parseamos la fecha actual como UTC
-  const [year, month, day] = this.fechaActual.split('-').map(Number);
-  const fechaObj = new Date(Date.UTC(year, month - 1, day));
+    const [year, month, day] = this.fechaActual.split('-').map(Number);
+    const fechaObj = new Date(Date.UTC(year, month - 1, day));
 
-  // Sumamos o restamos días
-  fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
+    fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
 
-  // Convertimos de nuevo a yyyy-mm-dd
-  this.fechaActual = [
-    fechaObj.getUTCFullYear(),
-    String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
-    String(fechaObj.getUTCDate()).padStart(2, '0')
-  ].join('-');
+    this.fechaActual = [
+      fechaObj.getUTCFullYear(),
+      String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
+      String(fechaObj.getUTCDate()).padStart(2, '0')
+    ].join('-');
 
-  // Recargamos los datos con la nueva fecha
-  this.cargarDatos(this.fechaActual);
+    this.cargarDatos(this.fechaActual);
+    this.showMore = false;
 
-  // Cerramos sección "más"
-  this.showMore = false;
-}
+    // <-- Emitimos la fecha al padre
+    this.fechaChange.emit(this.fechaActual);
+  }
 }

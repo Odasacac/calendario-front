@@ -5,15 +5,15 @@
 
     <div class="date-section">
       <!-- Componente de fecha -->
-      <app-date-vau [fecha]="fecha"></app-date-vau>
+     <app-date-vau [fecha]="fecha" (fechaChange)="onFechaDesdeComponenteHijo($event)"></app-date-vau>
 
-      <!-- Botón “Hoy”, solo si la fecha no es hoy -->
-      <button 
-        *ngIf="fecha !== today" 
-        (click)="volverHoy()" 
-        class="today-btn">
-        Hoy
-      </button>
+<!-- Botón “Hoy”, solo si la fecha no es hoy -->
+<button 
+  *ngIf="fecha !== today" 
+  (click)="volverHoy()" 
+  class="today-btn">
+  Volver a hoy
+</button>
     </div>
 
     <!-- Botones principales -->

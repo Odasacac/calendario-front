@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
 
   fecha: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  today: string = new Date().toISOString().split('T')[0]; // fecha de hoy
+  today: string = new Date().toISOString().split('T')[0];
   showDatePicker = false;
 
   openPdf() {
@@ -20,14 +20,20 @@ export class HomeComponent {
   }
 
   buscarFecha() {
-  this.showDatePicker = !this.showDatePicker;
-}
-onFechaSeleccionada(event: any) {
-  this.fecha = new Date(event.target.value).toISOString().split('T')[0];
-  this.showDatePicker = false;
-}
+    this.showDatePicker = !this.showDatePicker;
+  }
+
+  onFechaSeleccionada(event: any) {
+    this.fecha = new Date(event.target.value).toISOString().split('T')[0];
+    this.showDatePicker = false;
+  }
 
   volverHoy() {
     this.fecha = this.today;
+  }
+
+  // Nuevo: actualizar fecha desde el componente hijo
+  onFechaDesdeComponenteHijo(nuevaFecha: string) {
+    this.fecha = nuevaFecha;
   }
 }
