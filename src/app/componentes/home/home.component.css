@@ -6,24 +6,24 @@
   align-items: center;
   background: linear-gradient(135deg, #1b5e20, #81c784);
   font-family: 'Arial', sans-serif;
+  padding: 20px; /* evita que toque bordes en móvil */
 }
 
 /* Tarjeta principal */
 .home-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 40px;
-  border-radius: 20px;
-  width: 380px;
-  max-width: 90%;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 24px;
+  width: 600px;          /* MÁS GRANDE */
+  max-width: 95%;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
   text-align: center;
-  /* No hay hover en toda la tarjeta */
 }
 
 /* Título */
 .title {
-  font-size: 22px;
-  margin-bottom: 25px;
+  font-size: 26px; /* un poco más grande */
+  margin-bottom: 30px;
   font-weight: 600;
   color: #1b5e20;
 }
@@ -33,15 +33,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
+  gap: 18px;
+  margin-bottom: 30px;
 }
 
 /* Botón “Hoy” */
 .today-btn {
-  padding: 12px 20px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #43a047;
   color: white;
   font-weight: bold;
@@ -57,16 +57,16 @@
 /* Botones principales */
 .actions {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .actions button {
-  padding: 12px;
+  padding: 14px 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fb8c00;
   color: white;
   font-weight: bold;
@@ -81,25 +81,25 @@
 
 /* Calendario input */
 input[type="date"] {
-  padding: 10px 12px;
-  border-radius: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
   border: 1px solid #a5d6a7;
   outline: none;
   background: #f1f8e9;
   color: #1b5e20;
-  font-size: 14px;
+  font-size: 15px;
   transition: all 0.2s;
 }
 
 input[type="date"]:focus {
   border-color: #66bb6a;
   background: #ffffff;
-  box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+  box-shadow: 0 0 6px rgba(102, 187, 106, 0.5);
 }
 
 /* Footer */
 .author {
-  margin-top: 20px;
+  margin-top: 25px;
   color: #1b5e20;
   font-size: 13px;
   opacity: 0.8;

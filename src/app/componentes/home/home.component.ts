@@ -20,8 +20,8 @@ export class HomeComponent {
   }
 
   buscarFecha() {
-    this.showDatePicker = true;
-  }
+  this.showDatePicker = !this.showDatePicker;
+}
 onFechaSeleccionada(event: any) {
   this.fecha = new Date(event.target.value).toISOString().split('T')[0];
   this.showDatePicker = false;

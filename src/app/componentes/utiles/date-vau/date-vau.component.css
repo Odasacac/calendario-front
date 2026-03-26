@@ -1,16 +1,20 @@
 .date-vau-container {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 25px;
+  background: #ffffff;
+
+  padding: 15px;
   border-radius: 16px;
-  width: 400px; /* más ancho para textos largos */
+  width: 400px;
   max-width: 90%;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   margin-top: 20px;
-  text-align: left; /* contenido alineado a la izquierda */
+  text-align: left;
   word-wrap: break-word;
+
+  box-shadow: none;
+
+  border: 2px solid #66bb6a; /* borde verde */
 }
 
-/* Solo el título centrado */
+/* Título */
 .date-title {
   text-align: center;
   color: #1b5e20;
@@ -19,15 +23,18 @@
   font-size: 1.5em;
 }
 
+/* Texto */
 p {
   margin: 6px 0;
   color: #2e7d32;
-  text-align: left; /* asegurar que los párrafos estén a la izquierda */
+  text-align: left;
   word-wrap: break-word;
 }
 
+/* Botón */
 button {
   margin-top: 15px;
+  margin-bottom: 15px;
   width: 100%;
   padding: 10px;
   border: none;
@@ -36,12 +43,14 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
   background: #ef6c00;
 }
 
+/* Sección extra */
 .more {
   margin-top: 10px;
   border-top: 1px solid #c8e6c9;

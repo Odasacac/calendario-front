@@ -19,7 +19,9 @@
     <!-- Botones principales -->
     <div class="actions">
       <button (click)="openPdf()">PDF explicativo</button>
-      <button (click)="buscarFecha()">Buscar una fecha</button>
+      <button (click)="buscarFecha()">
+  {{ showDatePicker ? 'Ocultar calendario' : 'Buscar una fecha' }}
+</button>
     </div>
 
     <!-- Calendario oculto -->
