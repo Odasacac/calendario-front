@@ -30,6 +30,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
     if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
       this.cargarDatos(this.fecha);
     }
+    this.showMore=false;
   }
 
   cargarDatos(fecha: string) {
