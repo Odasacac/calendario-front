@@ -75,10 +75,16 @@ export class DateVAUComponent implements OnInit, OnChanges {
       String(fechaObj.getUTCDate()).padStart(2, '0')
     ].join('-');
 
-    this.cargarDatos(this.fechaActual);
     this.showMore = false;
 
     // <-- Emitimos la fecha al padre
     this.fechaChange.emit(this.fechaActual);
   }
+
+  getTipoCasalero(): string {
+  if (!this.data?.casalero) return '';
+  if (this.data.casalero.deSol) return 'De sol';
+  if (this.data.casalero.deLuna) return 'De luna';
+  return '';
+}
 }
