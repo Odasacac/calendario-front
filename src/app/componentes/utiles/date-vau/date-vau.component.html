@@ -16,13 +16,13 @@
   <!-- Mostrar datos solo si no está cargando -->
   <div *ngIf="!loading && data">
 
-    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>
-    <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
-    <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
-    <p><strong>Mes:</strong> {{ data.month.name }}</p>
-    <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
-    <p *ngIf="data.notableEvent"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
+    <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
+    <p><strong>Mes:</strong> {{ data.month.name }}</p>
+    <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
+    <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
+    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>     
+    <p *ngIf="data.notableEvent" class="evento-res"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
 
     <button (click)="toggleMore()">
       {{ showMore ? 'Menos detalles' : 'Más detalles' }}
