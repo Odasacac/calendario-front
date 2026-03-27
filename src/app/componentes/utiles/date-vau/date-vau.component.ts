@@ -81,10 +81,33 @@ export class DateVAUComponent implements OnInit, OnChanges {
     this.fechaChange.emit(this.fechaActual);
   }
 
-  getTipoCasalero(): string {
-  if (!this.data?.casalero) return '';
-  if (this.data.casalero.deSol) return 'De sol';
-  if (this.data.casalero.deLuna) return 'De luna';
+  getDescripcionCasalero(): string {
+    const c = this.data?.casalero;
+    if (!c) return '';
+
+
+    if (c.tipo.toUpperCase() === 'ECLIPELAR') {
+      if (c.deSol) return 'Eclipelar de sol';
+      if (c.deLuna) return 'Eclipelar de luna';
+      return 'Eclipelar';
+    }
+
+  
+    if (c.tipo.toUpperCase() === 'METÓNICO') {
+      let subtipo = '';
+
+      if (c.inicial) subtipo = 'inicial';
+      else if (c.cuartal) subtipo = 'cuartal';
+      else if (c.bicuartal) subtipo = 'bicuartal';
+      else if (c.tricuartal) subtipo = 'tricuartal';
+
+      let fase = '';
+      if (c.nuevo) fase = 'nuevo';
+      else if (c.lleno) fase = 'lleno';
+
+      return ['Metónico', subtipo, fase].filter(Boolean).join(' ');
+    }
+
   return '';
 }
 }
