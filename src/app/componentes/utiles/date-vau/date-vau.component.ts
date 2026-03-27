@@ -62,24 +62,23 @@ export class DateVAUComponent implements OnInit, OnChanges {
   }
 
   cambiarFecha(dias: number) {
-    if (!this.fechaActual) return;
+  if (!this.fechaActual) return;
 
-    const [year, month, day] = this.fechaActual.split('-').map(Number);
-    const fechaObj = new Date(Date.UTC(year, month - 1, day));
+  const [year, month, day] = this.fechaActual.split('-').map(Number);
+  const fechaObj = new Date(Date.UTC(year, month - 1, day));
 
-    fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
+  fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
 
-    this.fechaActual = [
-      fechaObj.getUTCFullYear(),
-      String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
-      String(fechaObj.getUTCDate()).padStart(2, '0')
-    ].join('-');
+  this.fechaActual = [
+    String(fechaObj.getUTCFullYear()).padStart(4, '0'), // <-- aquí mantenemos ceros a la izquierda
+    String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
+    String(fechaObj.getUTCDate()).padStart(2, '0')
+  ].join('-');
 
-    this.showMore = false;
+  this.showMore = false;
 
-    // <-- Emitimos la fecha al padre
-    this.fechaChange.emit(this.fechaActual);
-  }
+  this.fechaChange.emit(this.fechaActual);
+}
 
   getDescripcionCasalero(): string {
     const c = this.data?.casalero;
