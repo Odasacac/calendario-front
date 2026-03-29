@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { UsuarioService } from '../../servicios/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +12,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+
+  constructor(private router: Router, private usuarioService: UsuarioService) {}
+
   user = '';
   password = '';
-  constructor(private router: Router) {}
+  
 
   goHome(form: NgForm) {
     if (form.invalid) {
@@ -21,8 +25,7 @@ export class LoginComponent {
       return;
     }
     else{
-      // TO DO
-      this.router.navigate(['/home']);
+      alert('Login por usuario pendiente, entrar como invitado');
     }
   
   }
@@ -33,6 +36,11 @@ export class LoginComponent {
 
   goRecovery() {
     this.router.navigate(['/recovery']);
+  }
+
+  entrarComoInvitado(){
+    this.usuarioService.setEsInvitado(true);
+    this.router.navigate(['/home']);
   }
 
 }

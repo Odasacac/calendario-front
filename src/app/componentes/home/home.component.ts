@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DateVAUComponent } from '../utiles/date-vau/date-vau.component';
 import { CommonModule } from '@angular/common';
+import { UsuarioService } from '../../servicios/usuario.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,27 @@ export class HomeComponent {
   fecha: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   today: string = new Date().toISOString().split('T')[0];
   showDatePicker = false;
+  usuarioLogueado = false;
+  usuarioInvitado = false;
+
+  constructor(private usuarioService: UsuarioService, private router: Router){}
+
+  ngOnInit() {
+
+    if(this.usuarioService.getUsuario()){
+      this.usuarioLogueado = true;
+    }
+    else if(this.usuarioService.getEsInvitado()){
+      this.usuarioInvitado = this.usuarioService.getEsInvitado()
+    }
+    else{
+      console.log('El usuario ni es invitado ni esta logueado');
+      this.usuarioService.setEsInvitado(false);
+      this.usuarioService.setUsuario(null);
+      this.router.navigate(['/login']);
+    }
+ 
+  }
 
   openPdf() {
     alert('Abrir PDF (pendiente)');
