@@ -1,0 +1,53 @@
+/* Fondo general */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1b5e20, #81c784);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Tarjeta */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  width: 360px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+/* Subtítulo */
+.subtitle {
+  margin-bottom: 25px;
+  font-size: 18px;
+  color: #ef6c00;
+  font-weight: 500;
+}
+
+/* Mensaje */
+.message {
+  font-size: 15px;
+  color: #2e7d32;
+  margin-bottom: 25px;
+}
+
+/* Botón */
+button {
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #fb8c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+button:hover {
+  background: #ef6c00;
+  transform: translateY(-2px);
+}

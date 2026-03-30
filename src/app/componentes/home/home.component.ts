@@ -30,10 +30,9 @@ export class HomeComponent {
       this.usuarioInvitado = this.usuarioService.getEsInvitado()
     }
     else{
-      console.log('El usuario ni es invitado ni esta logueado');
       this.usuarioService.setEsInvitado(false);
       this.usuarioService.setUsuario(null);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/forbidden']);
     }
  
   }

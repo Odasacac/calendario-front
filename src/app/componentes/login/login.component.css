@@ -19,9 +19,6 @@
   transition: transform 0.2s;
 }
 
-.login-card:hover {
-  transform: translateY(-3px); /* efecto muy sutil de “levitar” */
-}
 
 /* Títulos */
 .title {
