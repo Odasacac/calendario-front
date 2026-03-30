@@ -54,6 +54,10 @@ export class HomeComponent {
     this.fecha = this.today;
   }
 
+  goToLogin(){
+    this.router.navigate(['/login']);
+  }
+
   // Nuevo: actualizar fecha desde el componente hijo
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;

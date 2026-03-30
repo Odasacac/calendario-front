@@ -63,7 +63,7 @@
   margin-bottom: 25px;
 }
 
-.actions button {
+button {
   padding: 14px 16px;
   border: none;
   border-radius: 12px;
@@ -74,8 +74,25 @@
   transition: all 0.25s;
 }
 
-.actions button:hover {
+button:hover {
   background: #ef6c00;
+  transform: translateY(-2px);
+}
+
+.login-button{
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  background: #43a047;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-bottom: 5px;
+}
+
+.login.button:hover{
+  background: #2e7d32;
   transform: translateY(-2px);
 }
 

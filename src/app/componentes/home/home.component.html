@@ -20,9 +20,11 @@
     <div class="actions">
       <button (click)="openPdf()">Descargar PDF explicativo</button>
       <button (click)="buscarFecha()">
-  {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
-</button>
+        {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
+      </button>
     </div>
+
+     <button class="login-button" (click)="goToLogin()">Volver al login</button>
 
     <!-- Calendario oculto -->
     <input
