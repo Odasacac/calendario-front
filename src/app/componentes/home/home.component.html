@@ -24,15 +24,19 @@
       </button>
     </div>
 
-     <button class="login-button" (click)="goToLogin()">Volver al login</button>
+     
+    <div class="others">
+      <!-- Calendario oculto -->
+      <input
+        *ngIf="showDatePicker"
+        type="date"
+        [value]="fecha"
+        (change)="onFechaSeleccionada($event)"
+      />
 
-    <!-- Calendario oculto -->
-    <input
-      *ngIf="showDatePicker"
-      type="date"
-      [value]="fecha"
-      (change)="onFechaSeleccionada($event)"
-    />
+      <button class="login-button" (click)="goToLogin()">Volver al login</button>
+    </div>
+    
 
     <!-- Footer -->
     <p class="author">Por Carlos Casado Aguilera</p>
