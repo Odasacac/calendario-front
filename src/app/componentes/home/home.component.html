@@ -17,12 +17,22 @@
     </div>
 
     <!-- Botones principales -->
-    <div class="actions">
-      <button (click)="openPdf()">Descargar PDF explicativo</button>
-      <button (click)="buscarFecha()">
-        {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
-      </button>
-    </div>
+   <div class="actions">
+  <div class="popup-container">
+  <button (click)="toggleOpciones($event)">
+  {{ mostrarOpciones ? 'Cerrar más opciones' : 'Más opciones' }}
+</button>
+
+  <div class="popup-menu" *ngIf="mostrarOpciones" #popup>
+    <button (click)="descargarPDF()">Descargar PDF explicativo</button>
+    <button (click)="irAEventos()" *ngIf="usuarioLogueado">Ir a Eventos reseñables</button>
+  </div>
+</div>
+
+  <button (click)="buscarFecha()">
+    {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
+  </button>
+</div>
 
      
     <div class="others">

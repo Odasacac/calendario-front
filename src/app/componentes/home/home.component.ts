@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
 import { DateVAUComponent } from '../utiles/date-vau/date-vau.component';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { Router } from '@angular/router';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -13,13 +13,15 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
+  @ViewChild('popup') popupRef!: ElementRef;
   fecha: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   today: string = new Date().toISOString().split('T')[0];
   showDatePicker = false;
   usuarioLogueado = false;
   usuarioInvitado = false;
+  mostrarOpciones: boolean = false;
 
-  constructor(private usuarioService: UsuarioService, private router: Router){}
+  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef){}
 
   ngOnInit() {
 
@@ -37,10 +39,21 @@ export class HomeComponent {
  
   }
 
-  openPdf() {
-    alert('Abrir PDF (pendiente)');
+
+  toggleOpciones(event: Event) {
+    event.stopPropagation();
+    this.mostrarOpciones = !this.mostrarOpciones;
   }
 
+    descargarPDF() {
+      console.log('Descargar PDF');
+      this.mostrarOpciones = false;
+    }
+
+irAEventos() {
+  console.log('Ir a eventos');
+  this.mostrarOpciones = false;
+}
   buscarFecha() {
     this.showDatePicker = !this.showDatePicker;
   }
@@ -62,4 +75,12 @@ export class HomeComponent {
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;
   }
+
+  @HostListener('document:click', ['$event'])
+  clickFuera(event: MouseEvent) {
+    if (this.mostrarOpciones && this.popupRef && !this.popupRef.nativeElement.contains(event.target)) {
+      this.mostrarOpciones = false;
+    }
+  }
+  
 }
