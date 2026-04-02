@@ -3,8 +3,8 @@
   background: #ffffff;
   padding: 20px;
   border-radius: 16px;
-  width: 400px;
-  max-width: 90%;
+  width: 600px;
+  max-width: 95%;
   margin: 20px auto;
   text-align: left;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -72,9 +72,17 @@ button:hover {
   background: #ef6c00;
 }
 
+.info{
+  display: flex;
+  flex-direction: column;
+  gap: 2px; 
+}
 /* Sección extra de “Más” */
 .more {
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 /* Contenedor del spinner */

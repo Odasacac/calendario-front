@@ -14,7 +14,7 @@
   </div>
 
   <!-- Mostrar datos solo si no está cargando -->
-  <div *ngIf="!loading && data">
+  <div *ngIf="!loading && data" class="info">
 
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
@@ -22,17 +22,28 @@
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
     <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
     <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>     
-    <p *ngIf="data.notableEvent" class="evento-res"><strong>Evento reseñable:</strong> {{ data.notableEvent }}</p>
+    <p *ngIf="data.notableEvent.today" class="evento-res"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
 
     <button (click)="toggleMore()">
       {{ showMore ? 'Menos detalles' : 'Más detalles' }}
     </button>
 
     <div *ngIf="showMore" class="more">
+
+      <div *ngIf="data.notableEvent.next">
+        <p><strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }}</p>
+      </div>
+
+      <div *ngIf="data.notableEvent.previous">
+        <p><strong>Último evento reseñable:</strong> {{ data.notableEvent.previous }}</p>
+      </div>
+
       <p><strong>Eclipses absolutos desde el eclípeno:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
+
       <div *ngIf="data.casalero">
         <p><strong>Casalero:</strong> {{ getDescripcionCasalero() }}</p>
       </div>
+    
     </div>
 
   </div>

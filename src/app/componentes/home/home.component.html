@@ -24,7 +24,8 @@
 </button>
 
   <div class="popup-menu" *ngIf="mostrarOpciones" #popup>
-    <button (click)="descargarPDF()">Descargar PDF explicativo</button>
+    <button (click)="descargarManual()">Descargar manual explicativo</button>
+     <button (click)="descargarCalendario()">Descargar calendario para un año</button>
     <button (click)="irAEventos()" *ngIf="usuarioLogueado">Ir a Eventos reseñables</button>
   </div>
 </div>

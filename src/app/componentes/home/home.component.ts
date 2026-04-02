@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { Router } from '@angular/router';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { DownloadService } from '../../servicios/download.service';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,7 @@ export class HomeComponent {
   usuarioInvitado = false;
   mostrarOpciones: boolean = false;
 
-  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef){}
+  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef, private downloadService: DownloadService){}
 
   ngOnInit() {
 
@@ -43,12 +44,27 @@ export class HomeComponent {
   toggleOpciones(event: Event) {
     event.stopPropagation();
     this.mostrarOpciones = !this.mostrarOpciones;
+    this.showDatePicker= false;
   }
 
-    descargarPDF() {
-      console.log('Descargar PDF');
-      this.mostrarOpciones = false;
-    }
+  descargarManual() {
+     
+      this.downloadService.getPDF().subscribe({
+      next: (res) => {
+        // Descargar el pdf. Mostrar un popup: "PDF explicativo descargado con éxito."
+      },
+      error: (err) => {
+        // Mostrar un popup: "No se ha podido descargar"
+      }
+    });
+  }
+
+    descargarCalendario() {
+     
+      
+  }
+
+    
 
 irAEventos() {
   console.log('Ir a eventos');

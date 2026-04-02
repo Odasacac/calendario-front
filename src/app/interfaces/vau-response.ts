@@ -40,7 +40,11 @@ export interface VAUResponse {
     newMoon: boolean;
   };
 
-  notableEvent: string | null;
+  notableEvent: {
+    today: string | null;
+    next: string | null;
+    previous: string | null
+  };
 
   week: string;
 
