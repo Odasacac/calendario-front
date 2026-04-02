@@ -40,7 +40,6 @@ export class HomeComponent {
  
   }
 
-
   toggleOpciones(event: Event) {
     event.stopPropagation();
     this.mostrarOpciones = !this.mostrarOpciones;
@@ -59,17 +58,17 @@ export class HomeComponent {
     });
   }
 
-    descargarCalendario() {
+  descargarCalendario() {
      
       
   }
-
     
 
-irAEventos() {
-  console.log('Ir a eventos');
-  this.mostrarOpciones = false;
-}
+  irAEventos() {
+    console.log('Ir a eventos');
+    this.mostrarOpciones = false;
+  }
+
   buscarFecha() {
     this.showDatePicker = !this.showDatePicker;
   }
@@ -90,6 +89,7 @@ irAEventos() {
   // Nuevo: actualizar fecha desde el componente hijo
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;
+    this.showDatePicker = false;
   }
 
   @HostListener('document:click', ['$event'])
