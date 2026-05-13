@@ -4,53 +4,58 @@
     <h1 class="title">Calendario para vivir en armonía con el universo</h1>
 
     <div class="date-section">
-      <!-- Componente de fecha -->
-     <app-date-vau [fecha]="fecha" (fechaChange)="onFechaDesdeComponenteHijo($event)"></app-date-vau>
 
-<!-- Botón “Hoy”, solo si la fecha no es hoy -->
-<button 
-  *ngIf="fecha !== today" 
-  (click)="volverHoy()" 
-  class="today-btn">
-  Volver a hoy
-</button>
+       <div class="general-container" >
+        <app-date-vau [fecha]="fecha" (fechaChange)="onFechaDesdeComponenteHijo($event)" *ngIf="vauContainerView"></app-date-vau>
+        <app-descargas *ngIf="descargarView"></app-descargas>
+       </div>
+     
+
+        <!-- Botón “Hoy”, solo si la fecha no es hoy -->
+        <button 
+          *ngIf="fecha !== today" 
+          (click)="volverHoy()" 
+          class="today-btn">
+            Volver a hoy
+        </button>
+      </div>
+
+      <!-- Botones principales -->
+      <div class="actions">
+      <div class="popup-container">
+      <button (click)="toggleOpciones($event)">
+        {{ mostrarOpciones ? 'Cerrar más opciones' : 'Más opciones' }}
+      </button>
+
+      <div class="popup-menu" *ngIf="mostrarOpciones" #popup>
+        <button (click)="goToDescargarDocumentos()">Descargar documentos</button>    
+        <button (click)="haceX()" >Hace...</button>
+        <button (click)="dentroDeX()" >Dentro de...</button>
+        <button (click)="irAEventos()" *ngIf="usuarioLogueado">Ir a Eventos reseñables</button>
+      </div>
     </div>
 
-    <!-- Botones principales -->
-   <div class="actions">
-  <div class="popup-container">
-  <button (click)="toggleOpciones($event)">
-  {{ mostrarOpciones ? 'Cerrar más opciones' : 'Más opciones' }}
-</button>
-
-  <div class="popup-menu" *ngIf="mostrarOpciones" #popup>
-    <button (click)="descargarManual()">Descargar manual explicativo</button>
-     <button (click)="descargarCalendario()">Descargar calendario para un año</button>
-    <button (click)="irAEventos()" *ngIf="usuarioLogueado">Ir a Eventos reseñables</button>
+    <button (click)="buscarFecha()">
+      {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
+    </button>
   </div>
-</div>
-
-  <button (click)="buscarFecha()">
-    {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
-  </button>
-</div>
 
      
-    <div class="others">
-      <!-- Calendario oculto -->
-      <input
-        *ngIf="showDatePicker"
-        type="date"
-        [value]="fecha"
-        (change)="onFechaSeleccionada($event)"
-      />
+  <div class="others">
+    <!-- Calendario oculto -->
+    <input
+      *ngIf="showDatePicker"
+      type="date"
+      [value]="fecha"
+      (change)="onFechaSeleccionada($event)"
+    />
 
-      <button class="login-button" (click)="goToLogin()">Volver al login</button>
-    </div>
+    <button class="login-button" (click)="goToLogin()">Volver al login</button>
+  </div>
     
 
-    <!-- Footer -->
-    <p class="author">Por Carlos Casado Aguilera</p>
+  <!-- Footer -->
+  <p class="author">Por Carlos Casado Aguilera</p>
 
   </div>
 </div>

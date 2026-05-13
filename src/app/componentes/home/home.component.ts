@@ -4,11 +4,12 @@ import { UsuarioService } from '../../servicios/usuario.service';
 import { Router } from '@angular/router';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { DownloadService } from '../../servicios/download.service';
+import { DescargasComponent } from '../utiles/descargas/descargas.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DateVAUComponent, CommonModule],
+  imports: [DateVAUComponent, CommonModule, DescargasComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -21,6 +22,8 @@ export class HomeComponent {
   usuarioLogueado = false;
   usuarioInvitado = false;
   mostrarOpciones: boolean = false;
+  vauContainerView: boolean = true;
+  descargarView: boolean = false;
 
   constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef, private downloadService: DownloadService){}
 
@@ -60,7 +63,17 @@ export class HomeComponent {
 
   descargarCalendario() {
      
-      
+  }
+
+  goToDescargarDocumentos(){
+    this.vauContainerView=false;
+    this.descargarView=true;
+    this.mostrarOpciones=false;
+  }
+
+  goToVauContainer(){
+    this.vauContainerView=true;
+    this.descargarView=false;
   }
     
 
@@ -97,6 +110,15 @@ export class HomeComponent {
     if (this.mostrarOpciones && this.popupRef && !this.popupRef.nativeElement.contains(event.target)) {
       this.mostrarOpciones = false;
     }
+  }
+
+
+  haceX(){
+
+  }
+
+  dentroDeX() {
+
   }
   
 }

@@ -167,6 +167,18 @@ input[type="date"]:focus {
   animation: fadeIn 0.15s ease-out;
 }
 
+.general-container{
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  width: 600px;
+  max-width: 95%;
+  margin: 20px auto;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border: 2px solid #66bb6a; /* borde verde */
+  font-family: Arial, sans-serif;
+}
 
 /* Botones dentro del popup */
 .popup-menu button {

@@ -53,4 +53,10 @@ export interface VAUResponse {
     numberOfYear: number;
     solsticiosDeInviernoSinceLastMetonIN: number;
   };
+
+  festividades:{
+    festividadActual: string | null;
+    festividadAnterior: string | null;
+    festividadProxima: string | null;
+  }
 }
