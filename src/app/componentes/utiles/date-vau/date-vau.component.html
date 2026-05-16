@@ -1,5 +1,3 @@
-<div class="date-vau-container">
-
   <!-- Título con flechas -->
 <div class="date-header">
   <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(-1)">&larr;</button>
@@ -61,6 +59,4 @@
  <div *ngIf="!data && !loading" class="error-message">
   <p>No se han podido obtener los datos</p>
   <button class="retry-btn" (click)="cargarDatos(fechaActual)">Reintentar</button>
-</div>
-
 </div>

@@ -158,13 +158,14 @@ input[type="date"]:focus {
   background: #d6e2df;
   border: 1px solid #c8e6c9;
   border-radius: 12px;
-  padding: 8px;
+  padding: 20px;
 
-  min-width: 250px;
+  min-width: 200px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
   z-index: 999;
 
   animation: fadeIn 0.15s ease-out;
+  align-items: flex-start
 }
 
 .general-container{

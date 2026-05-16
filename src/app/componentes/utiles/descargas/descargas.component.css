@@ -1,0 +1,16 @@
+.vau-button {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  background: #43a047;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-bottom: 5px;
+}
+
+.vau-button:hover {
+  background: #2e7d32;
+  transform: translateY(-2px);
+}

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { DownloadService } from '../../servicios/download.service';
 import { DescargasComponent } from '../utiles/descargas/descargas.component';
+import { opciones } from '../../interfaces/opciones';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,7 @@ import { DescargasComponent } from '../utiles/descargas/descargas.component';
 export class HomeComponent {
 
   @ViewChild('popup') popupRef!: ElementRef;
-  fecha: string = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  fecha: string = new Date().toISOString().split('T')[0];
   today: string = new Date().toISOString().split('T')[0];
   showDatePicker = false;
   usuarioLogueado = false;
@@ -24,6 +25,7 @@ export class HomeComponent {
   mostrarOpciones: boolean = false;
   vauContainerView: boolean = true;
   descargarView: boolean = false;
+  opciones: opciones[] = [];
 
   constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef, private downloadService: DownloadService){}
 
@@ -40,7 +42,25 @@ export class HomeComponent {
       this.usuarioService.setUsuario(null);
       this.router.navigate(['/forbidden']);
     }
+
+    this.updateOptionsVauView();
  
+  }
+
+  updateOptionsVauView(){
+    this.opciones=[];
+    this.opciones.push({name:'Descargar documentos', value: 1});
+    this.opciones.push({name:'Hace...', value: 2});
+    this.opciones.push({name:'Dentro de...', value: 3});
+    this.opciones.push({name:'Ir a eventos reseñables', value: 4});
+  }
+
+   updateOptionsDescargasView(){
+    this.opciones=[];
+    this.opciones.push({name:'Ir a fecha VAU', value: 5});
+    this.opciones.push({name:'Hace...', value: 2});
+    this.opciones.push({name:'Dentro de...', value: 3});
+    this.opciones.push({name:'Ir a eventos reseñables', value: 4});
   }
 
   toggleOpciones(event: Event) {
@@ -65,20 +85,58 @@ export class HomeComponent {
      
   }
 
+  opcionClickada(opcion:number){
+
+    switch(opcion){
+      case 1:
+        this.goToDescargarDocumentos();
+        break;
+
+      case 2:
+        this.irAHaceX();
+        break;
+
+      case 3:
+        this.irADentroDeX();
+        break;
+
+      case 4:
+        this.irAEventos();
+        break;
+
+      case 5:
+        this.goToVauContainer();
+        break;
+    }
+  }
+
   goToDescargarDocumentos(){
+    this.updateOptionsDescargasView();
     this.vauContainerView=false;
     this.descargarView=true;
     this.mostrarOpciones=false;
   }
 
   goToVauContainer(){
+    this.fecha = new Date().toISOString().split('T')[0];
+    this.updateOptionsVauView();
     this.vauContainerView=true;
     this.descargarView=false;
+  }
+
+  irAHaceX(){
+    console.log('Ir a Hace X... En construccion');
+    this.mostrarOpciones = false;
+  }
+
+  irADentroDeX(){
+    console.log('Ir a Dentro de X... En construccion');
+    this.mostrarOpciones = false;
   }
     
 
   irAEventos() {
-    console.log('Ir a eventos');
+    console.log('Ir a eventos... En construccion');
     this.mostrarOpciones = false;
   }
 
@@ -92,6 +150,7 @@ export class HomeComponent {
   }
 
   volverHoy() {
+    this.fecha = new Date().toISOString().split('T')[0];
     this.fecha = this.today;
   }
 
@@ -99,7 +158,7 @@ export class HomeComponent {
     this.router.navigate(['/login']);
   }
 
-  // Nuevo: actualizar fecha desde el componente hijo
+
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;
     this.showDatePicker = false;

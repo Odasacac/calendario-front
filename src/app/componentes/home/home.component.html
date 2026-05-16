@@ -7,7 +7,7 @@
 
        <div class="general-container" >
         <app-date-vau [fecha]="fecha" (fechaChange)="onFechaDesdeComponenteHijo($event)" *ngIf="vauContainerView"></app-date-vau>
-        <app-descargas *ngIf="descargarView"></app-descargas>
+        <app-descargas (back)="goToVauContainer()" *ngIf="descargarView"></app-descargas>
        </div>
      
 
@@ -27,11 +27,12 @@
         {{ mostrarOpciones ? 'Cerrar más opciones' : 'Más opciones' }}
       </button>
 
-      <div class="popup-menu" *ngIf="mostrarOpciones" #popup>
-        <button (click)="goToDescargarDocumentos()">Descargar documentos</button>    
-        <button (click)="haceX()" >Hace...</button>
-        <button (click)="dentroDeX()" >Dentro de...</button>
-        <button (click)="irAEventos()" *ngIf="usuarioLogueado">Ir a Eventos reseñables</button>
+      <div *ngIf="mostrarOpciones">
+        <div class="popup-menu" #popup>
+          <div *ngFor="let opcion of opciones">
+            <button (click)="opcionClickada(opcion.value)">{{opcion.name}}</button>    
+          </div>
+        </div>
       </div>
     </div>
 

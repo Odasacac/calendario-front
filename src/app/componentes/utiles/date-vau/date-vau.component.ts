@@ -13,7 +13,7 @@ import { VAUResponse } from '../../../interfaces/vau-response';
 export class DateVAUComponent implements OnInit, OnChanges {
 
   @Input() fecha!: string;
-  @Output() fechaChange = new EventEmitter<string>(); // <-- emitimos cambios al padre
+  @Output() fechaChange = new EventEmitter<string>(); 
 
   fechaActual!: string;
   data?: VAUResponse;
