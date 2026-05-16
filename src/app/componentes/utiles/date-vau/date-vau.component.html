@@ -44,8 +44,8 @@
         <p><strong>Próxima festividad:</strong> {{ data.festividades.festividadProxima }}</p>
       </div>
 
-        <div *ngIf="data.festividades.festividadAnterior">
-        <p><strong>Última festividad pasada:</strong> {{ data.festividades.festividadAnterior }}</p>
+      <div *ngIf="data.festividades.festividadAnterior">
+        <p><strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }}</p>
       </div>
 
       <p><strong>Eclipses absolutos desde el eclípeno:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
