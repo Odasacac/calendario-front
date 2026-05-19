@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { Router } from '@angular/router';
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { DownloadService } from '../../servicios/download.service';
 import { DescargasComponent } from '../utiles/descargas/descargas.component';
 import { opciones } from '../../interfaces/opciones';
 
@@ -26,8 +25,13 @@ export class HomeComponent {
   vauContainerView: boolean = true;
   descargarView: boolean = false;
   opciones: opciones[] = [];
+  descargarDocumentosOpcion: opciones = {name:'Descargar documentos', value: 1, loggedUserOnly: false};
+  haceOpcion: opciones = {name:'Hace...', value: 2, loggedUserOnly: false};
+  dentroDeOpcion: opciones = {name:'Dentro de...', value: 3, loggedUserOnly: false};
+  eventosResenyablesOpcion: opciones = {name:'Ir a eventos reseñables', value: 4, loggedUserOnly: true};
+  fechaVAUOpcion: opciones = {name:'Ir a fecha VAU', value: 5, loggedUserOnly: false};
 
-  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef, private downloadService: DownloadService){}
+  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef){}
 
   ngOnInit() {
 
@@ -49,18 +53,18 @@ export class HomeComponent {
 
   updateOptionsVauView(){
     this.opciones=[];
-    this.opciones.push({name:'Descargar documentos', value: 1});
-    this.opciones.push({name:'Hace...', value: 2});
-    this.opciones.push({name:'Dentro de...', value: 3});
-    this.opciones.push({name:'Ir a eventos reseñables', value: 4});
+    this.opciones.push(this.descargarDocumentosOpcion);
+    this.opciones.push(this.haceOpcion);
+    this.opciones.push(this.dentroDeOpcion);
+    this.opciones.push(this.eventosResenyablesOpcion);
   }
 
    updateOptionsDescargasView(){
     this.opciones=[];
-    this.opciones.push({name:'Ir a fecha VAU', value: 5});
-    this.opciones.push({name:'Hace...', value: 2});
-    this.opciones.push({name:'Dentro de...', value: 3});
-    this.opciones.push({name:'Ir a eventos reseñables', value: 4});
+    this.opciones.push(this.fechaVAUOpcion);
+    this.opciones.push(this.haceOpcion);
+    this.opciones.push(this.dentroDeOpcion);
+    this.opciones.push(this.eventosResenyablesOpcion);
   }
 
   toggleOpciones(event: Event) {
@@ -69,21 +73,17 @@ export class HomeComponent {
     this.showDatePicker= false;
   }
 
-  descargarManual() {
-     
-      this.downloadService.getPDF().subscribe({
-      next: (res) => {
-        // Descargar el pdf. Mostrar un popup: "PDF explicativo descargado con éxito."
-      },
-      error: (err) => {
-        // Mostrar un popup: "No se ha podido descargar"
-      }
-    });
+  mostrarOpcion(loggedUserOnly: boolean): boolean{
+
+    let mostrar: boolean = true;
+
+    if (loggedUserOnly){
+      mostrar = this.usuarioLogueado;
+    } 
+
+    return mostrar;
   }
 
-  descargarCalendario() {
-     
-  }
 
   opcionClickada(opcion:number){
 
@@ -169,15 +169,6 @@ export class HomeComponent {
     if (this.mostrarOpciones && this.popupRef && !this.popupRef.nativeElement.contains(event.target)) {
       this.mostrarOpciones = false;
     }
-  }
-
-
-  haceX(){
-
-  }
-
-  dentroDeX() {
-
   }
   
 }

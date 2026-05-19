@@ -1,3 +1,66 @@
+.date-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.date-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #1b5e20;
+  margin: 0 5px;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+
+
+
+
+
+
+
+.download-buttons-container{
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  width:45%;
+  margin: 0 auto;
+}
+
+.download-button {
+  margin: 10px 0;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #fb8c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.download-button:hover {
+  background: #ef6c00;
+}
+
+
+
+
+
+
+
+
+
+.vau-button-container{
+  display:flex;
+  justify-content: center;
+    margin-top: 40px;
+}
+
 .vau-button {
   padding: 14px 24px;
   border: none;

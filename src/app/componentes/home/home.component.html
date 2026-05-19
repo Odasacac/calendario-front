@@ -30,7 +30,7 @@
       <div *ngIf="mostrarOpciones">
         <div class="popup-menu" #popup>
           <div *ngFor="let opcion of opciones">
-            <button (click)="opcionClickada(opcion.value)">{{opcion.name}}</button>    
+            <button (click)="opcionClickada(opcion.value)" *ngIf="mostrarOpcion(opcion.loggedUserOnly)">{{opcion.name}}</button>    
           </div>
         </div>
       </div>
