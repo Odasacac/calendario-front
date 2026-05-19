@@ -112,16 +112,21 @@ export class HomeComponent {
 
   goToDescargarDocumentos(){
     this.updateOptionsDescargasView();
+    
     this.vauContainerView=false;
     this.descargarView=true;
+
     this.mostrarOpciones=false;
   }
 
   goToVauContainer(){
     this.fecha = new Date().toISOString().split('T')[0];
     this.updateOptionsVauView();
+
     this.vauContainerView=true;
     this.descargarView=false;
+
+    this.mostrarOpciones=false;
   }
 
   irAHaceX(){
