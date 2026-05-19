@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <button (click)="buscarFecha()">
+    <button (click)="buscarFecha()" *ngIf="vauContainerView">
       {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
     </button>
   </div>
