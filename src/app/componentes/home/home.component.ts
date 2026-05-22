@@ -26,10 +26,8 @@ export class HomeComponent {
   descargarView: boolean = false;
   opciones: opciones[] = [];
   descargarDocumentosOpcion: opciones = {name:'Descargar documentos', value: 1, loggedUserOnly: false};
-  haceOpcion: opciones = {name:'Hace...', value: 2, loggedUserOnly: false};
-  dentroDeOpcion: opciones = {name:'Dentro de...', value: 3, loggedUserOnly: false};
-  eventosResenyablesOpcion: opciones = {name:'Ir a eventos reseñables', value: 4, loggedUserOnly: true};
-  fechaVAUOpcion: opciones = {name:'Ir a fecha VAU', value: 5, loggedUserOnly: false};
+  eventosResenyablesOpcion: opciones = {name:'Ir a eventos reseñables', value: 2, loggedUserOnly: true};
+  fechaVAUOpcion: opciones = {name:'Ir a fecha VAU', value: 3, loggedUserOnly: false};
 
   constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef){}
 
@@ -54,16 +52,12 @@ export class HomeComponent {
   updateOptionsVauView(){
     this.opciones=[];
     this.opciones.push(this.descargarDocumentosOpcion);
-    this.opciones.push(this.haceOpcion);
-    this.opciones.push(this.dentroDeOpcion);
     this.opciones.push(this.eventosResenyablesOpcion);
   }
 
    updateOptionsDescargasView(){
     this.opciones=[];
     this.opciones.push(this.fechaVAUOpcion);
-    this.opciones.push(this.haceOpcion);
-    this.opciones.push(this.dentroDeOpcion);
     this.opciones.push(this.eventosResenyablesOpcion);
   }
 
@@ -93,18 +87,10 @@ export class HomeComponent {
         break;
 
       case 2:
-        this.irAHaceX();
+        this.irAEventos();;
         break;
 
       case 3:
-        this.irADentroDeX();
-        break;
-
-      case 4:
-        this.irAEventos();
-        break;
-
-      case 5:
         this.goToVauContainer();
         break;
     }
