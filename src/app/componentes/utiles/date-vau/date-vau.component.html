@@ -14,7 +14,7 @@
   <!-- Mostrar datos solo si no está cargando -->
   <div *ngIf="!loading && data" class="info">
 
-    <p *ngIf="data.festividades.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
+    <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Mes:</strong> {{ data.month.name }}</p>
@@ -38,11 +38,11 @@
         <p><strong>Último evento reseñable:</strong> {{ data.notableEvent.previous }}</p>
       </div>
       
-      <div *ngIf="data.festividades.festividadProxima">
+      <div *ngIf="data.festividades?.festividadProxima">
         <p><strong>Próxima festividad:</strong> {{ data.festividades.festividadProxima }}</p>
       </div>
 
-      <div *ngIf="data.festividades.festividadAnterior">
+      <div *ngIf="data.festividades?.festividadAnterior">
         <p><strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }}</p>
       </div>
 
