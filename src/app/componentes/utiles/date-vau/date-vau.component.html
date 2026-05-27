@@ -30,6 +30,10 @@
 
     <div *ngIf="showMore" class="more">
 
+      <div>
+        <p><strong>Estado de la luna:</strong> {{ data.estadoLuna.direccion }}</p>
+      </div>
+
       <div *ngIf="data.notableEvent.next">
         <p><strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }}</p>
       </div>

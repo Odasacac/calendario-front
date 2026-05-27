@@ -59,4 +59,8 @@ export interface VAUResponse {
     festividadAnterior: string | null;
     festividadProxima: string | null;
   }
+
+  estadoLuna:{
+    direccion: string | null;
+  }
 }
