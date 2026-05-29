@@ -61,6 +61,6 @@ export interface VAUResponse {
   }
 
   estadoLuna:{
-    direccion: string | null;
+    comportamiento: string | null;
   }
 }
