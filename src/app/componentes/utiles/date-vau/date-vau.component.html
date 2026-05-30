@@ -15,13 +15,13 @@
   <div *ngIf="!loading && data" class="info">
 
     <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
+    <p *ngIf="data.notableEvent.today"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Mes:</strong> {{ data.month.name }}</p>
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
     <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }}</p>
-    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>     
-    <p *ngIf="data.notableEvent.today"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
+    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.yearOfCurrentEclipenoIN }}</p>
   
 
     <button (click)="toggleMore()">
