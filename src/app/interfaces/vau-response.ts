@@ -33,7 +33,7 @@ export interface VAUResponse {
 
   lastEclipenoSelecto: {
     eclipenoINSelectoDay: boolean;
-    yearOfCurrentEclipenoSelectoIN: number;
+    daysSinceCurrentEclipenoSelectoIN: string;
   };
 
   metonoIN: {
