@@ -24,7 +24,15 @@ export interface VAUResponse {
   day: string;
 
   eclipenoIN: {
-    eclipenoINDay: boolean;
+    eclipenoINDay : boolean;
+    eclipenosINSinceLastEclipenoINSelecto: number;
+    numberOfEclipeno: number;
+    yearOfCurrentEclipenoIN: number;
+
+  }
+
+  lastEclipenoSelecto: {
+    eclipenoINSelectoDay: boolean;
     yearOfCurrentEclipenoIN: number;
   };
 
