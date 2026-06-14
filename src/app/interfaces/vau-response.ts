@@ -46,6 +46,7 @@ export interface VAUResponse {
   month: {
     name: string;
     newMoon: boolean;
+    surname: string;
   };
 
   notableEvent: {
