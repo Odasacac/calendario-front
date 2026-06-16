@@ -28,6 +28,7 @@ export interface VAUResponse {
     eclipenosINSinceLastEclipenoINSelecto: number;
     numberOfEclipeno: number;
     yearOfCurrentEclipenoIN: number;
+    lastEclipenoSurname: string;
 
   }
 
@@ -41,6 +42,7 @@ export interface VAUResponse {
     metonosINSinceLastEclipenoIN: number;
     numberOfMeton: number;
     yearOfCurrentMetonIN: number;
+    lastMetonSurname: string;
   };
 
   month: {
