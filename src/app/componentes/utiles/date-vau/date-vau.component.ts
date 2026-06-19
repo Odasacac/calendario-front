@@ -95,10 +95,10 @@ export class DateVAUComponent implements OnInit, OnChanges {
     if (c.tipo.toUpperCase() === 'METÓNICO') {
       let subtipo = '';
 
-      if (c.inicial) subtipo = 'inicial';
-      else if (c.cuartal) subtipo = 'cuartal';
-      else if (c.bicuartal) subtipo = 'bicuartal';
-      else if (c.tricuartal) subtipo = 'tricuartal';
+      if (c.invernal) subtipo = 'invernal';
+      else if (c.primaveral) subtipo = 'primaveral';
+      else if (c.estival) subtipo = 'estival';
+      else if (c.otonyal) subtipo = 'otoñal';
 
       let fase = '';
       if (c.nuevo) fase = 'nuevo';

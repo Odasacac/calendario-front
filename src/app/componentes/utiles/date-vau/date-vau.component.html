@@ -20,9 +20,10 @@
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Mes:</strong> {{ data.month.name }} {{data.month.surname}}</p>
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
-    <p><strong>Métono:</strong> {{ data.metonoIN.numberOfMeton }} {{ data.metonoIN.lastMetonSurname }}</p>
-    <p><strong>Eclípeno:</strong> {{ data.eclipenoIN.numberOfEclipeno }} {{ data.eclipenoIN.lastEclipenoSurname }}</p>
-    <p><strong>Último eclípeno selecto: </strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }}</p>
+    <p><strong>Métono invernal nuevo:</strong> {{ data.metonoVAU.metonsIN.numberOfMetonIN }} {{ data.metonoVAU.metonsIN.lastMetonSurname }}</p>
+    <p><strong>Métono invernal apórico:</strong> {{ data.metonoVAU.metonsIA.numberOfMetonIA }} {{ data.metonoVAU.metonsIA.lastMetonSurname }}</p>
+    <p><strong>Eclípeno invernal nuevo:</strong> {{ data.eclipenoVAU.numberOfEclipenoIN }} {{ data.eclipenoVAU.lastEclipenoSurname }}</p>
+    <p><strong>Último eclípeno invernal selecto nuevo: </strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }}</p>
   
 
     <button (click)="toggleMore()">

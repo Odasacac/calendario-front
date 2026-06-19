@@ -9,27 +9,26 @@ export interface VAUResponse {
   };
 
   casalero: {
-    bicuartal: boolean;
-    cuartal: boolean;
+    estival: boolean;
+    primaveral: boolean;
     dateO: string;
     deLuna: boolean;
     deSol: boolean;
-    inicial: boolean;
+    invernal: boolean;
     lleno: boolean;
     nuevo: boolean;
     tipo: string;
-    tricuartal: boolean;
+    otonyal: boolean;
   } | null;
 
   day: string;
 
-  eclipenoIN: {
-    eclipenoINDay : boolean;
-    eclipenosINSinceLastEclipenoINSelecto: number;
-    numberOfEclipeno: number;
-    yearOfCurrentEclipenoIN: number;
-    lastEclipenoSurname: string;
-
+  eclipenoVAU: {
+      eclipenoINDay : boolean;
+      eclipenosINSinceLastEclipenoINSelecto: number;
+      numberOfEclipenoIN: number;
+      yearOfCurrentEclipenoIN: number;
+      lastEclipenoSurname: string;
   }
 
   lastEclipenoSelecto: {
@@ -37,12 +36,22 @@ export interface VAUResponse {
     daysSinceCurrentEclipenoSelectoIN: string;
   };
 
-  metonoIN: {
-    metonoINDay: boolean;
-    metonosINSinceLastEclipenoIN: number;
-    numberOfMeton: number;
-    yearOfCurrentMetonIN: number;
-    lastMetonSurname: string;
+  metonoVAU:{
+    metonsIN: {
+      metonoINDay: boolean;
+      metonosINSinceLastEclipenoIN: number;
+      numberOfMetonIN: number;
+      yearOfCurrentMetonIN: number;
+      lastMetonSurname: string;
+    }
+    metonsIA:{
+      metonoIADay: boolean;
+      metonosIASinceLastEclipenoSelecto: number;
+      numberOfMetonIA: number;
+      yearOfCurrentMetonIA: number;
+      lastMetonSurname: string;
+    }
+  
   };
 
   month: {
