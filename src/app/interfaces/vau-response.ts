@@ -36,6 +36,12 @@ export interface VAUResponse {
     daysSinceCurrentEclipenoSelectoIN: string;
   };
 
+  lastMetonoInvernalApofasalRemoto:{
+    metonoInvernalApofasalRemotoDay: boolean;
+    daysSinceCurrentMetonoInvernalApofasalRemoto: string;
+
+  }
+
   metonoVAU:{
     metonsIN: {
       metonoINDay: boolean;
