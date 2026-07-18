@@ -6,7 +6,7 @@
     <div class="date-section">
 
        <div class="general-container" >
-        <app-date-vau [fecha]="fecha" (fechaChange)="onFechaDesdeComponenteHijo($event)" (setToday)="setToday($event)" *ngIf="vauContainerView"></app-date-vau>
+        <app-date-vau [fecha]="fecha" [esHoy]="esHoy" (fechaChange)="onFechaDesdeComponenteHijo($event)" (setToday)="setToday($event)" *ngIf="vauContainerView"></app-date-vau>
         <app-descargas (back)="goToVauContainer()" *ngIf="descargarView"></app-descargas>
        </div>
      

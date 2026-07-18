@@ -18,6 +18,7 @@ export class HomeComponent {
   @ViewChild('popup') popupRef!: ElementRef;
   fecha: string = '';
   today: string = '';
+  esHoy = true;
   showDatePicker = false;
   usuarioLogueado = false;
   usuarioInvitado = false;
@@ -138,11 +139,12 @@ export class HomeComponent {
   onFechaSeleccionada(event: any) {
     this.fecha = new Date(event.target.value).toISOString().split('T')[0];
     this.showDatePicker = false;
+    this.esHoy = false;
   }
 
   volverHoy() {
-    this.fecha = new Date().toISOString().split('T')[0];
-    this.fecha = this.today;
+    this.fecha = '';
+    this.esHoy = true;
   }
 
   goToLogin(){
@@ -153,6 +155,7 @@ export class HomeComponent {
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;
     this.showDatePicker = false;
+    this.esHoy=false;
   }
 
   @HostListener('document:click', ['$event'])
@@ -163,8 +166,7 @@ export class HomeComponent {
   }
 
   setToday(today: string){
-    this.today = today;
-    this.fecha = today;
-  }
+  this.today = today;
+}
   
 }

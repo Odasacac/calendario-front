@@ -13,6 +13,7 @@ import { VAUResponse } from '../../../interfaces/vau-response';
 export class DateVAUComponent implements OnInit, OnChanges {
 
   @Input() fecha!: string;
+  @Input() esHoy!: boolean;
   @Output() fechaChange = new EventEmitter<string>(); 
   @Output() setToday = new EventEmitter<string>(); 
 
@@ -26,27 +27,23 @@ export class DateVAUComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.fechaActual = this.fecha;
-    if (this.fechaActual) {
-      this.cargarDatos(this.fechaActual, false);
-    }
-    else{
-      this.cargarDatos(this.fechaActual, true);
-    }
+    this.cargarDatos(this.fechaActual);
+   
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
       this.fechaActual = this.fecha;
-      this.cargarDatos(this.fechaActual, false);
+      this.cargarDatos(this.fechaActual);
       this.showMore = false;
     }
   }
 
-  cargarDatos(fecha: string, today: boolean) {
+  cargarDatos(fecha: string) {
     this.loading = true;
     this.data = undefined;
 
-    if(today){
+    if(this.esHoy){
       this.dateService.getTodayVAU().subscribe({
       next: (res) => {
         this.data = res;
