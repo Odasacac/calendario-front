@@ -13,7 +13,11 @@ export class DatesService {
   constructor(private http: HttpClient) {}
 
   getVAU(date: string): Observable<VAUResponse> {
-    return this.http.get<VAUResponse>(`${this.apiUrl}?date=${date}`);
+    return this.http.get<VAUResponse>(`${this.apiUrl}/selected?date=${date}`);
+  }
+
+   getTodayVAU(): Observable<VAUResponse> {
+    return this.http.get<VAUResponse>(`${this.apiUrl}/today`);
   }
 
 }

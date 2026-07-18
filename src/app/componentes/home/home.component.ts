@@ -106,7 +106,7 @@ export class HomeComponent {
   }
 
   goToVauContainer(){
-    this.fecha = new Date().toISOString().split('T')[0];
+
     this.updateOptionsVauView();
 
     this.vauContainerView=true;

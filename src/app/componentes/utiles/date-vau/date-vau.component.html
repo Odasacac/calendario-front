@@ -12,7 +12,7 @@
   </div>
 
   <!-- Mostrar datos solo si no está cargando -->
-  <div *ngIf="!loading && data" class="info">
+  <div *ngIf="!loading && data && !mensajeError" class="info">
 
     <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
     <p *ngIf="data.notableEvent.today"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
@@ -62,6 +62,11 @@
     </div>
 
   </div>
+
+   <div *ngIf="data && !loading && mensajeError" class="error-message">
+  <p>{{ data.mensaje }}</p>
+  
+</div>
 
  <div *ngIf="!data && !loading" class="error-message">
   <p>No se han podido obtener los datos</p>

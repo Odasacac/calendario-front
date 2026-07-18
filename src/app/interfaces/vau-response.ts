@@ -93,4 +93,8 @@ export interface VAUResponse {
         direccion: string | null;
     } 
   }
+
+  mensaje: string | null;
+  fechaEncontrada: boolean;
+  fechaO: string | null;
 }

@@ -19,6 +19,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
   data?: VAUResponse;
   showMore = false;
   loading = false;
+  mensajeError = false;
 
   constructor(private dateService: DatesService) {}
 
@@ -44,6 +45,9 @@ export class DateVAUComponent implements OnInit, OnChanges {
       next: (res) => {
         this.data = res;
         this.loading = false;
+        if(!this.data.fechaEncontrada){
+          this.mensajeError=true;
+        }
       },
       error: (err) => {
         console.error(err);
@@ -62,6 +66,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
   }
 
   cambiarFecha(dias: number) {
+    this.mensajeError=false;
   if (!this.fechaActual) return;
 
   const [year, month, day] = this.fechaActual.split('-').map(Number);
