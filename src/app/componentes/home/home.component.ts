@@ -164,6 +164,7 @@ export class HomeComponent {
 
   setToday(today: string){
     this.today = today;
+    this.fecha = today;
   }
   
 }
