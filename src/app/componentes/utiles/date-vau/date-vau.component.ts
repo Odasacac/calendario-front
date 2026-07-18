@@ -14,6 +14,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
 
   @Input() fecha!: string;
   @Output() fechaChange = new EventEmitter<string>(); 
+  @Output() setToday = new EventEmitter<string>(); 
 
   fechaActual!: string;
   data?: VAUResponse;
@@ -26,25 +27,32 @@ export class DateVAUComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.fechaActual = this.fecha;
     if (this.fechaActual) {
-      this.cargarDatos(this.fechaActual);
+      this.cargarDatos(this.fechaActual, false);
+    }
+    else{
+      this.cargarDatos(this.fechaActual, true);
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['fecha'] && !changes['fecha'].isFirstChange()) {
       this.fechaActual = this.fecha;
-      this.cargarDatos(this.fechaActual);
+      this.cargarDatos(this.fechaActual, false);
       this.showMore = false;
     }
   }
 
-  cargarDatos(fecha: string) {
+  cargarDatos(fecha: string, today: boolean) {
     this.loading = true;
     this.data = undefined;
-    this.dateService.getVAU(fecha).subscribe({
+
+    if(today){
+      this.dateService.getTodayVAU().subscribe({
       next: (res) => {
         this.data = res;
         this.loading = false;
+        this.setToday.emit(this.data.fechaO!);
+        this.fechaActual = this.data.fechaO!;
         if(!this.data.fechaEncontrada){
           this.mensajeError=true;
         }
@@ -53,7 +61,25 @@ export class DateVAUComponent implements OnInit, OnChanges {
         console.error(err);
         this.loading = false;
       }
-    });
+      });
+    }
+    else{
+      this.dateService.getVAU(fecha).subscribe({
+      next: (res) => {
+        this.data = res;
+        this.loading = false;
+        this.fechaActual = this.data.fechaO!;
+        if(!this.data.fechaEncontrada){
+          this.mensajeError=true;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+      }
+      });
+    }
+    
   }
 
   toggleMore() {
@@ -67,23 +93,23 @@ export class DateVAUComponent implements OnInit, OnChanges {
 
   cambiarFecha(dias: number) {
     this.mensajeError=false;
-  if (!this.fechaActual) return;
+    if (!this.fechaActual) return;
 
-  const [year, month, day] = this.fechaActual.split('-').map(Number);
-  const fechaObj = new Date(Date.UTC(year, month - 1, day));
+    const [year, month, day] = this.fechaActual.split('-').map(Number);
+    const fechaObj = new Date(Date.UTC(year, month - 1, day));
 
-  fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
+    fechaObj.setUTCDate(fechaObj.getUTCDate() + dias);
 
-  this.fechaActual = [
-    String(fechaObj.getUTCFullYear()).padStart(4, '0'), // <-- aquí mantenemos ceros a la izquierda
-    String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
-    String(fechaObj.getUTCDate()).padStart(2, '0')
-  ].join('-');
+    this.fechaActual = [
+      String(fechaObj.getUTCFullYear()).padStart(4, '0'), // <-- aquí mantenemos ceros a la izquierda
+      String(fechaObj.getUTCMonth() + 1).padStart(2, '0'),
+      String(fechaObj.getUTCDate()).padStart(2, '0')
+    ].join('-');
 
-  this.showMore = false;
+    this.showMore = false;
 
-  this.fechaChange.emit(this.fechaActual);
-}
+    this.fechaChange.emit(this.fechaActual);
+  }
 
   getDescripcionCasalero(): string {
     const c = this.data?.casalero;

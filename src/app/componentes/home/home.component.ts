@@ -16,8 +16,8 @@ import { opciones } from '../../interfaces/opciones';
 export class HomeComponent {
 
   @ViewChild('popup') popupRef!: ElementRef;
-  fecha: string = new Date().toISOString().split('T')[0];
-  today: string = new Date().toISOString().split('T')[0];
+  fecha: string = '';
+  today: string = '';
   showDatePicker = false;
   usuarioLogueado = false;
   usuarioInvitado = false;
@@ -160,6 +160,10 @@ export class HomeComponent {
     if (this.mostrarOpciones && this.popupRef && !this.popupRef.nativeElement.contains(event.target)) {
       this.mostrarOpciones = false;
     }
+  }
+
+  setToday(today: string){
+    this.today = today;
   }
   
 }

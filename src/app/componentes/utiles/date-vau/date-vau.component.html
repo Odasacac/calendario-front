@@ -1,17 +1,19 @@
   <!-- Título con flechas -->
-<div class="date-header">
-  <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(-1)">&larr;</button>
-  <h2 class="date-title" *ngIf="fechaActual">{{ formatFecha(fechaActual) }}</h2>
-  <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(1)">&rarr;</button>
-</div>
-
-  <!-- Spinner mientras carga -->
+<!-- Spinner mientras carga -->
   <div *ngIf="loading" class="spinner-container">
     <div class="spinner"></div>
     <p>Cargando datos...</p>
   </div>
 
-  <!-- Mostrar datos solo si no está cargando -->
+<!-- Mostrar datos solo si no está cargando -->
+  <div class="date-header" *ngIf="!loading">
+    <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(-1)">&larr;</button>
+    <h2 class="date-title">{{ formatFecha(data!.fechaO!) }}</h2>
+    <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(1)">&rarr;</button>
+  </div>
+
+  
+  
   <div *ngIf="!loading && data && !mensajeError" class="info">
 
     <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
@@ -70,5 +72,5 @@
 
  <div *ngIf="!data && !loading" class="error-message">
   <p>No se han podido obtener los datos</p>
-  <button class="retry-btn" (click)="cargarDatos(fechaActual)">Reintentar</button>
+  <button class="retry-btn" (click)="cargarDatos(fechaActual, false)">Reintentar</button>
 </div>
