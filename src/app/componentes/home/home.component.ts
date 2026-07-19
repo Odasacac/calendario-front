@@ -155,7 +155,13 @@ export class HomeComponent {
   onFechaDesdeComponenteHijo(nuevaFecha: string) {
     this.fecha = nuevaFecha;
     this.showDatePicker = false;
-    this.esHoy=false;
+    if(nuevaFecha == this.today){
+      this.esHoy=true; 
+    }
+    else{
+      this.esHoy=false;
+    }
+    
   }
 
   @HostListener('document:click', ['$event'])
