@@ -84,7 +84,11 @@ export class DateVAUComponent implements OnInit, OnChanges {
   }
 
   formatFecha(fecha: string): string {
-    const [year, month, day] = fecha.split('-');
+    let fechaParaFormatear = fecha;
+    if(!fecha){
+      fechaParaFormatear=this.fechaActual;
+    }    
+    const [year, month, day] = fechaParaFormatear.split('-');
     return `${day}-${month}-${year}`;
   }
 

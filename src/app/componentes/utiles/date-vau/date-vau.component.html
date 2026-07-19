@@ -6,7 +6,7 @@
   </div>
 
 <!-- Mostrar datos solo si no está cargando -->
-  <div class="date-header" *ngIf="!loading">
+  <div class="date-header" *ngIf="!loading && data">
     <button class="arrow-btn" (click)="cambiarFecha(-1)">&larr;</button>
     <h2 class="date-title">{{ formatFecha(data!.fechaO!) }}</h2>
     <button class="arrow-btn" (click)="cambiarFecha(1)">&rarr;</button>
@@ -71,6 +71,8 @@
 </div>
 
  <div *ngIf="!data && !loading" class="error-message">
-  <p>No se han podido obtener los datos</p>
+  <p>No se han podido obtener los datos.</p>
+  <p>No hay respuesta de la API.</p>
+  <p>Por favor, informe si persiste.</p>
   <button class="retry-btn" (click)="cargarDatos(fechaActual)">Reintentar</button>
 </div>
