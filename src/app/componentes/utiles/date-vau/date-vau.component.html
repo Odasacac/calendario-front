@@ -7,9 +7,9 @@
 
 <!-- Mostrar datos solo si no está cargando -->
   <div class="date-header" *ngIf="!loading">
-    <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(-1)">&larr;</button>
+    <button class="arrow-btn" (click)="cambiarFecha(-1)">&larr;</button>
     <h2 class="date-title">{{ formatFecha(data!.fechaO!) }}</h2>
-    <button class="arrow-btn" *ngIf="!loading" (click)="cambiarFecha(1)">&rarr;</button>
+    <button class="arrow-btn" (click)="cambiarFecha(1)">&rarr;</button>
   </div>
 
   

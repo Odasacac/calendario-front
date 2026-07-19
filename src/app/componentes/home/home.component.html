@@ -13,7 +13,7 @@
 
         <!-- Botón “Hoy”, solo si la fecha no es hoy -->
         <button 
-          *ngIf="fecha !== today && vauContainerView" 
+          *ngIf="!esHoy && vauContainerView" 
           (click)="volverHoy()" 
           class="today-btn">
             Volver a hoy

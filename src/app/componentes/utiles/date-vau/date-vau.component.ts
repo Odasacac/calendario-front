@@ -42,7 +42,7 @@ export class DateVAUComponent implements OnInit, OnChanges {
   cargarDatos(fecha: string) {
     this.loading = true;
     this.data = undefined;
-
+    this.mensajeError=false;
     if(this.esHoy){
       this.dateService.getTodayVAU().subscribe({
       next: (res) => {
