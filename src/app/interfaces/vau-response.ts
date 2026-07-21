@@ -97,4 +97,11 @@ export interface VAUResponse {
   mensaje: string | null;
   fechaEncontrada: boolean;
   fechaO: string | null;
+
+  aponovos:{
+    aponovosPasadosDesdeLastMetonoIAR: number;
+    numeroDeAponovo: number;
+    lunasNuevasPasadasDesdeLastAponovo: number;
+    mesAponoval: number;
+  }
 }
