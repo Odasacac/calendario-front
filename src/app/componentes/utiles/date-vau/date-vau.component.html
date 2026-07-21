@@ -35,10 +35,6 @@
 
     <div *ngIf="showMore" class="more">
 
-      <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
-        <p><strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }}</p>
-      </div>
-
       <div *ngIf="data.notableEvent.next">
         <p><strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }}</p>
       </div>
@@ -55,6 +51,10 @@
         <p><strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }}</p>
       </div>
 
+      <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
+        <p><strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }}</p>
+      </div>
+      
       <p><strong>Mes aponoval:</strong> {{ data.aponovos.mesAponoval}}</p>
       <p><strong>Aponovos desde el último métono invernal apofasal remoto:</strong> {{ data.aponovos.numeroDeAponovo}}</p>
       <p><strong>Eclipses absolutos desde el ultimo eclípeno invernal nuevo:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
