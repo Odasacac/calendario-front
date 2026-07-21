@@ -22,8 +22,6 @@
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
-    <p><strong>Mes aponoval:</strong> {{ data.aponovos.mesAponoval}}</p>
-    <p><strong>Aponovo:</strong> {{ data.aponovos.numeroDeAponovo}}</p>
     <p><strong>Métono invernal nuevo:</strong> {{ data.metonoVAU.metonsIN.numberOfMetonIN }} {{ data.metonoVAU.metonsIN.lastMetonSurname }}</p>
     <p><strong>Métono invernal apórico:</strong> {{ data.metonoVAU.metonsIA.numberOfMetonIA }} {{ data.metonoVAU.metonsIA.lastMetonSurname }}</p>
     <p><strong>Métono invernal apofasal remoto:</strong> {{ data.metonoInvernalApofasalRemoto.numberOfMetonoInvernalApofasalRemoto }}</p>
@@ -57,6 +55,8 @@
         <p><strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }}</p>
       </div>
 
+      <p><strong>Mes aponoval:</strong> {{ data.aponovos.mesAponoval}}</p>
+      <p><strong>Aponovos desde el último métono invernal apofasal remoto:</strong> {{ data.aponovos.numeroDeAponovo}}</p>
       <p><strong>Eclipses absolutos desde el ultimo eclípeno invernal nuevo:</strong> {{ data.absoluteEclipses.sinceLastEclipenoIN }}</p>
 
       <div *ngIf="data.casalero">
