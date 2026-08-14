@@ -16,12 +16,41 @@
   
   <div *ngIf="!loading && data && !mensajeError" class="info">
 
+    <div class="basicinfo">
     <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
     <p *ngIf="data.notableEvent.today"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
     <p><strong>Mes fasal:</strong> {{ data.month.name }} {{data.month.surname}}</p>
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
-    <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>  
+    <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p> 
+    </div>
+
+
+    <div class="eventosyfestividades">
+      <p>
+        <strong>Festividad anterior</strong>
+        <span>{{ data.festividades.festividadAnterior }}</span>
+      </p>
+
+      <p>
+        <strong>Próxima festividad</strong>
+        <span>{{ data.festividades.festividadProxima }}</span>
+      </p>
+
+      <p>
+        <strong>Último evento reseñable</strong>
+        <span>{{ data.notableEvent.previous }}</span>
+      </p>
+
+      <p>
+        <strong>Próximo evento reseñable</strong>
+        <span>{{ data.notableEvent.next }}</span>
+      </p>
+</div>
+
+
+
+
 
     <button (click)="toggleMore()">
       {{ showMore ? 'Menos detalles' : 'Más detalles' }}
@@ -105,23 +134,6 @@
         <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
           <p> <strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }} </p>
         </div>
-
-        <div *ngIf="data.notableEvent.next">
-          <p> <strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }} </p>
-        </div>
-
-        <div *ngIf="data.notableEvent.previous">
-          <p> <strong>Último evento reseñable:</strong> {{ data.notableEvent.previous }} </p>
-        </div>
-
-        <div *ngIf="data.festividades?.festividadProxima">
-          <p> <strong>Próxima festividad:</strong> {{ data.festividades.festividadProxima }} </p>
-        </div>
-
-        <div *ngIf="data.festividades?.festividadAnterior">
-          <p> <strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }} </p>
-        </div>
-
       </div>
 
     </div>
