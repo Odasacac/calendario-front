@@ -132,3 +132,25 @@ button:hover {
 .retry-btn:hover {
   background: #ef6c00;
 }
+
+/* Sección */
+.section {
+  margin-top: 14px;
+}
+
+/* Título de sección */
+.section-title {
+  color: #1b5e20;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+/* Elementos pertenecientes a la sección */
+.section-content {
+  padding-left: 28px;
+}
+
+/* Eventos finales */
+.events {
+  margin-top: 14px;
+}
