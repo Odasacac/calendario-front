@@ -22,11 +22,11 @@
     <p *ngIf="data.week"><strong>Semana:</strong> {{ data.week }}</p>
     <p><strong>Día:</strong> {{ data.day }}</p>
     <p><strong>Año:</strong> {{ data.year.numberOfYear }}</p>
-    <p><strong>Métonos invernales nuevos:</strong> {{ data.metonoVAU.metonsIN.metonosINSinceLastEclipenoIN }} {{ data.metonoVAU.metonsIN.lastMetonSurname }}</p>
-    <p><strong>Métonos invernales apóricos:</strong> {{ data.metonoVAU.metonsIA.metonosIASinceLastEclipenoSelecto }} {{ data.metonoVAU.metonsIA.lastMetonSurname }}</p>
-    <p><strong>Métonos invernales apofasales remotos:</strong> {{ data.metonoInvernalApofasalRemoto.metonosInvernalApofasalRemotoSinceLastEclipenoINSelecto }}</p>
-    <p><strong>Eclípenos invernales nuevos:</strong> {{ data.eclipenoVAU.eclipenosINSinceLastEclipenoINSelecto }} {{ data.eclipenoVAU.lastEclipenoSurname }}</p>
-    <p><strong>Último eclípeno invernal apofasales remotos: </strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }}</p>
+    <p><strong>Métonos invernales nuevos desde el último métono invernal apofasal remoto:</strong> {{ data.metonoVAU.metonsIN.metonosINSinceLastEclipenoIN }} {{ data.metonoVAU.metonsIN.lastMetonSurname }}</p>
+    <p><strong>Métonos invernales apóricos desde el último métono invernal apofasal remoto:</strong> {{ data.metonoVAU.metonsIA.metonosIASinceLastEclipenoSelecto }} {{ data.metonoVAU.metonsIA.lastMetonSurname }}</p>
+    <p><strong>Métonos invernales apofasales remotos desde el último eclípeno invernal apofasal remoto:</strong> {{ data.metonoInvernalApofasalRemoto.metonosInvernalApofasalRemotoSinceLastEclipenoINSelecto }}</p>
+    <p><strong>Eclípenos invernales nuevos desde el último eclípeno invernal apofasal remoto:</strong> {{ data.eclipenoVAU.eclipenosINSinceLastEclipenoINSelecto }} {{ data.eclipenoVAU.lastEclipenoSurname }}</p>
+    <p><strong>Último eclípeno invernal apofasal remoto: </strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }}</p>
   
 
     <button (click)="toggleMore()">
