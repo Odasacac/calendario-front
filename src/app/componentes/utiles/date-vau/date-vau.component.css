@@ -154,3 +154,10 @@ button:hover {
 .events {
   margin-top: 14px;
 }
+
+.other-content {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px; 
+}

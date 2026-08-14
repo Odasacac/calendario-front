@@ -29,26 +29,6 @@
 
     <div *ngIf="showMore" class="more">
 
-      <div *ngIf="data.notableEvent.next">
-        <p> <strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }} </p>
-      </div>
-
-      <div *ngIf="data.notableEvent.previous">
-        <p> <strong>Último evento reseñable:</strong> {{ data.notableEvent.previous }} </p>
-      </div>
-
-      <div *ngIf="data.festividades?.festividadProxima">
-        <p> <strong>Próxima festividad:</strong> {{ data.festividades.festividadProxima }} </p>
-      </div>
-
-      <div *ngIf="data.festividades?.festividadAnterior">
-        <p> <strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }} </p>
-      </div>
-
-      <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
-      <p> <strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }} </p>
-      </div>
-
       <p> <strong>Último eclípeno invernal apofasal remoto:</strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }} </p>
 
       <div *ngIf="data.casalero">
@@ -120,6 +100,30 @@
           </p>
         </div>
       </div>
+
+      <div class="other-content">
+        <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
+          <p> <strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }} </p>
+        </div>
+
+        <div *ngIf="data.notableEvent.next">
+          <p> <strong>Próximo evento reseñable:</strong> {{ data.notableEvent.next }} </p>
+        </div>
+
+        <div *ngIf="data.notableEvent.previous">
+          <p> <strong>Último evento reseñable:</strong> {{ data.notableEvent.previous }} </p>
+        </div>
+
+        <div *ngIf="data.festividades?.festividadProxima">
+          <p> <strong>Próxima festividad:</strong> {{ data.festividades.festividadProxima }} </p>
+        </div>
+
+        <div *ngIf="data.festividades?.festividadAnterior">
+          <p> <strong>Festividad anterior:</strong> {{ data.festividades.festividadAnterior }} </p>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
