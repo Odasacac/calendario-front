@@ -61,6 +61,14 @@ export interface VAUResponse {
   
   };
 
+  season:{
+    name: string | null;
+    surname:string | null;
+    midsisonDay: boolean;
+    preMidsison: boolean;
+    postMidsison: boolean;
+  }
+
   month: {
     name: string;
     newMoon: boolean;
