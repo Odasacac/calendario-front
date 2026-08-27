@@ -86,7 +86,7 @@ export interface VAUResponse {
   year: {
     esSolsticioDeInvierno: boolean;
     numberOfYear: number;
-    solsticiosDeInviernoSinceLastMetonIN: number;
+    solsticiosDeInviernoSinceLastMetonIN: string | null;
   };
 
   festividades:{
