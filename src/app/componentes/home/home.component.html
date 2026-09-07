@@ -1,62 +1,79 @@
-<div class="home-container">
-  <div class="home-card">
-
-    <h1 class="title">Calendario para vivir en armonía con el universo</h1>
-
-    <div class="date-section">
-
-       <div class="general-container" >
-        <app-date-vau [fecha]="fecha" [esHoy]="esHoy" (fechaChange)="onFechaDesdeComponenteHijo($event)" (setToday)="setToday($event)" *ngIf="vauContainerView"></app-date-vau>
-        <app-descargas (back)="goToVauContainer()" *ngIf="descargarView"></app-descargas>
-       </div>
-     
-
-        <!-- Botón “Hoy”, solo si la fecha no es hoy -->
-        <button 
-          *ngIf="!esHoy && vauContainerView" 
-          (click)="volverHoy()" 
-          class="today-btn">
-            Volver a hoy
+<div class="home">
+  <div class="barra no-print">
+    <div class="estado">
+      @if (esHoy()) {
+        <span class="chip chip-primary">
+          <app-icono nombre="sol" [tamanyo]="14" />
+          {{ t('home.hoy') }}
+        </span>
+      } @else {
+        <button type="button" class="btn btn-outline" (click)="volverAHoy()">
+          <app-icono nombre="sol" [tamanyo]="18" />
+          {{ t('home.volverAHoy') }}
         </button>
-      </div>
-
-      <!-- Botones principales -->
-      <div class="actions">
-      <div class="popup-container">
-      <button (click)="toggleOpciones($event)">
-        {{ mostrarOpciones ? 'Cerrar más opciones' : 'Más opciones' }}
-      </button>
-
-      <div *ngIf="mostrarOpciones">
-        <div class="popup-menu" #popup>
-          <div *ngFor="let opcion of opciones">
-            <button (click)="opcionClickada(opcion.value)" *ngIf="mostrarOpcion(opcion.loggedUserOnly)">{{opcion.name}}</button>    
-          </div>
-        </div>
-      </div>
+      }
     </div>
 
-    <button (click)="buscarFecha()" *ngIf="vauContainerView">
-      {{ showDatePicker ? 'Ocultar calendario' : 'Convertir una fecha' }}
-    </button>
+    <div class="controles">
+      @if (vista() === 'vau') {
+        <button
+          type="button"
+          class="btn"
+          [attr.aria-expanded]="selectorAbierto()"
+          aria-controls="selector-fecha"
+          (click)="alternarSelector()"
+        >
+          <app-icono nombre="calendario" [tamanyo]="18" />
+          {{ selectorAbierto() ? t('home.ocultarCalendario') : t('home.convertirFecha') }}
+        </button>
+      }
+
+      <div class="contenedor-menu" #contenedorMenu>
+        <button
+          type="button"
+          class="btn btn-primary"
+          aria-haspopup="true"
+          [attr.aria-expanded]="menuAbierto()"
+          (click)="alternarMenu()"
+        >
+          <app-icono nombre="menu" [tamanyo]="18" />
+          {{ menuAbierto() ? t('home.cerrarOpciones') : t('home.masOpciones') }}
+        </button>
+
+        @if (menuAbierto()) {
+          <div class="menu" role="menu">
+            @for (opcion of opciones(); track opcion.accion) {
+              <button type="button" role="menuitem" (click)="ejecutar(opcion)">
+                <app-icono [nombre]="opcion.icono" [tamanyo]="16" />
+                {{ t(opcion.clave) }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
   </div>
 
-     
-  <div class="others">
-    <!-- Calendario oculto -->
-    <input
-      *ngIf="showDatePicker"
-      type="date"
-      [value]="fecha"
-      (change)="onFechaSeleccionada($event)"
-    />
+  @if (selectorAbierto() && vista() === 'vau') {
+    <div class="panel selector no-print" id="selector-fecha">
+      <label class="field">
+        <span>{{ t('home.elegirFecha') }}</span>
+        <input
+          #campoFecha
+          class="input"
+          type="date"
+          [value]="fechaDelSelector()"
+          (change)="seleccionarFecha($event)"
+        />
+      </label>
+    </div>
+  }
 
-    <button class="login-button" (click)="goToLogin()">Volver al login</button>
-  </div>
-    
-
-  <!-- Footer -->
-  <p class="author">Por Carlos Casado Aguilera</p>
-
-  </div>
+  <section class="card contenedor">
+    @if (vista() === 'vau') {
+      <app-date-vau [fecha]="fecha()" (fechaChange)="cambiarFecha($event)" />
+    } @else {
+      <app-descargas (back)="irAVau()" />
+    }
+  </section>
 </div>

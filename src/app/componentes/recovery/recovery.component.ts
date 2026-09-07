@@ -1,30 +1,52 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { I18nService } from '../../servicios/i18n.service';
+import { NotificacionesService } from '../../servicios/notificaciones.service';
+import { IconoComponent } from '../utiles/icono/icono.component';
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 
 @Component({
   selector: 'app-recovery',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [ReactiveFormsModule, IconoComponent],
   templateUrl: './recovery.component.html',
-  styleUrl: './recovery.component.css'
+  styleUrl: './recovery.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecoveryComponent {
+  private readonly router = inject(Router);
+  private readonly avisos = inject(NotificacionesService);
+  private readonly fb = inject(NonNullableFormBuilder);
 
- userEmail = '';
+  protected readonly t = inject(I18nService).t;
 
-  constructor(private router: Router) {}
+  protected readonly formulario = this.fb.group({
+    correo: ['', [Validators.required, Validators.pattern(EMAIL)]],
+  });
 
-  recoverPassword(form: NgForm) {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
+  protected recuperar(): void {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
       return;
     }
-    // TO DO
+
+    this.avisos.info(this.t('recuperar.pendiente'));
   }
 
-  goLogin() {
-    this.router.navigate(['/login']);
+  protected volverAlLogin(): void {
+    void this.router.navigate(['/login']);
+  }
+
+  protected get invalido(): boolean {
+    const control = this.formulario.controls.correo;
+    return control.invalid && (control.touched || control.dirty);
+  }
+
+  protected get error(): string {
+    return this.formulario.controls.correo.hasError('required')
+      ? this.t('comun.obligatorio')
+      : this.t('comun.emailInvalido');
   }
 }

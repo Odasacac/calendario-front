@@ -1,28 +1,42 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="pagina-centrada">
+  <section class="card tarjeta-auth">
+    <header>
+      <span class="emblema" aria-hidden="true">
+        <app-icono nombre="candado" [tamanyo]="24" />
+      </span>
+      <h1>{{ t('recuperar.titulo') }}</h1>
+      <p>{{ t('recuperar.subtitulo') }}</p>
+    </header>
 
-    <h1 class="title">Recuperar contraseña</h1>
-
-    <form #forgotForm="ngForm" (ngSubmit)="recoverPassword(forgotForm)">
-
-      <label for="user">Correo electrónico</label>
-      <input id="user" name="user" type="text" [(ngModel)]="userEmail" required
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" #userCtrl="ngModel"/>
-
-      <!-- Mensaje si está vacío -->
-      <div class="error" *ngIf="forgotForm.submitted && !userEmail">
-        Este campo es obligatorio
+    <form [formGroup]="formulario" (ngSubmit)="recuperar()" novalidate>
+      <div class="field">
+        <label for="correo">{{ t('recuperar.email') }}</label>
+        <input
+          id="correo"
+          class="input"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          formControlName="correo"
+          [class.invalid]="invalido"
+          [attr.aria-invalid]="invalido"
+          [attr.aria-describedby]="invalido ? 'correo-error' : null"
+        />
+        @if (invalido) {
+          <p class="field-error" id="correo-error">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ error }}
+          </p>
+        }
       </div>
 
-      <!-- Mensaje si no es un email válido -->
-      <div class="error" *ngIf="forgotForm.submitted && userEmail && userCtrl.errors?.['pattern']">
-        Introduce un email válido
-      </div>
-
-      <button type="submit">Recuperar</button>
-      <button type="button" class="secondary" (click)="goLogin()">Volver al login</button>
-
+      <button type="submit" class="btn btn-primary btn-block">
+        {{ t('recuperar.enviar') }}
+      </button>
+      <button type="button" class="btn btn-ghost btn-block" (click)="volverAlLogin()">
+        <app-icono nombre="izquierda" [tamanyo]="16" />
+        {{ t('comun.volverAlLogin') }}
+      </button>
     </form>
-
-  </div>
+  </section>
 </div>

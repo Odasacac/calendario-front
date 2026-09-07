@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<a class="skip-link" href="#contenido">{{ t('app.saltarAlContenido') }}</a>
+
+<app-cabecera />
+
+<main id="contenido" class="contenido" tabindex="-1">
+  <router-outlet />
+</main>
+
+<footer class="pie no-print">
+  <p class="subtle">{{ t('app.autor') }}</p>
+</footer>
+
+<app-notificaciones />

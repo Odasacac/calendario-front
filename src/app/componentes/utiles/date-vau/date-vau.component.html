@@ -1,152 +1,273 @@
-  <!-- Título con flechas -->
-<!-- Spinner mientras carga -->
-  <div *ngIf="loading" class="spinner-container">
-    <div class="spinner"></div>
-    <p>Cargando datos...</p>
-  </div>
-
-<!-- Mostrar datos solo si no está cargando -->
-  <div class="date-header" *ngIf="!loading && data">
-    <button class="arrow-btn" (click)="cambiarFecha(-1)">&larr;</button>
-    <h2 class="date-title">{{ formatFecha(data!.fechaO!) }}</h2>
-    <button class="arrow-btn" (click)="cambiarFecha(1)">&rarr;</button>
-  </div>
-
-  
-  
-  <div *ngIf="!loading && data && !mensajeError" class="info">
-
-    <div class="basicinfo">
-    <p *ngIf="data.festividades?.festividadActual"><strong>Festividad:</strong> {{ data.festividades.festividadActual }}</p>
-    <p *ngIf="data.notableEvent.today"><strong>Evento reseñable:</strong> {{ data.notableEvent.today }}</p>
-    <p><strong>Estación:</strong> {{ data.season.name }} {{ data.season.surname }}</p>
-    <p><strong>Mes fasal:</strong> {{ data.month.name }} {{data.month.surname}}</p>
-    <p><strong>Semana:</strong> {{ data.week }}</p>
-    <p><strong>Día:</strong> {{ data.day }}</p>
-    <p><strong>Año:</strong> {{ data.year.solsticiosDeInviernoSinceLastMetonIN }}</p> 
-    </div>
-
-
-    <div class="eventosyfestividades">
-      <p>
-        <strong>Festividad anterior</strong>
-        <span>{{ data.festividades.festividadAnterior }}</span>
-      </p>
-
-      <p>
-        <strong>Próxima festividad</strong>
-        <span>{{ data.festividades.festividadProxima }}</span>
-      </p>
-
-      <p>
-        <strong>Último evento reseñable</strong>
-        <span>{{ data.notableEvent.previous }}</span>
-      </p>
-
-      <p>
-        <strong>Próximo evento reseñable</strong>
-        <span>{{ data.notableEvent.next }}</span>
-      </p>
-</div>
-
-
-
-
-
-    <button (click)="toggleMore()">
-      {{ showMore ? 'Menos detalles' : 'Más detalles' }}
+<section
+  class="tarjeta"
+  (pointerdown)="inicioGesto($event)"
+  (pointerup)="finGesto($event)"
+>
+  <!-- Navegación entre días -->
+  <div class="navegador">
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon no-print"
+      [attr.aria-label]="t('vau.diaAnterior')"
+      [attr.title]="t('vau.diaAnterior')"
+      (click)="cambiarDia(-1)"
+    >
+      <app-icono nombre="izquierda" [tamanyo]="22" />
     </button>
 
-    <div *ngIf="showMore" class="more">
-
-      <p> <strong>Último eclípeno invernal apofasal remoto:</strong> {{ data.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN }} </p>
-
-      <div *ngIf="data.casalero">
-        <p> <strong>Casalero:</strong> {{ getDescripcionCasalero() }} </p>
-      </div>
-
-
-      <div class="section">
-        <div class="section-title">
-          Desde el último eclípeno invernal apofasal remoto:
-        </div>
-
-        <div class="section-content">
-          <p>
-            <strong>Métonos invernales apofasales remotos:</strong>
-            {{ data.metonoInvernalApofasalRemoto.metonosInvernalApofasalRemotoSinceLastEclipenoINSelecto }}
-          </p>
-
-          <p>
-            <strong>Eclípenos invernales nuevos:</strong>
-            {{ data.eclipenoVAU.eclipenosINSinceLastEclipenoINSelecto }}
-            {{ data.eclipenoVAU.lastEclipenoSurname }}
-          </p>
-        </div>
-      </div>
-
-
-      <div class="section">
-        <div class="section-title">
-          Desde el último métono invernal apofasal remoto:
-        </div>
-
-        <div class="section-content">
-          <p>
-            <strong>Métonos invernales nuevos:</strong>
-            {{ data.metonoVAU.metonsIN.metonosINSinceLastEclipenoIN }}
-            {{ data.metonoVAU.metonsIN.lastMetonSurname }}
-          </p>
-
-          <p>
-            <strong>Métonos invernales apóricos:</strong>
-            {{ data.metonoVAU.metonsIA.metonosIASinceLastEclipenoSelecto }}
-            {{ data.metonoVAU.metonsIA.lastMetonSurname }}
-          </p>
-
-          <p>
-            <strong>Aponovos:</strong>
-            {{ data.aponovos.numeroDeAponovo }}
-          </p>
-
-          <p>
-            <strong>Mes aponoval:</strong>
-            {{ data.aponovos.mesAponoval }}
-          </p>
-        </div>
-      </div>
-
-
-      <div class="section">
-        <div class="section-title">
-          Desde el último eclípeno invernal nuevo:
-        </div>
-
-        <div class="section-content">
-          <p>
-            <strong>Alisolunios:</strong>
-            {{ data.absoluteEclipses.sinceLastEclipenoIN }}
-            (Solares: {{ data.absoluteEclipses.solarSinceLastEclipenoIN }})
-          </p>
-        </div>
-      </div>
-
-      <div class="other-content">
-        <div *ngIf="data.estadoLuna.comportamientoLunaDTO">
-          <p> <strong>Comportamiento de la luna:</strong> {{ data.estadoLuna.comportamientoLunaDTO.direccion }} </p>
-        </div>
-      </div>
-
+    <div class="fecha" aria-live="polite">
+      <p class="dia-semana">{{ diaSemana() }}</p>
+      <h2 class="titulo-fecha">{{ fechaLarga() }}</h2>
+      <p class="fecha-iso subtle">{{ fechaCorta() }}</p>
     </div>
+
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon no-print"
+      [attr.aria-label]="t('vau.diaSiguiente')"
+      [attr.title]="t('vau.diaSiguiente')"
+      (click)="cambiarDia(1)"
+    >
+      <app-icono nombre="derecha" [tamanyo]="22" />
+    </button>
   </div>
 
-  <div *ngIf="data && !loading && mensajeError" class="error-message">
-    <p>{{ data.mensaje }}</p>
-  </div>
+  <p class="sr-only">{{ t('vau.atajoTeclado') }}</p>
 
- <div *ngIf="!data && !loading" class="error-message">
-  <p>No se han podido obtener los datos.</p>
-  <p>No hay respuesta de la API.</p>
-  <p>Por favor, informe si persiste.</p>
-  <button class="retry-btn" (click)="cargarDatos(fechaActual)">Reintentar</button>
-</div>
+  <!-- Carga -->
+  @if (cargando()) {
+    <div class="esqueleto" [attr.aria-label]="t('comun.cargandoDatos')" role="status">
+      <div class="skeleton linea" style="width: 45%"></div>
+      <div class="rejilla-datos">
+        @for (hueco of huecos; track hueco) {
+          <div class="skeleton bloque"></div>
+        }
+      </div>
+      <div class="skeleton bloque alto"></div>
+    </div>
+  } @else if (hayError()) {
+    <div class="aviso-bloque error" role="alert">
+      <app-icono nombre="alerta" [tamanyo]="28" />
+      <h3>{{ t('vau.errorTitulo') }}</h3>
+      <p>{{ t('vau.errorApi') }}</p>
+      <p class="subtle">{{ t('vau.errorPersiste') }}</p>
+      <button type="button" class="btn btn-accent" (click)="reintentar()">
+        {{ t('comun.reintentar') }}
+      </button>
+    </div>
+  } @else if (noEncontrada()) {
+    <div class="aviso-bloque" role="alert">
+      <app-icono nombre="info" [tamanyo]="28" />
+      <h3>{{ t('vau.fechaNoEncontrada') }}</h3>
+      <p>{{ datos()?.mensaje ?? t('vau.errorApi') }}</p>
+    </div>
+  } @else {
+    @if (datos(); as vau) {
+    @if (
+      vau.festividades.festividadActual || vau.notableEvent.today || vau.month.newMoon
+    ) {
+      <div class="destacados">
+        @if (vau.festividades.festividadActual) {
+          <span class="chip chip-accent">
+            <app-icono nombre="estrella" [tamanyo]="14" />
+            {{ vau.festividades.festividadActual }}
+          </span>
+        }
+        @if (vau.notableEvent.today) {
+          <span class="chip chip-primary">
+            <app-icono nombre="info" [tamanyo]="14" />
+            {{ vau.notableEvent.today }}
+          </span>
+        }
+        @if (vau.month.newMoon) {
+          <span class="chip">
+            <app-icono nombre="luna" [tamanyo]="14" />
+            {{ t('vau.lunaNueva') }}
+          </span>
+        }
+      </div>
+    }
+
+    <div class="rejilla-datos">
+      <div class="dato">
+        <span class="etiqueta">{{ t('vau.estacion') }}</span>
+        <span class="valor">{{ valor(vau.season.name, vau.season.surname) }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">{{ t('vau.mesFasal') }}</span>
+        <span class="valor">{{ valor(vau.month.name, vau.month.surname) }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">{{ t('vau.semana') }}</span>
+        <span class="valor">{{ valor(vau.week) }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">{{ t('vau.dia') }}</span>
+        <span class="valor">{{ valor(vau.day) }}</span>
+      </div>
+      <div class="dato">
+        <span class="etiqueta">{{ t('vau.anyo') }}</span>
+        <span class="valor">
+          {{ valor(vau.year.solsticiosDeInviernoSinceLastMetonIN) }}
+        </span>
+      </div>
+    </div>
+
+    <div class="rejilla-eventos">
+      <div class="panel evento">
+        <span class="etiqueta">{{ t('vau.festividadAnterior') }}</span>
+        <span>{{ valor(vau.festividades.festividadAnterior) }}</span>
+      </div>
+      <div class="panel evento">
+        <span class="etiqueta">{{ t('vau.festividadProxima') }}</span>
+        <span>{{ valor(vau.festividades.festividadProxima) }}</span>
+      </div>
+      <div class="panel evento">
+        <span class="etiqueta">{{ t('vau.eventoAnterior') }}</span>
+        <span>{{ valor(vau.notableEvent.previous) }}</span>
+      </div>
+      <div class="panel evento">
+        <span class="etiqueta">{{ t('vau.eventoProximo') }}</span>
+        <span>{{ valor(vau.notableEvent.next) }}</span>
+      </div>
+    </div>
+
+    <div class="acciones no-print">
+      <button
+        type="button"
+        class="btn btn-accent"
+        [attr.aria-expanded]="detalles()"
+        aria-controls="detalles-vau"
+        (click)="alternarDetalles()"
+      >
+        {{ detalles() ? t('vau.menosDetalles') : t('vau.masDetalles') }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [attr.title]="t('vau.copiar')"
+        (click)="copiarResumen()"
+      >
+        <app-icono nombre="copiar" [tamanyo]="18" />
+        <span class="texto-accion">{{ t('vau.copiar') }}</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [attr.title]="t('vau.imprimir')"
+        (click)="imprimir()"
+      >
+        <app-icono nombre="imprimir" [tamanyo]="18" />
+        <span class="texto-accion">{{ t('vau.imprimir') }}</span>
+      </button>
+    </div>
+
+    @if (detalles()) {
+      <div class="detalles" id="detalles-vau">
+        <div class="dato ancho">
+          <span class="etiqueta">{{ t('vau.ultimoEclipenoSelecto') }}</span>
+          <span class="valor">
+            {{ valor(vau.lastEclipenoSelecto.daysSinceCurrentEclipenoSelectoIN) }}
+          </span>
+        </div>
+
+        @if (descripcionCasalero()) {
+          <div class="dato ancho">
+            <span class="etiqueta">{{ t('vau.casalero') }}</span>
+            <span class="valor">{{ descripcionCasalero() }}</span>
+          </div>
+        }
+
+        <section class="grupo">
+          <h4>{{ t('vau.desdeEclipenoSelecto') }}</h4>
+          <ul>
+            <li>
+              <span class="etiqueta">{{ t('vau.metonosRemotos') }}</span>
+              <span>
+                {{
+                  valor(
+                    vau.metonoInvernalApofasalRemoto
+                      .metonosInvernalApofasalRemotoSinceLastEclipenoINSelecto
+                  )
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="etiqueta">{{ t('vau.eclipenosNuevos') }}</span>
+              <span>
+                {{
+                  valor(
+                    vau.eclipenoVAU.eclipenosINSinceLastEclipenoINSelecto,
+                    vau.eclipenoVAU.lastEclipenoSurname
+                  )
+                }}
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="grupo">
+          <h4>{{ t('vau.desdeMetonoRemoto') }}</h4>
+          <ul>
+            <li>
+              <span class="etiqueta">{{ t('vau.metonosNuevos') }}</span>
+              <span>
+                {{
+                  valor(
+                    vau.metonoVAU.metonsIN.metonosINSinceLastEclipenoIN,
+                    vau.metonoVAU.metonsIN.lastMetonSurname
+                  )
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="etiqueta">{{ t('vau.metonosAporicos') }}</span>
+              <span>
+                {{
+                  valor(
+                    vau.metonoVAU.metonsIA.metonosIASinceLastEclipenoSelecto,
+                    vau.metonoVAU.metonsIA.lastMetonSurname
+                  )
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="etiqueta">{{ t('vau.aponovos') }}</span>
+              <span>{{ valor(vau.aponovos.numeroDeAponovo) }}</span>
+            </li>
+            <li>
+              <span class="etiqueta">{{ t('vau.mesAponoval') }}</span>
+              <span>{{ valor(vau.aponovos.mesAponoval) }}</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="grupo">
+          <h4>{{ t('vau.desdeEclipenoIN') }}</h4>
+          <ul>
+            <li>
+              <span class="etiqueta">{{ t('vau.alisolunios') }}</span>
+              <span>
+                {{ valor(vau.absoluteEclipses.sinceLastEclipenoIN) }}
+                <span class="subtle">
+                  ({{ t('vau.solares') }}:
+                  {{ valor(vau.absoluteEclipses.solarSinceLastEclipenoIN) }})
+                </span>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        @if (vau.estadoLuna.comportamientoLunaDTO.direccion) {
+          <div class="dato ancho">
+            <span class="etiqueta">{{ t('vau.comportamientoLuna') }}</span>
+            <span class="valor">
+              {{ vau.estadoLuna.comportamientoLunaDTO.direccion }}
+            </span>
+          </div>
+        }
+      </div>
+    }
+    }
+  }
+</section>

@@ -1,46 +1,56 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { I18nService } from '../../servicios/i18n.service';
+import { NotificacionesService } from '../../servicios/notificaciones.service';
 import { UsuarioService } from '../../servicios/usuario.service';
+import { IconoComponent } from '../utiles/icono/icono.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [ReactiveFormsModule, IconoComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
+  private readonly router = inject(Router);
+  private readonly usuarios = inject(UsuarioService);
+  private readonly avisos = inject(NotificacionesService);
+  private readonly fb = inject(NonNullableFormBuilder);
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
+  protected readonly t = inject(I18nService).t;
+  protected readonly verContrasenya = signal(false);
 
-  user = '';
-  password = '';
-  
+  protected readonly formulario = this.fb.group({
+    user: ['', Validators.required],
+    password: ['', Validators.required],
+  });
 
-  goHome(form: NgForm) {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
+  protected enviar(): void {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
       return;
     }
-    else{
-      alert('Login por usuario pendiente, entrar como invitado');
-    }
-  
+
+    // El backend todavía no expone autenticación por usuario.
+    this.avisos.info(this.t('login.pendiente'));
   }
 
-  goRegister() {
-    this.router.navigate(['/register']);
+  protected entrarComoInvitado(): void {
+    this.usuarios.setEsInvitado(true);
+    this.avisos.exito(this.t('login.bienvenidaInvitado'));
+    void this.router.navigate(['/home']);
   }
 
-  goRecovery() {
-    this.router.navigate(['/recovery']);
+  protected irA(ruta: string): void {
+    void this.router.navigate([ruta]);
   }
 
-  entrarComoInvitado(){
-    this.usuarioService.setEsInvitado(true);
-    this.router.navigate(['/home']);
+  /** Muestra el error solo cuando el usuario ya ha interactuado con el campo. */
+  protected invalido(campo: 'user' | 'password'): boolean {
+    const control = this.formulario.controls[campo];
+    return control.invalid && (control.touched || control.dirty);
   }
-
 }

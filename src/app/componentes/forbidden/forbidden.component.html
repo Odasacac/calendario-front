@@ -1,13 +1,16 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="pagina-centrada">
+  <section class="card tarjeta-auth text-center">
+    <header>
+      <span class="emblema emblema-alerta" aria-hidden="true">
+        <app-icono nombre="candado" [tamanyo]="24" />
+      </span>
+      <h1>{{ t('prohibido.titulo') }}</h1>
+      <p>{{ t('prohibido.mensaje') }}</p>
+    </header>
 
-    <h2 class="subtitle">Acceso denegado</h2>
-
-    <p class="message">
-      No tiene permisos para acceder a esta sección
-    </p>
-
-    <button (click)="goToLogin()">Volver al login</button>
-
-  </div>
+    <button type="button" class="btn btn-primary btn-block" (click)="volverAlLogin()">
+      <app-icono nombre="izquierda" [tamanyo]="16" />
+      {{ t('comun.volverAlLogin') }}
+    </button>
+  </section>
 </div>

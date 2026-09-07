@@ -1,178 +1,158 @@
-import { DateVAUComponent } from '../utiles/date-vau/date-vau.component';
-import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { AccionOpcion, Opcion } from '../../interfaces/opciones';
+import { I18nService } from '../../servicios/i18n.service';
+import { NotificacionesService } from '../../servicios/notificaciones.service';
 import { UsuarioService } from '../../servicios/usuario.service';
-import { Router } from '@angular/router';
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { hoyIso } from '../../utiles/fechas';
+import { DateVAUComponent } from '../utiles/date-vau/date-vau.component';
 import { DescargasComponent } from '../utiles/descargas/descargas.component';
-import { opciones } from '../../interfaces/opciones';
+import { IconoComponent } from '../utiles/icono/icono.component';
+
+type Vista = 'vau' | 'descargas';
+
+const OPCIONES: Readonly<Record<AccionOpcion, Opcion>> = {
+  descargas: {
+    accion: 'descargas',
+    clave: 'home.opcionDescargas',
+    icono: 'descargar',
+    soloRegistrados: false,
+  },
+  eventos: {
+    accion: 'eventos',
+    clave: 'home.opcionEventos',
+    icono: 'estrella',
+    soloRegistrados: true,
+  },
+  'fecha-vau': {
+    accion: 'fecha-vau',
+    clave: 'home.opcionFechaVau',
+    icono: 'calendario',
+    soloRegistrados: false,
+  },
+};
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [DateVAUComponent, CommonModule, DescargasComponent],
+  imports: [DateVAUComponent, DescargasComponent, IconoComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
+  private readonly usuarios = inject(UsuarioService);
+  private readonly avisos = inject(NotificacionesService);
 
-  @ViewChild('popup') popupRef!: ElementRef;
-  fecha: string = '';
-  today: string = '';
-  esHoy = true;
-  showDatePicker = false;
-  usuarioLogueado = false;
-  usuarioInvitado = false;
-  mostrarOpciones: boolean = false;
-  vauContainerView: boolean = true;
-  descargarView: boolean = false;
-  opciones: opciones[] = [];
-  descargarDocumentosOpcion: opciones = {name:'Descargar documentos', value: 1, loggedUserOnly: false};
-  eventosResenyablesOpcion: opciones = {name:'Ir a eventos reseñables', value: 2, loggedUserOnly: true};
-  fechaVAUOpcion: opciones = {name:'Ir a fecha VAU', value: 3, loggedUserOnly: false};
+  private readonly contenedorMenu =
+    viewChild<ElementRef<HTMLElement>>('contenedorMenu');
+  private readonly campoFecha = viewChild<ElementRef<HTMLInputElement>>('campoFecha');
 
-  constructor(private usuarioService: UsuarioService, private router: Router, private eRef: ElementRef){}
+  protected readonly t = inject(I18nService).t;
 
-  ngOnInit() {
+  /** `null` = hoy; cualquier otro valor es una fecha ISO concreta. */
+  protected readonly fecha = signal<string | null>(null);
+  protected readonly vista = signal<Vista>('vau');
+  protected readonly menuAbierto = signal(false);
+  protected readonly selectorAbierto = signal(false);
 
-    if(this.usuarioService.getUsuario()){
-      this.usuarioLogueado = true;
+  protected readonly esHoy = computed(() => this.fecha() === null);
+  protected readonly fechaDelSelector = computed(() => this.fecha() ?? hoyIso());
+
+  /** Opciones del menú según la vista actual y el tipo de sesión. */
+  protected readonly opciones = computed<readonly Opcion[]>(() => {
+    const disponibles =
+      this.vista() === 'vau'
+        ? [OPCIONES.descargas, OPCIONES.eventos]
+        : [OPCIONES['fecha-vau'], OPCIONES.eventos];
+
+    const registrado = this.usuarios.usuario() !== null;
+    return disponibles.filter((opcion) => !opcion.soloRegistrados || registrado);
+  });
+
+  protected alternarMenu(): void {
+    this.menuAbierto.update((abierto) => !abierto);
+    this.selectorAbierto.set(false);
+  }
+
+  protected alternarSelector(): void {
+    this.selectorAbierto.update((abierto) => !abierto);
+    this.menuAbierto.set(false);
+
+    if (this.selectorAbierto()) {
+      // El input lo crea `@if`, así que hay que esperar a que exista.
+      setTimeout(() => this.campoFecha()?.nativeElement.focus());
     }
-    else if(this.usuarioService.getEsInvitado()){
-      this.usuarioInvitado = this.usuarioService.getEsInvitado()
-    }
-    else{
-      this.usuarioService.setEsInvitado(false);
-      this.usuarioService.setUsuario(null);
-      this.router.navigate(['/forbidden']);
-    }
-
-    this.updateOptionsVauView();
- 
   }
 
-  updateOptionsVauView(){
-    this.opciones=[];
-    this.opciones.push(this.descargarDocumentosOpcion);
-    this.opciones.push(this.eventosResenyablesOpcion);
-  }
+  protected ejecutar(opcion: Opcion): void {
+    this.menuAbierto.set(false);
 
-   updateOptionsDescargasView(){
-    this.opciones=[];
-    this.opciones.push(this.fechaVAUOpcion);
-    this.opciones.push(this.eventosResenyablesOpcion);
-  }
-
-  toggleOpciones(event: Event) {
-    event.stopPropagation();
-    this.mostrarOpciones = !this.mostrarOpciones;
-    this.showDatePicker= false;
-  }
-
-  mostrarOpcion(loggedUserOnly: boolean): boolean{
-
-    let mostrar: boolean = true;
-
-    if (loggedUserOnly){
-      mostrar = this.usuarioLogueado;
-    } 
-
-    return mostrar;
-  }
-
-
-  opcionClickada(opcion:number){
-
-    switch(opcion){
-      case 1:
-        this.goToDescargarDocumentos();
+    switch (opcion.accion) {
+      case 'descargas':
+        this.vista.set('descargas');
+        this.selectorAbierto.set(false);
         break;
 
-      case 2:
-        this.irAEventos();;
+      case 'fecha-vau':
+        this.vista.set('vau');
         break;
 
-      case 3:
-        this.goToVauContainer();
+      case 'eventos':
+        this.avisos.info(this.t('comun.enConstruccion'));
         break;
     }
   }
 
-  goToDescargarDocumentos(){
-    this.updateOptionsDescargasView();
-    
-    this.vauContainerView=false;
-    this.descargarView=true;
-
-    this.mostrarOpciones=false;
+  protected irAVau(): void {
+    this.vista.set('vau');
   }
 
-  goToVauContainer(){
-
-    this.updateOptionsVauView();
-
-    this.vauContainerView=true;
-    this.descargarView=false;
-
-    this.mostrarOpciones=false;
-  }
-
-  irAHaceX(){
-    console.log('Ir a Hace X... En construccion');
-    this.mostrarOpciones = false;
-  }
-
-  irADentroDeX(){
-    console.log('Ir a Dentro de X... En construccion');
-    this.mostrarOpciones = false;
-  }
-    
-
-  irAEventos() {
-    console.log('Ir a eventos... En construccion');
-    this.mostrarOpciones = false;
-  }
-
-  buscarFecha() {
-    this.showDatePicker = !this.showDatePicker;
-  }
-
-  onFechaSeleccionada(event: any) {
-    this.fecha = new Date(event.target.value).toISOString().split('T')[0];
-    this.showDatePicker = false;
-    this.esHoy = false;
-  }
-
-  volverHoy() {
-    this.fecha = '';
-    this.esHoy = true;
-  }
-
-  goToLogin(){
-    this.router.navigate(['/login']);
-  }
-
-
-  onFechaDesdeComponenteHijo(nuevaFecha: string) {
-    this.fecha = nuevaFecha;
-    this.showDatePicker = false;
-    if(nuevaFecha == this.today){
-      this.esHoy=true; 
+  /**
+   * El valor del input ya viene en `yyyy-MM-dd`; usarlo tal cual evita el
+   * desfase de un día que provocaba `new Date(...).toISOString()`.
+   */
+  protected seleccionarFecha(evento: Event): void {
+    const valor = (evento.target as HTMLInputElement).value;
+    if (!valor) {
+      return;
     }
-    else{
-      this.esHoy=false;
-    }
-    
+
+    this.fecha.set(valor === hoyIso() ? null : valor);
+    this.selectorAbierto.set(false);
+  }
+
+  protected cambiarFecha(nueva: string): void {
+    this.fecha.set(nueva === hoyIso() ? null : nueva);
+  }
+
+  protected volverAHoy(): void {
+    this.fecha.set(null);
   }
 
   @HostListener('document:click', ['$event'])
-  clickFuera(event: MouseEvent) {
-    if (this.mostrarOpciones && this.popupRef && !this.popupRef.nativeElement.contains(event.target)) {
-      this.mostrarOpciones = false;
+  protected clickFuera(evento: MouseEvent): void {
+    if (!this.menuAbierto()) {
+      return;
+    }
+
+    const contenedor = this.contenedorMenu()?.nativeElement;
+    if (contenedor && !contenedor.contains(evento.target as Node)) {
+      this.menuAbierto.set(false);
     }
   }
 
-  setToday(today: string){
-  this.today = today;
-}
-  
+  @HostListener('document:keydown.escape')
+  protected cerrarConEscape(): void {
+    this.menuAbierto.set(false);
+    this.selectorAbierto.set(false);
+  }
 }

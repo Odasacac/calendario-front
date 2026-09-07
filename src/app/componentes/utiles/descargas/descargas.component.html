@@ -1,13 +1,106 @@
-<div class="date-header">
-    <h2 class="date-title">Descargas</h2>
-</div>
+<section class="descargas">
+  <header class="cabecera-seccion">
+    <h2>{{ t('descargas.titulo') }}</h2>
+    <p class="muted">{{ t('descargas.subtitulo') }}</p>
+  </header>
 
-<div class="download-buttons-container">
-    <button class="download-button" (click)="descargarManual()">Descargar manual</button>
-    <button class="download-button" (click)="descargarCalendario()">Descargar calendario</button>
-</div>
+  <article class="panel bloque">
+    <div class="texto">
+      <h3>{{ t('descargas.manualTitulo') }}</h3>
+      <p class="muted">{{ t('descargas.manualTexto') }}</p>
+    </div>
+    <button
+      type="button"
+      class="btn btn-accent"
+      [disabled]="descargandoManual()"
+      (click)="descargarManual()"
+    >
+      @if (descargandoManual()) {
+        <span class="spinner" aria-hidden="true"></span>
+        {{ t('descargas.descargando') }}
+      } @else {
+        <app-icono nombre="descargar" [tamanyo]="18" />
+        {{ t('descargas.manualBoton') }}
+      }
+    </button>
+  </article>
 
-<div class="vau-button-container">
-    <button class="vau-button" (click)="backToDateVAU()">Volver</button>
-</div>
- 
+  <article class="panel bloque columna">
+    <div class="texto">
+      <h3>{{ t('descargas.calendarioTitulo') }}</h3>
+      <p class="muted">{{ t('descargas.calendarioTexto') }}</p>
+    </div>
+
+    <form [formGroup]="formulario" (ngSubmit)="descargarCalendario()" novalidate>
+      <div class="campos">
+        <div class="field">
+          <label for="yearOfEclipenoIN">{{ t('descargas.anyoEclipeno') }}</label>
+          <input
+            id="yearOfEclipenoIN"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step="1"
+            formControlName="yearOfEclipenoIN"
+            [class.invalid]="invalido('yearOfEclipenoIN')"
+          />
+        </div>
+
+        <div class="field">
+          <label for="numberOfMetonoIN">{{ t('descargas.numeroMetono') }}</label>
+          <input
+            id="numberOfMetonoIN"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step="1"
+            formControlName="numberOfMetonoIN"
+            [class.invalid]="invalido('numberOfMetonoIN')"
+          />
+        </div>
+
+        <div class="field">
+          <label for="numberOfYear">{{ t('descargas.numeroAnyo') }}</label>
+          <input
+            id="numberOfYear"
+            class="input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            step="1"
+            formControlName="numberOfYear"
+            [class.invalid]="invalido('numberOfYear')"
+          />
+        </div>
+      </div>
+
+      @if (formulario.invalid && formulario.touched) {
+        <p class="field-error">
+          <app-icono nombre="alerta" [tamanyo]="14" />
+          {{ t('comun.numeroInvalido') }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        class="btn btn-accent"
+        [disabled]="descargandoCalendario()"
+      >
+        @if (descargandoCalendario()) {
+          <span class="spinner" aria-hidden="true"></span>
+          {{ t('descargas.descargando') }}
+        } @else {
+          <app-icono nombre="descargar" [tamanyo]="18" />
+          {{ t('descargas.calendarioBoton') }}
+        }
+      </button>
+    </form>
+  </article>
+
+  <button type="button" class="btn btn-ghost volver" (click)="volver()">
+    <app-icono nombre="izquierda" [tamanyo]="18" />
+    {{ t('comun.volver') }}
+  </button>
+</section>

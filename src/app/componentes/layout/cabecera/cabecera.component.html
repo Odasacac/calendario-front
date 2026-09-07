@@ -1,0 +1,64 @@
+<header class="cabecera no-print">
+  <div class="interior">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">
+        <app-icono nombre="estrella" [tamanyo]="18" />
+      </span>
+      <span class="nombres">
+        <strong class="nombre">{{ t('app.nombre') }}</strong>
+        <span class="lema">{{ t('app.lema') }}</span>
+      </span>
+    </div>
+
+    <div class="acciones">
+      @if (usuarios.estaAutenticado()) {
+        <span class="chip chip-primary sesion">
+          <app-icono nombre="usuario" [tamanyo]="14" />
+          {{ usuarios.usuario()?.nombre ?? t('sesion.invitado') }}
+        </span>
+      }
+
+      <label class="selector-idioma">
+        <span class="sr-only">{{ t('idioma.seleccionar') }}</span>
+        <app-icono nombre="globo" [tamanyo]="16" />
+        <!-- La selección se marca en cada <option>: al pintar el <select> sus
+             opciones todavía no existen, así que un [value] en el select se
+             perdería en el primer render. -->
+        <select class="select" (change)="cambiarIdioma($event)">
+          @for (idioma of i18n.idiomas; track idioma.codigo) {
+            <option [value]="idioma.codigo" [selected]="idioma.codigo === i18n.idioma()">
+              {{ idioma.etiqueta }}
+            </option>
+          }
+        </select>
+      </label>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon"
+        [attr.aria-label]="
+          tema.tema() === 'dark' ? t('tema.cambiarAClaro') : t('tema.cambiarAOscuro')
+        "
+        [attr.title]="
+          tema.tema() === 'dark' ? t('tema.cambiarAClaro') : t('tema.cambiarAOscuro')
+        "
+        [attr.aria-pressed]="tema.tema() === 'dark'"
+        (click)="tema.alternar()"
+      >
+        <app-icono [nombre]="tema.tema() === 'dark' ? 'sol' : 'luna'" />
+      </button>
+
+      @if (usuarios.estaAutenticado()) {
+        <button
+          type="button"
+          class="btn btn-ghost salir"
+          [attr.title]="t('sesion.salir')"
+          (click)="cerrarSesion()"
+        >
+          <app-icono nombre="salir" [tamanyo]="18" />
+          <span class="texto-salir">{{ t('sesion.salir') }}</span>
+        </button>
+      }
+    </div>
+  </div>
+</header>

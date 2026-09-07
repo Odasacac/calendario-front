@@ -1,190 +1,248 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
 
-/* Encabezado con flechas */
-.date-header {
+/* ------------------------- Navegación entre días ------------------------ */
+.navegador {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.fecha {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.dia-semana {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.titulo-fecha {
+  font-size: var(--fs-2xl);
+  overflow-wrap: break-word;
+}
+
+.fecha-iso {
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------ Destacados ------------------------------ */
+.destacados {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
-  gap: 5px;
+  gap: var(--sp-2);
 }
 
-.arrow-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.2em;
-  color: #2e7d32;
-  cursor: pointer;
-  padding: 4px 4px;
-  line-height: 1.2;
-  transition: color 0.2s;
+.destacados .chip {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
 }
 
-.arrow-btn:hover {
-  color: #1b5e20;
-}
-
-/* Título */
-.date-title {
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.5em;
-  color: #1b5e20;
-  margin: 0 5px;
-  padding: 4px 0;
-  white-space: nowrap;
-}
-
-/* Datos normales */
-p {
-  margin: 6px 0;
-  color: #2e7d32;
-  word-wrap: break-word;
-}
-
-/* Botón principal */
-button {
-  margin: 15px 0;
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #fb8c00;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #ef6c00;
-}
-
-.info{
-  display: flex;
-  flex-direction: column;
-  gap: 2px; 
-}
-/* Sección extra de “Más” */
-.more {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* Contenedor del spinner */
-.spinner-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* centra horizontalmente */
-  justify-content: center; /* centra verticalmente */
-  text-align: center;
-  margin: 20px 0;
-}
-
-/* Spinner animado */
-.spinner {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 10px;
-  border: 4px solid #c8e6c9;       /* borde gris claro */
-  border-top: 4px solid #2e7d32;    /* borde verde */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.spinner-container p {
-  color: #2e7d32;
-  font-weight: bold;
-}
-
-/* Contenedor de error centrado */
-.error-message {
-  display: flex;
-  flex-direction: column; /* ahora los elementos van en columna */
-  align-items: center;    /* centra horizontalmente */
-  justify-content: center; /* centra verticalmente si hay altura */
-  text-align: center;
-  color: #d32f2f;
-  font-weight: bold;
-  margin: 20px 0;
-}
-
-/* Botón de reintento debajo del texto */
-.retry-btn {
-  margin-top: 10px;       /* separa el botón del texto */
-  padding: 6px 14px;      /* tamaño compacto */
-  width: auto;             /* ancho ajustado al contenido */
-  border: none;
-  border-radius: 6px;
-  background: #fb8c00;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.retry-btn:hover {
-  background: #ef6c00;
-}
-
-/* Sección */
-.section {
-  margin-top: 14px;
-}
-
-/* Título de sección */
-.section-title {
-  color: #1b5e20;
-  font-weight: bold;
-  margin-bottom: 7px;
-}
-
-/* Elementos pertenecientes a la sección */
-.section-content {
-  padding-left: 28px;
-}
-
-/* Eventos finales */
-.events {
-  margin-top: 14px;
-}
-
-.other-content {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px; 
-}
-
-.eventosyfestividades {
+/* ---------------------------- Datos básicos ----------------------------- */
+/* Móvil: dos columnas, con el año ocupando la fila entera. */
+.rejilla-datos {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px 20px;
-  padding: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
 }
 
-.eventosyfestividades p {
-  margin: 0;
+.rejilla-datos > :nth-child(5) {
+  grid-column: span 2;
+}
+
+.dato {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 30px;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
 }
 
-.eventosyfestividades strong {
+.dato.ancho {
+  grid-column: 1 / -1;
+}
+
+.etiqueta {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.valor {
+  font-size: var(--fs-lg);
   font-weight: 600;
+  overflow-wrap: break-word;
 }
 
-.eventosyfestividades span {
-  margin-left: 10px;
+/* ------------------------- Eventos y festividades ----------------------- */
+.rejilla-eventos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
 }
 
-.basicinfo {
+.evento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+
+/* -------------------------------- Acciones ------------------------------ */
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.acciones .btn-accent {
+  flex: 1 1 12rem;
+}
+
+/* -------------------------------- Detalles ------------------------------ */
+.detalles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-top: var(--sp-2);
+  animation: pop-in 200ms ease-out;
+}
+
+.grupo h4 {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.grupo ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0 0 0 var(--sp-4);
+  border-left: 2px solid var(--border);
+  list-style: none;
+}
+
+.grupo li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+
+.grupo li > span:last-child {
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ----------------------------- Estados vacíos --------------------------- */
+.aviso-bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
   text-align: center;
+  color: var(--text-muted);
+}
+
+.aviso-bloque h3 {
+  font-size: var(--fs-lg);
+  color: var(--text);
+}
+
+.aviso-bloque.error {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.aviso-bloque.error app-icono,
+.aviso-bloque.error h3 {
+  color: var(--danger);
+}
+
+.aviso-bloque .btn {
+  margin-top: var(--sp-2);
+}
+
+/* ------------------------------- Esqueleto ------------------------------ */
+.esqueleto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.esqueleto .linea {
+  height: 1.25rem;
+  margin: 0 auto;
+}
+
+.esqueleto .bloque {
+  height: 4.5rem;
+}
+
+.esqueleto .bloque.alto {
+  height: 7rem;
+}
+
+/* ------------------------------ Responsive ------------------------------ */
+@media (max-width: 30rem) {
+  .titulo-fecha {
+    font-size: var(--fs-xl);
+  }
+
+  .acciones .texto-accion {
+    display: none;
+  }
+
+  .acciones .btn-ghost {
+    flex: 0 0 auto;
+    min-width: 44px;
+    padding: 0 var(--sp-3);
+  }
+}
+
+@media (min-width: 34rem) {
+  /* Rejilla de 6 columnas: estación y mes ocupan 3, el resto 2 cada uno. */
+  .rejilla-datos {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .rejilla-datos > :nth-child(1),
+  .rejilla-datos > :nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .rejilla-datos > :nth-child(3),
+  .rejilla-datos > :nth-child(4),
+  .rejilla-datos > :nth-child(5) {
+    grid-column: span 2;
+  }
+
+  .rejilla-eventos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: min(72rem, 100%);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4);
+}
+
+.contenido:focus {
+  outline: none;
+}
+
+router-outlet {
+  display: none;
+}
+
+.pie {
+  padding: var(--sp-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  text-align: center;
+}
+
+@media (max-width: 40rem) {
+  .contenido {
+    padding: var(--sp-4) var(--sp-3);
+  }
+}

@@ -1,32 +1,58 @@
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { FormsModule, NgForm } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { I18nService } from '../../servicios/i18n.service';
+import { NotificacionesService } from '../../servicios/notificaciones.service';
+import { IconoComponent } from '../utiles/icono/icono.component';
+
+const EMAIL = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+type CampoRegistro = 'nombre' | 'apellido' | 'correo' | 'fecha';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [ReactiveFormsModule, IconoComponent],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.css'
+  styleUrl: './registro.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistroComponent {
- nombre = '';
-  apellido = '';
-  correo = '';
-  fecha = '';
+  private readonly router = inject(Router);
+  private readonly avisos = inject(NotificacionesService);
+  private readonly fb = inject(NonNullableFormBuilder);
 
-  constructor(private router: Router) {}
+  protected readonly t = inject(I18nService).t;
 
-  createAccount(form: NgForm) {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
+  protected readonly formulario = this.fb.group({
+    nombre: ['', Validators.required],
+    apellido: ['', Validators.required],
+    correo: ['', [Validators.required, Validators.pattern(EMAIL)]],
+    fecha: ['', Validators.required],
+  });
+
+  protected crearCuenta(): void {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
       return;
     }
-    // TO DO
+
+    this.avisos.info(this.t('registro.pendiente'));
   }
 
-  goLogin() {
-    this.router.navigate(['/login']);
+  protected volverAlLogin(): void {
+    void this.router.navigate(['/login']);
+  }
+
+  protected invalido(campo: CampoRegistro): boolean {
+    const control = this.formulario.controls[campo];
+    return control.invalid && (control.touched || control.dirty);
+  }
+
+  protected error(campo: CampoRegistro): string {
+    const control = this.formulario.controls[campo];
+    return control.hasError('required')
+      ? this.t('comun.obligatorio')
+      : this.t('comun.emailInvalido');
   }
 }

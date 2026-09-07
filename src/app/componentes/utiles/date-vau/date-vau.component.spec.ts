@@ -1,23 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { DateVAUComponent } from './date-vau.component';
 
 describe('DateVAUComponent', () => {
-  let component: DateVAUComponent;
   let fixture: ComponentFixture<DateVAUComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DateVAUComponent]
-    })
-    .compileComponents();
+      imports: [DateVAUComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DateVAUComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('se crea', () => {
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('muestra el esqueleto de carga mientras espera a la API', () => {
+    const elemento = fixture.nativeElement as HTMLElement;
+    expect(elemento.querySelector('.esqueleto')).not.toBeNull();
   });
 });

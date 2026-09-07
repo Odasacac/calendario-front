@@ -1,15 +1,44 @@
 <!doctype html>
-<html lang="en">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <title>CalendarioVAU</title>
+  <title>CalendarioVAU · vivir en armonía con el universo</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Convierte cualquier fecha al calendario VAU: estación, mes fasal, semana, día, festividades y eventos reseñables.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#eef3ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#080d14" media="(prefers-color-scheme: dark)">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    // Resuelve el tema antes del primer pintado para evitar el flash de tema
+    // incorrecto. Debe mantenerse sincronizado con TemaService.
+    (function () {
+      try {
+        var guardado = localStorage.getItem('vau.tema');
+        var modo = guardado === 'light' || guardado === 'dark' ? guardado : null;
+        if (!modo) {
+          modo = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = modo;
+        var idioma = localStorage.getItem('vau.idioma');
+        if (idioma) {
+          document.documentElement.lang = idioma;
+        }
+      } catch (e) {
+        /* modo privado o almacenamiento bloqueado: se queda el tema claro */
+      }
+    })();
+  </script>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <noscript>
+      <p style="font-family: system-ui, sans-serif; padding: 2rem; text-align: center">
+        CalendarioVAU necesita JavaScript activado para funcionar.
+      </p>
+    </noscript>
+  </app-root>
 </body>
 </html>

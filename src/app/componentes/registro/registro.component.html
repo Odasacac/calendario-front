@@ -1,34 +1,100 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="pagina-centrada">
+  <section class="card tarjeta-auth">
+    <header>
+      <span class="emblema" aria-hidden="true">
+        <app-icono nombre="usuario" [tamanyo]="24" />
+      </span>
+      <h1>{{ t('registro.titulo') }}</h1>
+      <p>{{ t('registro.subtitulo') }}</p>
+    </header>
 
-    <h1 class="title">Crear nueva cuenta</h1>
+    <form [formGroup]="formulario" (ngSubmit)="crearCuenta()" novalidate>
+      <div class="dos-columnas">
+        <div class="field">
+          <label for="nombre">{{ t('registro.nombre') }}</label>
+          <input
+            id="nombre"
+            class="input"
+            type="text"
+            autocomplete="given-name"
+            formControlName="nombre"
+            [class.invalid]="invalido('nombre')"
+            [attr.aria-invalid]="invalido('nombre')"
+          />
+          @if (invalido('nombre')) {
+            <p class="field-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ error('nombre') }}
+            </p>
+          }
+        </div>
 
-    <form #registerForm="ngForm" (ngSubmit)="createAccount(registerForm)">
-
-      <label for="nombre">Nombre</label>
-      <input id="nombre" name="nombre" type="text" [(ngModel)]="nombre" required #nombreCtrl="ngModel"/>
-      <div class="error" *ngIf="registerForm.submitted && !nombre">Este campo es obligatorio</div>
-
-      <label for="apellido">Primer apellido</label>
-      <input id="apellido" name="apellido" type="text" [(ngModel)]="apellido" required #apellidoCtrl="ngModel"/>
-      <div class="error" *ngIf="registerForm.submitted && !apellido">Este campo es obligatorio</div>
-
-      <label for="correo">Correo electrónico</label>
-      <input id="correo" name="correo" type="text" [(ngModel)]="correo" required
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" #correoCtrl="ngModel"/>
-      <div class="error" *ngIf="registerForm.submitted && !correo">Este campo es obligatorio</div>
-      <div class="error" *ngIf="registerForm.submitted && correo && correoCtrl.errors?.['pattern']">
-        Introduce un email válido
+        <div class="field">
+          <label for="apellido">{{ t('registro.apellido') }}</label>
+          <input
+            id="apellido"
+            class="input"
+            type="text"
+            autocomplete="family-name"
+            formControlName="apellido"
+            [class.invalid]="invalido('apellido')"
+            [attr.aria-invalid]="invalido('apellido')"
+          />
+          @if (invalido('apellido')) {
+            <p class="field-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ error('apellido') }}
+            </p>
+          }
+        </div>
       </div>
 
-      <label for="fecha">Fecha de nacimiento</label>
-      <input id="fecha" name="fecha" type="date" [(ngModel)]="fecha" required #fechaCtrl="ngModel"/>
-      <div class="error" *ngIf="registerForm.submitted && !fecha">Este campo es obligatorio</div>
+      <div class="field">
+        <label for="correo">{{ t('registro.email') }}</label>
+        <input
+          id="correo"
+          class="input"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          formControlName="correo"
+          [class.invalid]="invalido('correo')"
+          [attr.aria-invalid]="invalido('correo')"
+        />
+        @if (invalido('correo')) {
+          <p class="field-error">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ error('correo') }}
+          </p>
+        }
+      </div>
 
-      <button type="submit">Crear nueva cuenta</button>
-      <button type="button" class="secondary" (click)="goLogin()">Volver al login</button>
+      <div class="field">
+        <label for="fecha">{{ t('registro.fechaNacimiento') }}</label>
+        <input
+          id="fecha"
+          class="input"
+          type="date"
+          autocomplete="bday"
+          formControlName="fecha"
+          [class.invalid]="invalido('fecha')"
+          [attr.aria-invalid]="invalido('fecha')"
+        />
+        @if (invalido('fecha')) {
+          <p class="field-error">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ error('fecha') }}
+          </p>
+        }
+      </div>
 
+      <button type="submit" class="btn btn-primary btn-block">
+        {{ t('registro.crear') }}
+      </button>
+      <button type="button" class="btn btn-ghost btn-block" (click)="volverAlLogin()">
+        <app-icono nombre="izquierda" [tamanyo]="16" />
+        {{ t('comun.volverAlLogin') }}
+      </button>
     </form>
-
-  </div>
+  </section>
 </div>
