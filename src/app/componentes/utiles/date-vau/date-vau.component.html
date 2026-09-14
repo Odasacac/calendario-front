@@ -233,11 +233,8 @@
             </li>
             <li>
               <span class="etiqueta">{{ t('vau.aponovos') }}</span>
-              <span>{{ valor(vau.aponovos.numeroDeAponovo) }}</span>
-            </li>
-            <li>
-              <span class="etiqueta">{{ t('vau.mesAponoval') }}</span>
-              <span>{{ valor(vau.aponovos.mesAponoval) }}</span>
+              <span>{{ valor(vau.aponovos.numeroDeAponovo) }} (<span class="etiqueta">{{ t('vau.mesAponoval') }}: </span>
+              <span>{{ valor(vau.aponovos.mesAponoval) }}</span>)</span>
             </li>
           </ul>
         </section>
