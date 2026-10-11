@@ -1,8 +1,11 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CalendarByYearDTO } from '../interfaces/calendar-by-year-dto';
+
+/** Rango de años que acepta el endpoint `/getcalendar` (ambos incluidos). */
+export const ANYO_CALENDARIO_MIN = 1434;
+export const ANYO_CALENDARIO_MAX = 2099;
 
 export interface FicheroDescargado {
   readonly blob: Blob;
@@ -20,17 +23,15 @@ export class DownloadService {
       .pipe(map((respuesta) => aFichero(respuesta, 'manual-calendario-vau.pdf')));
   }
 
-  getCalendarForAYear(dto: CalendarByYearDTO): Observable<FicheroDescargado> {
+  getCalendarForAYear(anyo: number): Observable<FicheroDescargado> {
+    const params = new HttpParams().set('yearForCalendar', anyo);
     return this.http
-      .post(`${this.apiUrl}/getcalendar`, dto, {
+      .get(`${this.apiUrl}/getcalendar`, {
+        params,
         responseType: 'blob',
         observe: 'response',
       })
-      .pipe(
-        map((respuesta) =>
-          aFichero(respuesta, `calendario-vau-${dto.numberOfYear}.pdf`),
-        ),
-      );
+      .pipe(map((respuesta) => aFichero(respuesta, `calendario-vau-${anyo}.pdf`)));
   }
 
   /**

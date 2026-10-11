@@ -34,44 +34,17 @@
     <form [formGroup]="formulario" (ngSubmit)="descargarCalendario()" novalidate>
       <div class="campos">
         <div class="field">
-          <label for="yearOfEclipenoIN">{{ t('descargas.anyoEclipeno') }}</label>
+          <label for="anyo">{{ t('descargas.anyoCalendario') }}</label>
           <input
-            id="yearOfEclipenoIN"
+            id="anyo"
             class="input"
             type="number"
             inputmode="numeric"
-            min="0"
+            [min]="anyoMin"
+            [max]="anyoMax"
             step="1"
-            formControlName="yearOfEclipenoIN"
-            [class.invalid]="invalido('yearOfEclipenoIN')"
-          />
-        </div>
-
-        <div class="field">
-          <label for="numberOfMetonoIN">{{ t('descargas.numeroMetono') }}</label>
-          <input
-            id="numberOfMetonoIN"
-            class="input"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            step="1"
-            formControlName="numberOfMetonoIN"
-            [class.invalid]="invalido('numberOfMetonoIN')"
-          />
-        </div>
-
-        <div class="field">
-          <label for="numberOfYear">{{ t('descargas.numeroAnyo') }}</label>
-          <input
-            id="numberOfYear"
-            class="input"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            step="1"
-            formControlName="numberOfYear"
-            [class.invalid]="invalido('numberOfYear')"
+            formControlName="anyo"
+            [class.invalid]="invalido('anyo')"
           />
         </div>
       </div>
@@ -79,7 +52,7 @@
       @if (formulario.invalid && formulario.touched) {
         <p class="field-error">
           <app-icono nombre="alerta" [tamanyo]="14" />
-          {{ t('comun.numeroInvalido') }}
+          {{ t('descargas.anyoFueraDeRango', { min: anyoMin, max: anyoMax }) }}
         </p>
       }
 

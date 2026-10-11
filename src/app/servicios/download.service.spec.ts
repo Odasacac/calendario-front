@@ -31,4 +31,16 @@ describe('DownloadService', () => {
 
     expect(nombre).toBe('manual-vau.pdf');
   });
+
+  it('pide el calendario por GET con el año como yearForCalendar', () => {
+    let nombre = '';
+    service.getCalendarForAYear(2025).subscribe((fichero) => (nombre = fichero.nombre));
+
+    const peticion = http.expectOne((r) => r.url.endsWith('/getcalendar'));
+    expect(peticion.request.method).toBe('GET');
+    expect(peticion.request.params.get('yearForCalendar')).toBe('2025');
+    peticion.flush(new Blob(['x']));
+
+    expect(nombre).toBe('calendario-vau-2025.pdf');
+  });
 });

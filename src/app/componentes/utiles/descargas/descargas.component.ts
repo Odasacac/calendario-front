@@ -4,6 +4,8 @@ import { finalize } from 'rxjs';
 import { I18nService } from '../../../servicios/i18n.service';
 import { NotificacionesService } from '../../../servicios/notificaciones.service';
 import {
+  ANYO_CALENDARIO_MAX,
+  ANYO_CALENDARIO_MIN,
   DownloadService,
   FicheroDescargado,
 } from '../../../servicios/download.service';
@@ -28,10 +30,19 @@ export class DescargasComponent {
   protected readonly descargandoManual = signal(false);
   protected readonly descargandoCalendario = signal(false);
 
+  protected readonly anyoMin = ANYO_CALENDARIO_MIN;
+  protected readonly anyoMax = ANYO_CALENDARIO_MAX;
+
   protected readonly formulario = this.fb.group({
-    yearOfEclipenoIN: [1, [Validators.required, Validators.min(0)]],
-    numberOfMetonoIN: [1, [Validators.required, Validators.min(0)]],
-    numberOfYear: [1, [Validators.required, Validators.min(0)]],
+    anyo: [
+      new Date().getFullYear(),
+      [
+        Validators.required,
+        Validators.min(ANYO_CALENDARIO_MIN),
+        Validators.max(ANYO_CALENDARIO_MAX),
+        Validators.pattern(/^\d+$/),
+      ],
+    ],
   });
 
   protected volver(): void {
@@ -65,7 +76,7 @@ export class DescargasComponent {
 
     this.descargandoCalendario.set(true);
     this.descargas
-      .getCalendarForAYear(this.formulario.getRawValue())
+      .getCalendarForAYear(this.formulario.getRawValue().anyo)
       .pipe(finalize(() => this.descargandoCalendario.set(false)))
       .subscribe({
         next: (fichero) => this.guardar(fichero),
