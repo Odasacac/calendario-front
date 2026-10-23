@@ -302,7 +302,7 @@ export const es = {
     hoy: 'Hoy',
     escribirFecha: 'O escribe una fecha',
     tieneAcontecimiento: 'Tienes un acontecimiento destacado este día',
-    leyendaAcontecimiento: 'Días con un acontecimiento destacado tuyo',
+    leyendaAcontecimiento: 'Día con un acontecimiento destacado',
     instrucciones: 'Usa las flechas para moverte entre días, RePág y AvPág para cambiar de mes e Intro para elegir.',
   },
   calendarioVau: {

@@ -299,7 +299,7 @@ export const ca: Diccionario = {
     hoy: 'Avui',
     escribirFecha: 'O escriu una data',
     tieneAcontecimiento: 'Tens un esdeveniment destacat aquest dia',
-    leyendaAcontecimiento: 'Dies amb un esdeveniment destacat teu',
+    leyendaAcontecimiento: 'Dia amb un esdeveniment destacat',
     instrucciones: 'Fes servir les fletxes per moure’t entre dies, RePàg i AvPàg per canviar de mes i Retorn per triar.',
   },
   calendarioVau: {

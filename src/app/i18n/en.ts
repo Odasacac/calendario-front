@@ -299,7 +299,7 @@ export const en: Diccionario = {
     hoy: 'Today',
     escribirFecha: 'Or type a date',
     tieneAcontecimiento: 'You have a highlighted event on this day',
-    leyendaAcontecimiento: 'Days with one of your highlighted events',
+    leyendaAcontecimiento: 'Day with a highlighted event',
     instrucciones: 'Use the arrow keys to move between days, Page Up and Page Down to change month and Enter to choose.',
   },
   calendarioVau: {
