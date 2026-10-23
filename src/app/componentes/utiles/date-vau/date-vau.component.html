@@ -32,6 +32,39 @@
     </button>
   </div>
 
+  <!-- Acontecimiento del usuario para ese día, justo debajo de la fecha. -->
+  @if (acontecimientoDelDia(); as acontecimiento) {
+    <div class="panel acontecimiento">
+      <div class="cabecera-acontecimiento">
+        <span class="etiqueta">
+          <app-icono nombre="estrella" [tamanyo]="14" />
+          {{ t('acontecimientos.tuAcontecimiento') }}
+        </span>
+        <div class="acciones-acontecimiento no-print">
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon"
+            [attr.aria-label]="t('acontecimientos.modificar')"
+            [attr.title]="t('acontecimientos.modificar')"
+            (click)="abrirAcontecimiento('modificar', acontecimiento)"
+          >
+            <app-icono nombre="editar" [tamanyo]="16" />
+          </button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon peligro"
+            [attr.aria-label]="t('acontecimientos.eliminar')"
+            [attr.title]="t('acontecimientos.eliminar')"
+            (click)="abrirAcontecimiento('eliminar', acontecimiento)"
+          >
+            <app-icono nombre="papelera" [tamanyo]="16" />
+          </button>
+        </div>
+      </div>
+      <p class="texto-acontecimiento">{{ acontecimiento.descripcion }}</p>
+    </div>
+  }
+
   <p class="sr-only">{{ t('vau.atajoTeclado') }}</p>
 
   <!-- Carga -->
@@ -132,6 +165,16 @@
       </div>
     </div>
 
+    <!-- Solo usuarios registrados, y solo si ese día aún no tiene acontecimiento (uno por día). -->
+    @if (registrado() && acontecimientoDelDia() === null) {
+      <div class="anyadir-acontecimiento no-print">
+        <button type="button" class="btn btn-outline" (click)="abrirAcontecimiento('crear')">
+          <app-icono nombre="estrella" [tamanyo]="16" />
+          {{ t('acontecimientos.anyadir') }}
+        </button>
+      </div>
+    }
+
     <div class="acciones no-print">
       <button
         type="button"
@@ -141,24 +184,6 @@
         (click)="alternarDetalles()"
       >
         {{ detalles() ? t('vau.menosDetalles') : t('vau.masDetalles') }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-ghost"
-        [attr.title]="t('vau.copiar')"
-        (click)="copiarResumen()"
-      >
-        <app-icono nombre="copiar" [tamanyo]="18" />
-        <span class="texto-accion">{{ t('vau.copiar') }}</span>
-      </button>
-      <button
-        type="button"
-        class="btn btn-ghost"
-        [attr.title]="t('vau.imprimir')"
-        (click)="imprimir()"
-      >
-        <app-icono nombre="imprimir" [tamanyo]="18" />
-        <span class="texto-accion">{{ t('vau.imprimir') }}</span>
       </button>
     </div>
 
@@ -268,3 +293,14 @@
     }
   }
 </section>
+
+@if (popupAcontecimiento(); as abierto) {
+  <app-acontecimiento-popup
+    [modo]="abierto.modo"
+    [acontecimiento]="abierto.acontecimiento"
+    [fechaInicial]="fechaResuelta()"
+    (guardado)="alCambiarAcontecimiento()"
+    (eliminado)="alCambiarAcontecimiento()"
+    (cerrar)="popupAcontecimiento.set(null)"
+  />
+}

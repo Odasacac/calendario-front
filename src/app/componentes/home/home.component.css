@@ -77,16 +77,6 @@
   animation: pop-in 160ms ease-out;
 }
 
-.selector .field {
-  max-width: 18rem;
-}
-
-.selector span {
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
 /* ------------------------------ Contenedor ------------------------------ */
 .contenedor {
   padding: var(--sp-5);
@@ -117,7 +107,7 @@
     padding: var(--sp-4) var(--sp-3);
   }
 
-  .selector .field {
-    max-width: none;
+  .selector {
+    padding: var(--sp-3);
   }
 }

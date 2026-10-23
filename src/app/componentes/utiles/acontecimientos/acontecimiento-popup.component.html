@@ -1,0 +1,155 @@
+@switch (modo()) {
+  @case ('ver') {
+    @if (acontecimiento(); as s) {
+      <app-popup [titulo]="titulo()" icono="estrella" (cerrar)="cerrar.emit()">
+        <p class="fecha-acontecimiento">{{ fechaLarga(s.fecha) }}</p>
+        <p class="descripcion">{{ s.descripcion }}</p>
+        @if (s.notableEvent && s.notableEventType) {
+          <p class="evento-del-dia">
+            <span class="etiqueta-evento">{{ t('acontecimientos.eventoDelDia') }}</span>
+            <span class="chip chip-accent">
+              <app-icono nombre="luna" [tamanyo]="14" />
+              {{ s.notableEventType }}
+            </span>
+          </p>
+        }
+        <p class="sellos subtle">
+          <span>{{ t('acontecimientos.creadoEl', { fecha: fechaLarga(s.fechaCreacion) }) }}</span>
+          @if (s.fechaModificacion !== s.fechaCreacion) {
+            <span>{{ t('acontecimientos.modificadoEl', { fecha: fechaLarga(s.fechaModificacion) }) }}</span>
+          }
+        </p>
+
+        <ng-container ngProjectAs="[acciones]">
+          @if (mostrarIrAFecha()) {
+            <button type="button" class="btn btn-primary" (click)="irAFecha.emit(s.fecha)">
+              <app-icono nombre="calendario" [tamanyo]="18" />
+              {{ t('acontecimientos.irAFecha') }}
+            </button>
+          }
+          <button type="button" class="btn btn-outline" (click)="cambiarModo('modificar')">
+            <app-icono nombre="editar" [tamanyo]="16" />
+            {{ t('acontecimientos.modificar') }}
+          </button>
+          <button type="button" class="btn btn-danger-outline" (click)="cambiarModo('eliminar')">
+            <app-icono nombre="papelera" [tamanyo]="16" />
+            {{ t('acontecimientos.eliminar') }}
+          </button>
+        </ng-container>
+      </app-popup>
+    }
+  }
+
+  @case ('eliminar') {
+    @if (acontecimiento(); as s) {
+      <app-popup [titulo]="titulo()" icono="papelera" tono="peligro" (cerrar)="cerrar.emit()">
+        <p>{{ t('acontecimientos.eliminarPregunta', { fecha: fechaLarga(s.fecha) }) }}</p>
+        <p class="descripcion recortada">{{ s.descripcion }}</p>
+
+        @if (errorGeneral(); as mensaje) {
+          <div class="alerta alerta-error" role="alert">
+            <app-icono nombre="alerta" [tamanyo]="18" />
+            <span>{{ mensaje }}</span>
+          </div>
+        }
+
+        <ng-container ngProjectAs="[acciones]">
+          <button type="button" class="btn btn-ghost" (click)="cerrar.emit()">
+            {{ t('comun.cancelar') }}
+          </button>
+          <button type="button" class="btn btn-danger" [disabled]="enviando()" (click)="eliminar()">
+            @if (enviando()) {
+              <span class="spinner" aria-hidden="true"></span>
+            }
+            {{ t('acontecimientos.eliminarConfirmar') }}
+          </button>
+        </ng-container>
+      </app-popup>
+    }
+  }
+
+  @default {
+    <!-- crear / modificar -->
+    <app-popup
+      [titulo]="titulo()"
+      [icono]="modo() === 'crear' ? 'estrella' : 'editar'"
+      (cerrar)="cerrar.emit()"
+    >
+      <form
+        id="formulario-acontecimiento"
+        class="formulario"
+        [formGroup]="formulario"
+        (ngSubmit)="guardar()"
+        novalidate
+      >
+        <div class="field">
+          <label for="acontecimiento-fecha">{{ t('acontecimientos.fecha') }}</label>
+          <input
+            id="acontecimiento-fecha"
+            class="input"
+            type="date"
+            [min]="fechaMin"
+            [max]="fechaMax"
+            formControlName="fecha"
+            [class.invalid]="invalido('fecha')"
+            [attr.aria-invalid]="invalido('fecha')"
+            [attr.aria-describedby]="invalido('fecha') ? 'acontecimiento-fecha-error' : null"
+          />
+          @if (invalido('fecha')) {
+            <p class="field-error" id="acontecimiento-fecha-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ errorCampo('fecha') }}
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="acontecimiento-descripcion">{{ t('acontecimientos.descripcion') }}</label>
+          <textarea
+            id="acontecimiento-descripcion"
+            class="input"
+            rows="5"
+            [attr.maxlength]="descripcionMax"
+            formControlName="descripcion"
+            [placeholder]="t('acontecimientos.descripcionPlaceholder')"
+            [class.invalid]="invalido('descripcion')"
+            [attr.aria-invalid]="invalido('descripcion')"
+            aria-describedby="acontecimiento-descripcion-ayuda"
+          ></textarea>
+          <div class="pie-campo" id="acontecimiento-descripcion-ayuda">
+            @if (invalido('descripcion')) {
+              <p class="field-error">
+                <app-icono nombre="alerta" [tamanyo]="14" />
+                {{ errorCampo('descripcion') }}
+              </p>
+            } @else {
+              <span></span>
+            }
+            <span class="field-hint contador">
+              {{ t('acontecimientos.caracteres', { n: caracteres(), max: descripcionMax }) }}
+            </span>
+          </div>
+        </div>
+
+        @if (errorGeneral(); as mensaje) {
+          <div class="alerta alerta-error" role="alert">
+            <app-icono nombre="alerta" [tamanyo]="18" />
+            <span>{{ mensaje }}</span>
+          </div>
+        }
+      </form>
+
+      <ng-container ngProjectAs="[acciones]">
+        <button type="button" class="btn btn-ghost" (click)="cerrar.emit()">
+          {{ t('comun.cancelar') }}
+        </button>
+        <button type="submit" form="formulario-acontecimiento" class="btn btn-primary" [disabled]="enviando()">
+          @if (enviando()) {
+            <span class="spinner" aria-hidden="true"></span>
+          }
+          {{ t('comun.guardar') }}
+        </button>
+      </ng-container>
+    </app-popup>
+  }
+}

@@ -32,6 +32,7 @@
 }
 
 .logo {
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -48,9 +49,13 @@
   min-width: 0;
 }
 
+/* En pantallas estrechas el nombre se recorta en vez de quedar bajo los botones. */
 .nombre {
   font-size: var(--fs-md);
   letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lema {
@@ -62,6 +67,7 @@
 }
 
 .acciones {
+  flex: none;
   display: flex;
   align-items: center;
   gap: var(--sp-2);
@@ -80,6 +86,58 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+/* Botón «Mi cuenta» de usuarios registrados */
+.cuenta {
+  gap: var(--sp-2);
+  padding: 0 var(--sp-3) 0 var(--sp-1);
+  border-radius: var(--radius-full);
+  --btn-bg: var(--primary-soft);
+  --btn-border: transparent;
+  --btn-fg: var(--primary-hover);
+}
+
+[data-theme="dark"] .cuenta {
+  --btn-fg: var(--primary);
+}
+
+.cuenta:hover:not(:disabled) {
+  --btn-border: var(--primary);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.texto-cuenta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.nombre-usuario {
+  max-width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.etiqueta-cuenta {
+  font-size: var(--fs-xs);
+  font-weight: 500;
   color: var(--text-muted);
 }
 
@@ -130,6 +188,15 @@
   }
 
   .sesion {
+    display: none;
+  }
+
+  /* En móvil la cuenta se queda solo con el avatar. */
+  .cuenta {
+    padding: 0 var(--sp-1);
+  }
+
+  .texto-cuenta {
     display: none;
   }
 

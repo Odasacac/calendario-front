@@ -17,12 +17,14 @@
             class="input"
             type="text"
             autocomplete="given-name"
+            maxlength="60"
             formControlName="nombre"
             [class.invalid]="invalido('nombre')"
             [attr.aria-invalid]="invalido('nombre')"
+            [attr.aria-describedby]="invalido('nombre') ? 'nombre-error' : null"
           />
           @if (invalido('nombre')) {
-            <p class="field-error">
+            <p class="field-error" id="nombre-error">
               <app-icono nombre="alerta" [tamanyo]="14" />
               {{ error('nombre') }}
             </p>
@@ -36,12 +38,14 @@
             class="input"
             type="text"
             autocomplete="family-name"
+            maxlength="60"
             formControlName="apellido"
             [class.invalid]="invalido('apellido')"
             [attr.aria-invalid]="invalido('apellido')"
+            [attr.aria-describedby]="invalido('apellido') ? 'apellido-error' : null"
           />
           @if (invalido('apellido')) {
-            <p class="field-error">
+            <p class="field-error" id="apellido-error">
               <app-icono nombre="alerta" [tamanyo]="14" />
               {{ error('apellido') }}
             </p>
@@ -57,12 +61,15 @@
           type="email"
           inputmode="email"
           autocomplete="email"
+          autocapitalize="none"
+          spellcheck="false"
           formControlName="correo"
           [class.invalid]="invalido('correo')"
           [attr.aria-invalid]="invalido('correo')"
+          [attr.aria-describedby]="invalido('correo') ? 'correo-error' : null"
         />
         @if (invalido('correo')) {
-          <p class="field-error">
+          <p class="field-error" id="correo-error">
             <app-icono nombre="alerta" [tamanyo]="14" />
             {{ error('correo') }}
           </p>
@@ -76,20 +83,89 @@
           class="input"
           type="date"
           autocomplete="bday"
+          min="1900-01-01"
           formControlName="fecha"
           [class.invalid]="invalido('fecha')"
           [attr.aria-invalid]="invalido('fecha')"
+          [attr.aria-describedby]="invalido('fecha') ? 'fecha-error' : null"
         />
         @if (invalido('fecha')) {
-          <p class="field-error">
+          <p class="field-error" id="fecha-error">
             <app-icono nombre="alerta" [tamanyo]="14" />
             {{ error('fecha') }}
           </p>
         }
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block">
-        {{ t('registro.crear') }}
+      <div class="field">
+        <label for="contrasenya">{{ t('registro.contrasenya') }}</label>
+        <div class="input-group">
+          <input
+            id="contrasenya"
+            class="input"
+            [type]="verContrasenya() ? 'text' : 'password'"
+            autocomplete="new-password"
+            formControlName="contrasenya"
+            [class.invalid]="invalido('contrasenya')"
+            [attr.aria-invalid]="invalido('contrasenya')"
+            aria-describedby="contrasenya-ayuda"
+          />
+          <button
+            type="button"
+            class="input-action"
+            [attr.aria-label]="
+              verContrasenya() ? t('login.ocultarContrasenya') : t('login.mostrarContrasenya')
+            "
+            [attr.aria-pressed]="verContrasenya()"
+            (click)="verContrasenya.set(!verContrasenya())"
+          >
+            <app-icono [nombre]="verContrasenya() ? 'ojo-cerrado' : 'ojo'" [tamanyo]="18" />
+          </button>
+        </div>
+        @if (invalido('contrasenya')) {
+          <p class="field-error" id="contrasenya-ayuda">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ error('contrasenya') }}
+          </p>
+        } @else {
+          <p class="field-hint" id="contrasenya-ayuda">{{ t('comun.contrasenyaPolitica') }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="repetir">{{ t('registro.repetirContrasenya') }}</label>
+        <input
+          id="repetir"
+          class="input"
+          [type]="verContrasenya() ? 'text' : 'password'"
+          autocomplete="new-password"
+          formControlName="repetir"
+          [class.invalid]="invalido('repetir')"
+          [attr.aria-invalid]="invalido('repetir')"
+          [attr.aria-describedby]="invalido('repetir') ? 'repetir-error' : null"
+        />
+        @if (invalido('repetir')) {
+          <p class="field-error" id="repetir-error">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ error('repetir') }}
+          </p>
+        }
+      </div>
+
+      @if (errorGeneral(); as mensaje) {
+        <div class="alerta alerta-error" role="alert">
+          <app-icono nombre="alerta" [tamanyo]="18" />
+          <span>{{ mensaje }}</span>
+        </div>
+      }
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+        @if (enviando()) {
+          <span class="spinner" aria-hidden="true"></span>
+          {{ t('registro.creando') }}
+        } @else {
+          {{ t('registro.crear') }}
+        }
       </button>
       <button type="button" class="btn btn-ghost btn-block" (click)="volverAlLogin()">
         <app-icono nombre="izquierda" [tamanyo]="16" />
@@ -98,3 +174,17 @@
     </form>
   </section>
 </div>
+
+@if (cuentaCreada(); as usuario) {
+  <!-- Solo se cierra con «Entendido», para que el código no pase desapercibido. -->
+  <app-popup [titulo]="t('registro.popupTitulo')" icono="ok" [cerrable]="false">
+    <p>{{ t('registro.popupSaludo', { nombre: usuario.nombre }) }}</p>
+    <p class="codigo-usuario">{{ usuario.codigoUsuario }}</p>
+    <p>{{ t('registro.popupLogin', { correo: usuario.correo }) }}</p>
+    <p class="muted">{{ t('registro.popupGuardar') }}</p>
+
+    <button acciones type="button" class="btn btn-primary btn-block" autofocus (click)="entendido()">
+      {{ t('registro.entendido') }}
+    </button>
+  </app-popup>
+}

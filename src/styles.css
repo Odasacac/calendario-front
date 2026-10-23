@@ -307,6 +307,26 @@ svg {
   --btn-bg: var(--primary-soft);
 }
 
+.btn-danger {
+  --btn-bg: var(--danger);
+  --btn-fg: #fff;
+  --btn-border: transparent;
+}
+
+[data-theme="dark"] .btn-danger {
+  --btn-fg: #2a0703;
+}
+
+.btn-danger-outline {
+  --btn-bg: transparent;
+  --btn-fg: var(--danger);
+  --btn-border: var(--danger);
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  --btn-bg: var(--danger-soft);
+}
+
 .btn-link {
   min-height: auto;
   padding: var(--sp-1) var(--sp-2);
@@ -460,6 +480,54 @@ svg {
 
 [data-theme="dark"] .chip-primary {
   color: var(--primary);
+}
+
+/* ------------------------------- Alertas -------------------------------- */
+/* Mensajes fijos dentro de una tarjeta (los efímeros van en las notificaciones). */
+.alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  animation: pop-in 200ms ease-out;
+}
+
+.alerta > app-icono {
+  margin-top: 1px;
+}
+
+.alerta-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.alerta-cuerpo strong {
+  font-size: var(--fs-md);
+}
+
+.alerta-error {
+  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+  background: var(--danger-soft);
+  color: var(--text);
+}
+
+.alerta-error > app-icono {
+  color: var(--danger);
+}
+
+.alerta-info {
+  border-color: color-mix(in srgb, var(--info) 30%, transparent);
+  background: var(--info-soft);
+  color: var(--text);
+}
+
+.alerta-info > app-icono {
+  color: var(--info);
 }
 
 /* ------------------------------ Utilidades ------------------------------ */

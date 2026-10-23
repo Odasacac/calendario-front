@@ -29,6 +29,14 @@ export class CabeceraComponent {
     this.i18n.cambiar(valor);
   }
 
+  protected abrirCuenta(): void {
+    void this.router.navigate(['/home'], { queryParams: { seccion: 'cuenta' } });
+  }
+
+  protected inicial(nombre: string): string {
+    return nombre.trim().charAt(0).toUpperCase();
+  }
+
   protected cerrarSesion(): void {
     this.usuarios.cerrarSesion();
     this.avisos.info(this.t('sesion.sesionCerrada'));

@@ -1,0 +1,200 @@
+.calendario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  width: min(22rem, 100%);
+  margin: 0 auto;
+}
+
+/* ------------------------------ Mes y año ------------------------------- */
+.cabecera-mes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.mes-anyo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.select-mes,
+.campo-anyo {
+  min-height: 38px;
+  padding: 0 var(--sp-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.select-mes {
+  text-transform: capitalize;
+}
+
+.select-mes option {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.campo-anyo {
+  width: 5.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.select-mes:hover,
+.campo-anyo:hover {
+  background: var(--surface-3);
+}
+
+.select-mes:focus-visible,
+.campo-anyo:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+/* -------------------------------- Rejilla ------------------------------- */
+.rejilla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+  table-layout: fixed;
+}
+
+.rejilla th {
+  padding-bottom: var(--sp-1);
+  color: var(--text-subtle);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.rejilla td {
+  padding: 0;
+  text-align: center;
+}
+
+.dia {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 2.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition);
+}
+
+.dia:hover {
+  background: var(--surface-3);
+}
+
+.dia:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.dia.fuera {
+  color: var(--text-subtle);
+  opacity: 0.55;
+}
+
+.dia.hoy {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.dia.elegido {
+  border-color: transparent;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  opacity: 1;
+}
+
+/* Punto bajo el número en los días con acontecimiento destacado */
+.dia.marcado::after,
+.punto {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+.dia.marcado::after {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dia.elegido.marcado::after {
+  background: var(--on-primary);
+}
+
+/* ---------------------------------- Pie --------------------------------- */
+.pie-calendario {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--border);
+}
+
+.btn-hoy {
+  flex: none;
+}
+
+.escribir-fecha {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.escribir-fecha span {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.leyenda {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+}
+
+.punto {
+  display: inline-block;
+  flex: none;
+}
+
+@media (max-width: 22rem) {
+  .pie-calendario {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

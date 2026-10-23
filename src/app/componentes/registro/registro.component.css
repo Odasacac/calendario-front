@@ -8,6 +8,21 @@
   gap: var(--sp-4);
 }
 
+/* Código de usuario dentro del popup de bienvenida */
+.codigo-usuario {
+  padding: var(--sp-3) var(--sp-4);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--text);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
 @media (max-width: 30rem) {
   .dos-columnas {
     grid-template-columns: 1fr;

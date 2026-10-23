@@ -20,7 +20,11 @@ export type NombreIcono =
   | 'usuario'
   | 'salir'
   | 'menu'
-  | 'estrella';
+  | 'estrella'
+  | 'editar'
+  | 'correo'
+  | 'pausa'
+  | 'papelera';
 
 /** Trazos SVG de 24x24 dibujados con `currentColor`, sin fuentes de iconos. */
 const TRAZOS: Record<NombreIcono, string> = {
@@ -50,6 +54,10 @@ const TRAZOS: Record<NombreIcono, string> = {
   salir: 'M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3M10 8 6 12l4 4m-4-4h10',
   menu: 'M4 7h16M4 12h16M4 17h16',
   estrella: 'M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8-5.3-2.9-5.3 2.9 1.1-5.8-4.3-4.1 5.9-.8L12 3.5Z',
+  editar: 'M4 20h4L19 9l-4-4L4 16v4Zm9-13 4 4',
+  correo: 'M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm-.5 1 8.5 6 8.5-6',
+  pausa: 'M10 9v6m4-6v6M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z',
+  papelera: 'M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v6m4-6v6',
 };
 
 @Component({

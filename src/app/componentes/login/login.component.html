@@ -5,6 +5,35 @@
       <p>{{ t('login.titulo') }}</p>
     </header>
 
+    @if (avisoCuenta(); as aviso) {
+      @if (aviso.tipo === 'suspendida') {
+        <div class="alerta alerta-error aviso-cuenta" role="alert">
+          <app-icono nombre="pausa" [tamanyo]="20" />
+          <div class="alerta-cuerpo">
+            <strong>{{ t('login.suspendidaTitulo') }}</strong>
+            @if (aviso.motivo) {
+              <span>{{ t('login.suspendidaMotivo', { motivo: motivoTexto(aviso.motivo) }) }}</span>
+            }
+            <span class="muted">
+              {{ t('login.suspendidaTexto', { correo: correoReactivacion }) }}
+            </span>
+            <button type="button" class="btn btn-outline" (click)="solicitarReactivacion()">
+              <app-icono nombre="correo" [tamanyo]="18" />
+              {{ t('login.solicitarReactivacion') }}
+            </button>
+          </div>
+        </div>
+      } @else {
+        <div class="alerta alerta-error aviso-cuenta" role="alert">
+          <app-icono nombre="papelera" [tamanyo]="20" />
+          <div class="alerta-cuerpo">
+            <strong>{{ t('login.eliminadaTitulo') }}</strong>
+            <span>{{ t('login.eliminadaTexto', { fecha: fechaTexto(aviso.fecha) }) }}</span>
+          </div>
+        </div>
+      }
+    }
+
     <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
       <div class="field">
         <label for="user">{{ t('login.usuario') }}</label>
@@ -13,6 +42,8 @@
           class="input"
           type="text"
           autocomplete="username"
+          autocapitalize="none"
+          spellcheck="false"
           formControlName="user"
           [class.invalid]="invalido('user')"
           [attr.aria-invalid]="invalido('user')"
@@ -61,9 +92,21 @@
         }
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block">
-        <app-icono nombre="candado" [tamanyo]="18" />
-        {{ t('login.entrar') }}
+      @if (error(); as mensaje) {
+        <div class="alerta alerta-error" role="alert">
+          <app-icono nombre="alerta" [tamanyo]="18" />
+          <span>{{ mensaje }}</span>
+        </div>
+      }
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+        @if (enviando()) {
+          <span class="spinner" aria-hidden="true"></span>
+          {{ t('login.entrando') }}
+        } @else {
+          <app-icono nombre="candado" [tamanyo]="18" />
+          {{ t('login.entrar') }}
+        }
       </button>
     </form>
 

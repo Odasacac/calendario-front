@@ -1,0 +1,76 @@
+.fecha-acontecimiento {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.evento-del-dia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+}
+
+.etiqueta-evento {
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+}
+
+.evento-del-dia .chip {
+  white-space: normal;
+}
+
+.descripcion {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--fs-md);
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* En la confirmación de borrado basta un recordatorio de qué se borra. */
+.descripcion.recortada {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--fs-sm);
+}
+
+.sellos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-xs);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  text-align: left;
+}
+
+textarea.input {
+  min-height: 7rem;
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.pie-campo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.contador {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}

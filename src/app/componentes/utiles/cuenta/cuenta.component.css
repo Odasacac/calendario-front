@@ -1,0 +1,193 @@
+/* Misma estructura que `descargas`: cabecera centrada y paneles apilados. */
+.cuenta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cabecera-seccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  text-align: center;
+}
+
+.cabecera-seccion h2 {
+  font-size: var(--fs-xl);
+}
+
+.cabecera-seccion p {
+  font-size: var(--fs-sm);
+}
+
+.avatar-grande {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  box-shadow: var(--shadow-2);
+}
+
+.codigo {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: var(--fs-sm);
+  user-select: all;
+}
+
+.bloque {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+}
+
+.bloque.columna {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.destacado {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--accent-soft);
+}
+
+.texto h3,
+.fila-titulo h3,
+.peligro h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-md);
+}
+
+.texto h4 {
+  font-size: var(--fs-sm);
+}
+
+.texto p {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-sm);
+}
+
+.fila-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--sp-3) var(--sp-4);
+  margin: 0;
+}
+
+.datos dt {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-subtle);
+}
+
+.datos dd {
+  margin: var(--sp-1) 0 0;
+  overflow-wrap: anywhere;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--sp-3);
+}
+
+.acciones-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.nota-correo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--border);
+}
+
+.nota-correo .btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.peligro {
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+}
+
+.peligro h3 {
+  color: var(--danger);
+}
+
+.peligro .divider {
+  margin: var(--sp-1) 0;
+}
+
+.accion-peligro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.accion-peligro .btn,
+.fila-titulo .btn,
+.destacado .btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.confirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--radius-md);
+  background: var(--danger-soft);
+  animation: pop-in 200ms ease-out;
+}
+
+.volver {
+  align-self: center;
+}
+
+@media (max-width: 34rem) {
+  .bloque,
+  .accion-peligro {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .acciones-form .btn {
+    flex: 1 1 auto;
+  }
+}

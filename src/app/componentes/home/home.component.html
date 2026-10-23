@@ -1,16 +1,20 @@
 <div class="home">
   <div class="barra no-print">
+    <!-- «Hoy» / «Volver a hoy» solo tienen sentido en la fecha VAU; el
+         contenedor se mantiene para que el menú no cambie de sitio. -->
     <div class="estado">
-      @if (esHoy()) {
-        <span class="chip chip-primary">
-          <app-icono nombre="sol" [tamanyo]="14" />
-          {{ t('home.hoy') }}
-        </span>
-      } @else {
-        <button type="button" class="btn btn-outline" (click)="volverAHoy()">
-          <app-icono nombre="sol" [tamanyo]="18" />
-          {{ t('home.volverAHoy') }}
-        </button>
+      @if (vista() === 'vau') {
+        @if (esHoy()) {
+          <span class="chip chip-primary">
+            <app-icono nombre="sol" [tamanyo]="14" />
+            {{ t('home.hoy') }}
+          </span>
+        } @else {
+          <button type="button" class="btn btn-outline" (click)="volverAHoy()">
+            <app-icono nombre="sol" [tamanyo]="18" />
+            {{ t('home.volverAHoy') }}
+          </button>
+        }
       }
     </div>
 
@@ -55,25 +59,25 @@
   </div>
 
   @if (selectorAbierto() && vista() === 'vau') {
-    <div class="panel selector no-print" id="selector-fecha">
-      <label class="field">
-        <span>{{ t('home.elegirFecha') }}</span>
-        <input
-          #campoFecha
-          class="input"
-          type="date"
-          [value]="fechaDelSelector()"
-          (change)="seleccionarFecha($event)"
-        />
-      </label>
+    <div class="panel selector no-print" id="selector-fecha" role="region" [attr.aria-label]="t('home.elegirFecha')">
+      <app-calendario [seleccionada]="fechaDelSelector()" (seleccionar)="seleccionarFecha($event)" />
     </div>
   }
 
   <section class="card contenedor">
-    @if (vista() === 'vau') {
-      <app-date-vau [fecha]="fecha()" (fechaChange)="cambiarFecha($event)" />
-    } @else {
-      <app-descargas (back)="irAVau()" />
+    @switch (vista()) {
+      @case ('vau') {
+        <app-date-vau [fecha]="fecha()" (fechaChange)="cambiarFecha($event)" />
+      }
+      @case ('descargas') {
+        <app-descargas (back)="irAVau()" />
+      }
+      @case ('cuenta') {
+        <app-cuenta (back)="irAVau()" (acontecimientos)="irA('acontecimientos')" />
+      }
+      @case ('acontecimientos') {
+        <app-acontecimientos (back)="irAVau()" (irAFecha)="irAFecha($event)" />
+      }
     }
   </section>
 </div>

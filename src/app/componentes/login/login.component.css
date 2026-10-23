@@ -8,3 +8,11 @@
   font-weight: 600;
   color: var(--accent);
 }
+
+.aviso-cuenta {
+  margin-bottom: var(--sp-4);
+}
+
+.aviso-cuenta .btn {
+  align-self: flex-start;
+}

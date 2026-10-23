@@ -10,10 +10,12 @@ import {
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, startWith, switchMap } from 'rxjs';
+import { Acontecimiento } from '../../../interfaces/acontecimiento';
 import { VAUResponse } from '../../../interfaces/vau-response';
 import { DatesService } from '../../../servicios/dates.service';
 import { I18nService } from '../../../servicios/i18n.service';
-import { NotificacionesService } from '../../../servicios/notificaciones.service';
+import { AcontecimientosService } from '../../../servicios/acontecimientos.service';
+import { UsuarioService } from '../../../servicios/usuario.service';
 import {
   formatearDiaSemana,
   formatearFechaCorta,
@@ -22,6 +24,7 @@ import {
   sumarDias,
 } from '../../../utiles/fechas';
 import { IconoComponent } from '../icono/icono.component';
+import { ModoAcontecimiento, AcontecimientoPopupComponent } from '../acontecimientos/acontecimiento-popup.component';
 
 type Estado =
   | { readonly tipo: 'cargando' }
@@ -32,7 +35,7 @@ type Estado =
 @Component({
   selector: 'app-date-vau',
   standalone: true,
-  imports: [IconoComponent],
+  imports: [IconoComponent, AcontecimientoPopupComponent],
   templateUrl: './date-vau.component.html',
   styleUrl: './date-vau.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +46,8 @@ export class DateVAUComponent {
   readonly fechaChange = output<string>();
 
   private readonly dates = inject(DatesService);
-  private readonly avisos = inject(NotificacionesService);
+  private readonly acontecimientos = inject(AcontecimientosService);
+  private readonly usuarios = inject(UsuarioService);
   private readonly i18n = inject(I18nService);
 
   protected readonly t = this.i18n.t;
@@ -115,6 +119,35 @@ export class DateVAUComponent {
     formatearFechaCorta(this.fechaResuelta()),
   );
 
+  // --- Acontecimiento destacado del día (solo usuarios registrados) ---------------
+  protected readonly registrado = this.usuarios.esRegistrado;
+  protected readonly popupAcontecimiento = signal<{ modo: ModoAcontecimiento; acontecimiento: Acontecimiento | null } | null>(null);
+  private readonly recargaAcontecimiento = signal(0);
+
+  private readonly peticionAcontecimiento = computed(() => ({
+    fecha: this.fechaResuelta(),
+    registrado: this.registrado(),
+    intento: this.recargaAcontecimiento(),
+  }));
+
+  /**
+   * `undefined` mientras se consulta, `null` si ese día no hay acontecimiento. Un
+   * fallo se trata como «sin acontecimiento»: no debe estropear la fecha VAU.
+   */
+  protected readonly acontecimientoDelDia = toSignal(
+    toObservable(this.peticionAcontecimiento).pipe(
+      switchMap(({ fecha, registrado }) =>
+        registrado
+          ? this.acontecimientos.porFecha(fecha).pipe(
+              catchError(() => of(null)),
+              startWith<Acontecimiento | null | undefined>(undefined),
+            )
+          : of(undefined),
+      ),
+    ),
+    { initialValue: undefined as Acontecimiento | null | undefined },
+  );
+
   /** Descripción legible del casalero, compuesta a partir de sus banderas. */
   protected readonly descripcionCasalero = computed(() => {
     const casalero = this.datos()?.casalero;
@@ -173,38 +206,14 @@ export class DateVAUComponent {
     this.detalles.update((abierto) => !abierto);
   }
 
-  protected imprimir(): void {
-    window.print();
+  protected abrirAcontecimiento(modo: ModoAcontecimiento, acontecimiento: Acontecimiento | null = null): void {
+    this.popupAcontecimiento.set({ modo, acontecimiento });
   }
 
-  protected async copiarResumen(): Promise<void> {
-    const datos = this.datos();
-    if (!datos) {
-      return;
-    }
-
-    const lineas = [
-      `${this.fechaLarga()} (${this.fechaCorta()})`,
-      `${this.t('vau.estacion')}: ${texto(datos.season?.name, datos.season?.surname)}`,
-      `${this.t('vau.mesFasal')}: ${texto(datos.month?.name, datos.month?.surname)}`,
-      `${this.t('vau.semana')}: ${texto(datos.week)}`,
-      `${this.t('vau.dia')}: ${texto(datos.day)}`,
-      `${this.t('vau.anyo')}: ${texto(datos.year?.solsticiosDeInviernoSinceLastMetonIN)}`,
-    ];
-
-    if (datos.festividades?.festividadActual) {
-      lineas.push(`${this.t('vau.festividad')}: ${datos.festividades.festividadActual}`);
-    }
-    if (datos.notableEvent?.today) {
-      lineas.push(`${this.t('vau.eventoResenyable')}: ${datos.notableEvent.today}`);
-    }
-
-    try {
-      await navigator.clipboard.writeText(lineas.join('\n'));
-      this.avisos.exito(this.t('vau.copiado'));
-    } catch {
-      this.avisos.error(this.t('vau.copiadoError'));
-    }
+  /** Tras crear, modificar o eliminar se vuelve a pedir el acontecimiento del día mostrado. */
+  protected alCambiarAcontecimiento(): void {
+    this.popupAcontecimiento.set(null);
+    this.recargaAcontecimiento.update((valor) => valor + 1);
   }
 
   /** Flechas ← → para cambiar de día, salvo si el foco está en un campo. */

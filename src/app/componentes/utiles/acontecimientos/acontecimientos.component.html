@@ -1,0 +1,116 @@
+<section class="acontecimientos">
+  <header class="cabecera-lista">
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon"
+      [attr.aria-label]="t('acontecimientos.volver')"
+      [attr.title]="t('acontecimientos.volver')"
+      (click)="back.emit()"
+    >
+      <app-icono nombre="izquierda" [tamanyo]="22" />
+    </button>
+    <div class="titulos">
+      <h2>{{ t('acontecimientos.titulo') }}</h2>
+      <p class="muted">{{ t('acontecimientos.subtitulo') }}</p>
+    </div>
+    <!-- En móvil el texto se oculta: aria-label y title mantienen el nombre del botón. -->
+    <button
+      type="button"
+      class="btn btn-accent anyadir"
+      [attr.aria-label]="t('acontecimientos.anyadir')"
+      [attr.title]="t('acontecimientos.anyadir')"
+      (click)="abrir('crear')"
+    >
+      <app-icono nombre="estrella" [tamanyo]="18" />
+      <span class="texto-anyadir">{{ t('acontecimientos.anyadir') }}</span>
+    </button>
+  </header>
+
+  @if (cargando()) {
+    <div class="estado-lista" aria-busy="true">
+      <span class="spinner" aria-hidden="true"></span>
+      {{ t('comun.cargando') }}
+    </div>
+  } @else if (hayError()) {
+    <div class="alerta alerta-error" role="alert">
+      <app-icono nombre="alerta" [tamanyo]="18" />
+      <div class="alerta-cuerpo">
+        <span>{{ t('acontecimientos.cargarError') }}</span>
+        <button type="button" class="btn btn-outline reintentar" (click)="cargar()">
+          {{ t('comun.reintentar') }}
+        </button>
+      </div>
+    </div>
+  } @else if (acontecimientos().length === 0) {
+    <div class="vacio">
+      <span class="emblema" aria-hidden="true">
+        <app-icono nombre="estrella" [tamanyo]="24" />
+      </span>
+      <p><strong>{{ t('acontecimientos.vacio') }}</strong></p>
+      <p class="muted">{{ t('acontecimientos.vacioTexto') }}</p>
+    </div>
+  } @else {
+    <div class="panel contenedor-tabla">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th scope="col">{{ t('acontecimientos.columnaFecha') }}</th>
+            <th scope="col" class="columna-acciones">{{ t('acontecimientos.columnaAcciones') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (acontecimiento of acontecimientos(); track acontecimiento.id) {
+            <tr>
+              <td>
+                <span class="fecha">{{ fecha(acontecimiento.fecha) }}</span>
+              </td>
+              <td class="columna-acciones">
+                <div class="acciones-fila">
+                  <button
+                    type="button"
+                    class="btn btn-ghost accion"
+                    [attr.aria-label]="t('acontecimientos.verAria', { fecha: fecha(acontecimiento.fecha) })"
+                    (click)="abrir('ver', acontecimiento)"
+                  >
+                    <app-icono nombre="ojo" [tamanyo]="16" />
+                    <span class="texto-accion">{{ t('acontecimientos.ver') }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost accion"
+                    [attr.aria-label]="t('acontecimientos.modificarAria', { fecha: fecha(acontecimiento.fecha) })"
+                    (click)="abrir('modificar', acontecimiento)"
+                  >
+                    <app-icono nombre="editar" [tamanyo]="16" />
+                    <span class="texto-accion">{{ t('acontecimientos.modificar') }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost accion peligro"
+                    [attr.aria-label]="t('acontecimientos.eliminarAria', { fecha: fecha(acontecimiento.fecha) })"
+                    (click)="abrir('eliminar', acontecimiento)"
+                  >
+                    <app-icono nombre="papelera" [tamanyo]="16" />
+                    <span class="texto-accion">{{ t('acontecimientos.eliminar') }}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+@if (popup(); as abierto) {
+  <app-acontecimiento-popup
+    [modo]="abierto.modo"
+    [acontecimiento]="abierto.acontecimiento"
+    [mostrarIrAFecha]="true"
+    (guardado)="alGuardar($event)"
+    (eliminado)="alEliminar($event)"
+    (irAFecha)="irA($event)"
+    (cerrar)="cerrarPopup()"
+  />
+}

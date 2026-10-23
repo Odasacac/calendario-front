@@ -1,0 +1,367 @@
+@if (usuario(); as u) {
+  <section class="cuenta">
+    <header class="cabecera-seccion">
+      <span class="avatar-grande" aria-hidden="true">{{ inicial() }}</span>
+      <h2>{{ t('cuenta.saludo', { nombre: u.nombre }) }}</h2>
+      <p class="muted">
+        {{ t('cuenta.codigoUsuario') }}:
+        <span class="chip chip-primary codigo">{{ u.codigoUsuario }}</span>
+      </p>
+    </header>
+
+    <!-- Acceso destacado a acontecimientos destacados -->
+    <article class="panel bloque destacado">
+      <div class="texto">
+        <h3>
+          <app-icono nombre="estrella" [tamanyo]="18" />
+          {{ t('cuenta.acontecimientosTitulo') }}
+        </h3>
+        <p class="muted">{{ t('cuenta.acontecimientosTexto') }}</p>
+      </div>
+      <button type="button" class="btn btn-accent" (click)="acontecimientos.emit()">
+        {{ t('cuenta.acontecimientosBoton') }}
+        <app-icono nombre="derecha" [tamanyo]="18" />
+      </button>
+    </article>
+
+    <!-- Datos personales -->
+    <article class="panel bloque columna">
+      <div class="fila-titulo">
+        <h3>{{ t('cuenta.datosTitulo') }}</h3>
+        @if (panel() !== 'perfil') {
+          <button type="button" class="btn btn-outline" (click)="abrir('perfil')">
+            <app-icono nombre="editar" [tamanyo]="16" />
+            {{ t('cuenta.editar') }}
+          </button>
+        }
+      </div>
+
+      @if (panel() === 'perfil') {
+        <form [formGroup]="perfil" (ngSubmit)="guardarPerfil()" novalidate>
+          <div class="campos">
+            <div class="field">
+              <label for="cuenta-nombre">{{ t('cuenta.nombre') }}</label>
+              <input
+                id="cuenta-nombre"
+                class="input"
+                type="text"
+                autocomplete="given-name"
+                maxlength="60"
+                formControlName="nombre"
+                [class.invalid]="invalido(perfil.controls.nombre)"
+                [attr.aria-invalid]="invalido(perfil.controls.nombre)"
+              />
+              @if (invalido(perfil.controls.nombre)) {
+                <p class="field-error">
+                  <app-icono nombre="alerta" [tamanyo]="14" />
+                  {{ t('comun.obligatorio') }}
+                </p>
+              }
+            </div>
+            <div class="field">
+              <label for="cuenta-apellido">{{ t('cuenta.apellido') }}</label>
+              <input
+                id="cuenta-apellido"
+                class="input"
+                type="text"
+                autocomplete="family-name"
+                maxlength="60"
+                formControlName="apellido"
+                [class.invalid]="invalido(perfil.controls.apellido)"
+                [attr.aria-invalid]="invalido(perfil.controls.apellido)"
+              />
+              @if (invalido(perfil.controls.apellido)) {
+                <p class="field-error">
+                  <app-icono nombre="alerta" [tamanyo]="14" />
+                  {{ t('comun.obligatorio') }}
+                </p>
+              }
+            </div>
+            <div class="field">
+              <label for="cuenta-fecha">{{ t('cuenta.fechaNacimiento') }}</label>
+              <input
+                id="cuenta-fecha"
+                class="input"
+                type="date"
+                min="1900-01-01"
+                autocomplete="bday"
+                formControlName="fechaNacimiento"
+                [class.invalid]="invalido(perfil.controls.fechaNacimiento)"
+                [attr.aria-invalid]="invalido(perfil.controls.fechaNacimiento)"
+              />
+              @if (invalido(perfil.controls.fechaNacimiento)) {
+                <p class="field-error">
+                  <app-icono nombre="alerta" [tamanyo]="14" />
+                  {{
+                    perfil.controls.fechaNacimiento.hasError('required')
+                      ? t('comun.obligatorio')
+                      : t('comun.fechaInvalida')
+                  }}
+                </p>
+              }
+            </div>
+          </div>
+          <p class="field-hint">{{ t('cuenta.codigoAviso') }}</p>
+
+          @if (errorPanel(); as mensaje) {
+            <div class="alerta alerta-error" role="alert">
+              <app-icono nombre="alerta" [tamanyo]="18" />
+              <span>{{ mensaje }}</span>
+            </div>
+          }
+
+          <div class="acciones-form">
+            <button type="button" class="btn btn-ghost" (click)="abrir(null)">
+              {{ t('comun.cancelar') }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+              @if (enviando()) {
+                <span class="spinner" aria-hidden="true"></span>
+              }
+              {{ t('comun.guardar') }}
+            </button>
+          </div>
+        </form>
+      } @else {
+        <dl class="datos">
+          <div>
+            <dt>{{ t('cuenta.nombre') }}</dt>
+            <dd>{{ u.nombre }} {{ u.apellido }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('cuenta.correo') }}</dt>
+            <dd>{{ u.correo }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('cuenta.fechaNacimiento') }}</dt>
+            <dd>{{ fecha(u.fechaNacimiento) }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('cuenta.mayorDeEdad') }}</dt>
+            <dd>{{ u.esMayorDeEdad ? t('cuenta.si') : t('cuenta.no') }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('cuenta.miembroDesde') }}</dt>
+            <dd>{{ fecha(u.fechaCreacion) }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('cuenta.ultimoAcceso') }}</dt>
+            <dd>{{ fecha(u.fechaLastLogin) }}</dd>
+          </div>
+        </dl>
+      }
+
+      <div class="nota-correo">
+        <p class="field-hint">{{ t('cuenta.correoTexto') }}</p>
+        <button type="button" class="btn-link" (click)="solicitarCambioCorreo()">
+          <app-icono nombre="correo" [tamanyo]="16" />
+          {{ t('cuenta.solicitarCambioCorreo') }}
+        </button>
+      </div>
+    </article>
+
+    <!-- Contraseña -->
+    <article class="panel bloque columna">
+      <div class="fila-titulo">
+        <div class="texto">
+          <h3>{{ t('cuenta.contrasenyaTitulo') }}</h3>
+          <p class="muted">{{ t('cuenta.contrasenyaTexto') }}</p>
+        </div>
+        @if (panel() !== 'contrasenya') {
+          <button type="button" class="btn btn-outline" (click)="abrir('contrasenya')">
+            <app-icono nombre="candado" [tamanyo]="16" />
+            {{ t('cuenta.cambiarContrasenya') }}
+          </button>
+        }
+      </div>
+
+      @if (panel() === 'contrasenya') {
+        <form [formGroup]="contrasenya" (ngSubmit)="cambiarContrasenya()" novalidate>
+          <div class="field">
+            <label for="cuenta-actual">{{ t('cuenta.contrasenyaActual') }}</label>
+            <input
+              id="cuenta-actual"
+              class="input"
+              type="password"
+              autocomplete="current-password"
+              formControlName="actual"
+              [class.invalid]="invalido(contrasenya.controls.actual)"
+              [attr.aria-invalid]="invalido(contrasenya.controls.actual)"
+            />
+            @if (invalido(contrasenya.controls.actual)) {
+              <p class="field-error">
+                <app-icono nombre="alerta" [tamanyo]="14" />
+                {{ t('comun.obligatorio') }}
+              </p>
+            }
+          </div>
+          <div class="campos">
+            <div class="field">
+              <label for="cuenta-nueva">{{ t('cuenta.contrasenyaNueva') }}</label>
+              <input
+                id="cuenta-nueva"
+                class="input"
+                type="password"
+                autocomplete="new-password"
+                formControlName="nueva"
+                [class.invalid]="invalido(contrasenya.controls.nueva)"
+                [attr.aria-invalid]="invalido(contrasenya.controls.nueva)"
+              />
+            </div>
+            <div class="field">
+              <label for="cuenta-repetir">{{ t('cuenta.contrasenyaRepetir') }}</label>
+              <input
+                id="cuenta-repetir"
+                class="input"
+                type="password"
+                autocomplete="new-password"
+                formControlName="repetir"
+                [class.invalid]="repeticionInvalida()"
+                [attr.aria-invalid]="repeticionInvalida()"
+              />
+            </div>
+          </div>
+          @if (invalido(contrasenya.controls.nueva)) {
+            <p class="field-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ t('comun.contrasenyaPolitica') }}
+            </p>
+          } @else if (repeticionInvalida()) {
+            <p class="field-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ t('comun.contrasenyasNoCoinciden') }}
+            </p>
+          } @else {
+            <p class="field-hint">{{ t('comun.contrasenyaPolitica') }}</p>
+          }
+
+          @if (errorPanel(); as mensaje) {
+            <div class="alerta alerta-error" role="alert">
+              <app-icono nombre="alerta" [tamanyo]="18" />
+              <span>{{ mensaje }}</span>
+            </div>
+          }
+
+          <div class="acciones-form">
+            <button type="button" class="btn btn-ghost" (click)="abrir(null)">
+              {{ t('comun.cancelar') }}
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="enviando()">
+              @if (enviando()) {
+                <span class="spinner" aria-hidden="true"></span>
+              }
+              {{ t('comun.guardar') }}
+            </button>
+          </div>
+        </form>
+      }
+    </article>
+
+    <!-- Zona de peligro -->
+    <article class="panel bloque columna peligro">
+      <h3>
+        <app-icono nombre="alerta" [tamanyo]="18" />
+        {{ t('cuenta.peligroTitulo') }}
+      </h3>
+
+      <div class="accion-peligro">
+        <div class="texto">
+          <h4>{{ t('cuenta.suspenderTitulo') }}</h4>
+          <p class="muted">{{ t('cuenta.suspenderTexto') }}</p>
+        </div>
+        @if (panel() !== 'suspender') {
+          <button type="button" class="btn btn-danger-outline" (click)="abrir('suspender')">
+            <app-icono nombre="pausa" [tamanyo]="16" />
+            {{ t('cuenta.suspenderBoton') }}
+          </button>
+        }
+      </div>
+      @if (panel() === 'suspender') {
+        <div class="confirmacion" role="group" [attr.aria-label]="t('cuenta.suspenderTitulo')">
+          <p>{{ t('cuenta.suspenderPregunta') }}</p>
+          @if (errorPanel(); as mensaje) {
+            <div class="alerta alerta-error" role="alert">
+              <app-icono nombre="alerta" [tamanyo]="18" />
+              <span>{{ mensaje }}</span>
+            </div>
+          }
+          <div class="acciones-form">
+            <button type="button" class="btn btn-ghost" (click)="abrir(null)">
+              {{ t('comun.cancelar') }}
+            </button>
+            <button type="button" class="btn btn-danger" [disabled]="enviando()" (click)="suspender()">
+              @if (enviando()) {
+                <span class="spinner" aria-hidden="true"></span>
+              }
+              {{ t('cuenta.suspenderConfirmar') }}
+            </button>
+          </div>
+        </div>
+      }
+
+      <hr class="divider" />
+
+      <div class="accion-peligro">
+        <div class="texto">
+          <h4>{{ t('cuenta.eliminarTitulo') }}</h4>
+          <p class="muted">{{ t('cuenta.eliminarTexto') }}</p>
+        </div>
+        @if (panel() !== 'eliminar') {
+          <button type="button" class="btn btn-danger-outline" (click)="abrir('eliminar')">
+            <app-icono nombre="papelera" [tamanyo]="16" />
+            {{ t('cuenta.eliminarBoton') }}
+          </button>
+        }
+      </div>
+      @if (panel() === 'eliminar') {
+        <form
+          class="confirmacion"
+          [formGroup]="eliminacion"
+          (ngSubmit)="eliminar()"
+          novalidate
+        >
+          <div class="field">
+            <label for="cuenta-eliminar">{{ t('cuenta.eliminarPideContrasenya') }}</label>
+            <input
+              id="cuenta-eliminar"
+              class="input"
+              type="password"
+              autocomplete="current-password"
+              formControlName="contrasenya"
+              [class.invalid]="invalido(eliminacion.controls.contrasenya)"
+              [attr.aria-invalid]="invalido(eliminacion.controls.contrasenya)"
+            />
+            @if (invalido(eliminacion.controls.contrasenya)) {
+              <p class="field-error">
+                <app-icono nombre="alerta" [tamanyo]="14" />
+                {{ t('comun.obligatorio') }}
+              </p>
+            }
+          </div>
+          @if (errorPanel(); as mensaje) {
+            <div class="alerta alerta-error" role="alert">
+              <app-icono nombre="alerta" [tamanyo]="18" />
+              <span>{{ mensaje }}</span>
+            </div>
+          }
+          <div class="acciones-form">
+            <button type="button" class="btn btn-ghost" (click)="abrir(null)">
+              {{ t('comun.cancelar') }}
+            </button>
+            <button type="submit" class="btn btn-danger" [disabled]="enviando()">
+              @if (enviando()) {
+                <span class="spinner" aria-hidden="true"></span>
+              }
+              {{ t('cuenta.eliminarConfirmar') }}
+            </button>
+          </div>
+        </form>
+      }
+    </article>
+
+    <button type="button" class="btn btn-ghost volver" (click)="back.emit()">
+      <app-icono nombre="izquierda" [tamanyo]="16" />
+      {{ t('comun.volver') }}
+    </button>
+  </section>
+}

@@ -11,10 +11,25 @@
     </div>
 
     <div class="acciones">
-      @if (usuarios.estaAutenticado()) {
+      @if (usuarios.usuario(); as usuario) {
+        <!-- Registrado: su nombre abre «Mi cuenta». -->
+        <button
+          type="button"
+          class="btn cuenta"
+          [attr.aria-label]="t('sesion.abrirCuenta', { nombre: usuario.nombre })"
+          [attr.title]="t('sesion.miCuenta')"
+          (click)="abrirCuenta()"
+        >
+          <span class="avatar" aria-hidden="true">{{ inicial(usuario.nombre) }}</span>
+          <span class="texto-cuenta">
+            <span class="nombre-usuario">{{ usuario.nombre }}</span>
+            <span class="etiqueta-cuenta">{{ t('sesion.miCuenta') }}</span>
+          </span>
+        </button>
+      } @else if (usuarios.esInvitado()) {
         <span class="chip chip-primary sesion">
           <app-icono nombre="usuario" [tamanyo]="14" />
-          {{ usuarios.usuario()?.nombre ?? t('sesion.invitado') }}
+          {{ t('sesion.invitado') }}
         </span>
       }
 

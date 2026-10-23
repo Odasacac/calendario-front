@@ -1,2 +1,10 @@
-/* Los estilos de esta pantalla viven en las clases compartidas
-   `.pagina-centrada` y `.tarjeta-auth` de src/styles.css. */
+/* El resto de estilos de esta pantalla viven en las clases compartidas
+   `.pagina-centrada`, `.tarjeta-auth` y `.alerta` de src/styles.css. */
+
+.ayuda {
+  margin-top: var(--sp-5);
+}
+
+.ayuda .btn {
+  align-self: flex-start;
+}

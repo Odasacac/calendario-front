@@ -104,6 +104,61 @@
   font-size: var(--fs-sm);
 }
 
+/* --------------------------- Acontecimiento destacado --------------------------- */
+.anyadir-acontecimiento {
+  display: flex;
+  justify-content: center;
+}
+
+.acontecimiento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--accent-soft);
+  animation: pop-in 200ms ease-out;
+}
+
+.cabecera-acontecimiento {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.cabecera-acontecimiento .etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--accent-hover);
+}
+
+[data-theme="dark"] .cabecera-acontecimiento .etiqueta {
+  color: var(--accent);
+}
+
+.acciones-acontecimiento {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.acciones-acontecimiento .btn-icon {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.acciones-acontecimiento .peligro:hover:not(:disabled) {
+  --btn-bg: var(--danger-soft);
+  --btn-fg: var(--danger);
+}
+
+.texto-acontecimiento {
+  font-size: var(--fs-md);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* -------------------------------- Acciones ------------------------------ */
 .acciones {
   display: flex;
@@ -212,16 +267,6 @@
 @media (max-width: 30rem) {
   .titulo-fecha {
     font-size: var(--fs-xl);
-  }
-
-  .acciones .texto-accion {
-    display: none;
-  }
-
-  .acciones .btn-ghost {
-    flex: 0 0 auto;
-    min-width: 44px;
-    padding: 0 var(--sp-3);
   }
 }
 

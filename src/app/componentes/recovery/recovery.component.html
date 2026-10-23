@@ -1,42 +1,179 @@
 <div class="pagina-centrada">
   <section class="card tarjeta-auth">
-    <header>
-      <span class="emblema" aria-hidden="true">
-        <app-icono nombre="candado" [tamanyo]="24" />
-      </span>
-      <h1>{{ t('recuperar.titulo') }}</h1>
-      <p>{{ t('recuperar.subtitulo') }}</p>
-    </header>
+    @if (token() === null) {
+      <header>
+        <span class="emblema" aria-hidden="true">
+          <app-icono nombre="candado" [tamanyo]="24" />
+        </span>
+        <h1>{{ t('recuperar.titulo') }}</h1>
+        <p>{{ t('recuperar.subtitulo') }}</p>
+      </header>
 
-    <form [formGroup]="formulario" (ngSubmit)="recuperar()" novalidate>
-      <div class="field">
-        <label for="correo">{{ t('recuperar.email') }}</label>
-        <input
-          id="correo"
-          class="input"
-          type="email"
-          inputmode="email"
-          autocomplete="email"
-          formControlName="correo"
-          [class.invalid]="invalido"
-          [attr.aria-invalid]="invalido"
-          [attr.aria-describedby]="invalido ? 'correo-error' : null"
-        />
-        @if (invalido) {
-          <p class="field-error" id="correo-error">
-            <app-icono nombre="alerta" [tamanyo]="14" />
-            {{ error }}
-          </p>
+      <form [formGroup]="datos" (ngSubmit)="verificar()" novalidate>
+        <div class="field">
+          <label for="codigoUsuario">{{ t('recuperar.codigoUsuario') }}</label>
+          <input
+            id="codigoUsuario"
+            class="input"
+            type="text"
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false"
+            formControlName="codigoUsuario"
+            [placeholder]="t('recuperar.codigoPlaceholder')"
+            [class.invalid]="invalidoDatos('codigoUsuario')"
+            [attr.aria-invalid]="invalidoDatos('codigoUsuario')"
+            [attr.aria-describedby]="invalidoDatos('codigoUsuario') ? 'codigo-error' : null"
+          />
+          @if (invalidoDatos('codigoUsuario')) {
+            <p class="field-error" id="codigo-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ errorDatos('codigoUsuario') }}
+            </p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="correo">{{ t('recuperar.email') }}</label>
+          <input
+            id="correo"
+            class="input"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            autocapitalize="none"
+            spellcheck="false"
+            formControlName="correo"
+            [class.invalid]="invalidoDatos('correo')"
+            [attr.aria-invalid]="invalidoDatos('correo')"
+            [attr.aria-describedby]="invalidoDatos('correo') ? 'correo-error' : null"
+          />
+          @if (invalidoDatos('correo')) {
+            <p class="field-error" id="correo-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ errorDatos('correo') }}
+            </p>
+          }
+        </div>
+
+        @if (errorGeneral(); as mensaje) {
+          <div class="alerta alerta-error" role="alert">
+            <app-icono nombre="alerta" [tamanyo]="18" />
+            <span>{{ mensaje }}</span>
+          </div>
         }
-      </div>
 
-      <button type="submit" class="btn btn-primary btn-block">
-        {{ t('recuperar.enviar') }}
-      </button>
-      <button type="button" class="btn btn-ghost btn-block" (click)="volverAlLogin()">
-        <app-icono nombre="izquierda" [tamanyo]="16" />
-        {{ t('comun.volverAlLogin') }}
-      </button>
-    </form>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+          @if (enviando()) {
+            <span class="spinner" aria-hidden="true"></span>
+            {{ t('comun.enviando') }}
+          } @else {
+            {{ t('recuperar.continuar') }}
+          }
+        </button>
+        <button type="button" class="btn btn-ghost btn-block" (click)="volverAlLogin()">
+          <app-icono nombre="izquierda" [tamanyo]="16" />
+          {{ t('comun.volverAlLogin') }}
+        </button>
+      </form>
+
+      <div class="alerta alerta-info ayuda">
+        <app-icono nombre="info" [tamanyo]="18" />
+        <div class="alerta-cuerpo">
+          <strong>{{ t('recuperar.olvidoDatos') }}</strong>
+          <span class="muted">{{ t('recuperar.olvidoTexto', { correo: correoSoporte }) }}</span>
+          <button type="button" class="btn btn-outline" (click)="solicitarAyuda()">
+            <app-icono nombre="correo" [tamanyo]="18" />
+            {{ t('recuperar.solicitarAyuda') }}
+          </button>
+        </div>
+      </div>
+    } @else {
+      <header>
+        <span class="emblema" aria-hidden="true">
+          <app-icono nombre="ok" [tamanyo]="24" />
+        </span>
+        <h1>{{ t('recuperar.nuevaTitulo') }}</h1>
+        <p>{{ t('recuperar.nuevaSubtitulo', { codigo: codigoVerificado() }) }}</p>
+      </header>
+
+      <form [formGroup]="nueva" (ngSubmit)="guardar()" novalidate>
+        <div class="field">
+          <label for="nueva">{{ t('recuperar.nueva') }}</label>
+          <div class="input-group">
+            <input
+              id="nueva"
+              class="input"
+              [type]="verContrasenya() ? 'text' : 'password'"
+              autocomplete="new-password"
+              formControlName="contrasenya"
+              [class.invalid]="invalidoNueva('contrasenya')"
+              [attr.aria-invalid]="invalidoNueva('contrasenya')"
+              aria-describedby="nueva-ayuda"
+            />
+            <button
+              type="button"
+              class="input-action"
+              [attr.aria-label]="
+                verContrasenya() ? t('login.ocultarContrasenya') : t('login.mostrarContrasenya')
+              "
+              [attr.aria-pressed]="verContrasenya()"
+              (click)="verContrasenya.set(!verContrasenya())"
+            >
+              <app-icono [nombre]="verContrasenya() ? 'ojo-cerrado' : 'ojo'" [tamanyo]="18" />
+            </button>
+          </div>
+          @if (invalidoNueva('contrasenya')) {
+            <p class="field-error" id="nueva-ayuda">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ errorNueva('contrasenya') }}
+            </p>
+          } @else {
+            <p class="field-hint" id="nueva-ayuda">{{ t('comun.contrasenyaPolitica') }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="repetir">{{ t('recuperar.repetir') }}</label>
+          <input
+            id="repetir"
+            class="input"
+            [type]="verContrasenya() ? 'text' : 'password'"
+            autocomplete="new-password"
+            formControlName="repetir"
+            [class.invalid]="invalidoNueva('repetir')"
+            [attr.aria-invalid]="invalidoNueva('repetir')"
+            [attr.aria-describedby]="invalidoNueva('repetir') ? 'repetir-error' : null"
+          />
+          @if (invalidoNueva('repetir')) {
+            <p class="field-error" id="repetir-error">
+              <app-icono nombre="alerta" [tamanyo]="14" />
+              {{ errorNueva('repetir') }}
+            </p>
+          }
+        </div>
+
+        @if (errorGeneral(); as mensaje) {
+          <div class="alerta alerta-error" role="alert">
+            <app-icono nombre="alerta" [tamanyo]="18" />
+            <span>{{ mensaje }}</span>
+          </div>
+        }
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="enviando()">
+          @if (enviando()) {
+            <span class="spinner" aria-hidden="true"></span>
+            {{ t('comun.enviando') }}
+          } @else {
+            <app-icono nombre="candado" [tamanyo]="18" />
+            {{ t('recuperar.guardar') }}
+          }
+        </button>
+        <button type="button" class="btn btn-ghost btn-block" (click)="volverAlPaso1()">
+          <app-icono nombre="izquierda" [tamanyo]="16" />
+          {{ t('comun.volver') }}
+        </button>
+      </form>
+    }
   </section>
 </div>

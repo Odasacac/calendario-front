@@ -1,7 +1,7 @@
 import { NombreIcono } from '../componentes/utiles/icono/icono.component';
 import { ClaveTraduccion } from '../i18n/idiomas';
 
-export type AccionOpcion = 'descargas' | 'eventos' | 'fecha-vau';
+export type AccionOpcion = 'descargas' | 'acontecimientos' | 'fecha-vau' | 'cuenta';
 
 /** Entrada del menú «Más opciones» de la pantalla principal. */
 export interface Opcion {

@@ -1,0 +1,139 @@
+.acontecimientos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Flecha a la izquierda, título en medio y «Añadir» arriba a la derecha */
+.cabecera-lista {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.titulos {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.titulos h2 {
+  font-size: var(--fs-xl);
+}
+
+.titulos p {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-sm);
+}
+
+.anyadir {
+  flex: none;
+  white-space: nowrap;
+}
+
+.estado-lista {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6) 0;
+  color: var(--text-muted);
+}
+
+.reintentar {
+  align-self: flex-start;
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-6) var(--sp-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.contenedor-tabla {
+  overflow: hidden;
+  padding: 0;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-3);
+  color: var(--text-subtle);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.tabla td {
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla tbody tr:hover {
+  background: var(--surface-3);
+}
+
+.fecha {
+  font-weight: 600;
+}
+
+/* `.tabla` delante para ganar a `.tabla th { text-align: left }`. */
+.tabla .columna-acciones {
+  text-align: right;
+}
+
+.acciones-fila {
+  display: inline-flex;
+  gap: var(--sp-1);
+}
+
+.accion {
+  min-height: 38px;
+  padding: 0 var(--sp-3);
+  font-size: var(--fs-sm);
+}
+
+.accion.peligro {
+  --btn-fg: var(--danger);
+}
+
+.accion.peligro:hover:not(:disabled) {
+  --btn-bg: var(--danger-soft);
+  --btn-fg: var(--danger);
+}
+
+@media (max-width: 34rem) {
+  .texto-anyadir,
+  .texto-accion {
+    display: none;
+  }
+
+  .anyadir,
+  .accion {
+    min-width: 44px;
+    padding: 0;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding-left: var(--sp-3);
+    padding-right: var(--sp-3);
+  }
+}

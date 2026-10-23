@@ -1,0 +1,111 @@
+<div class="calendario">
+  <div class="cabecera-mes">
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon"
+      [attr.aria-label]="t('calendario.mesAnterior')"
+      [attr.title]="t('calendario.mesAnterior')"
+      [disabled]="anteriorDeshabilitado()"
+      (click)="cambiarMes(-1)"
+    >
+      <app-icono nombre="izquierda" [tamanyo]="20" />
+    </button>
+
+    <div class="mes-anyo">
+      <label class="sr-only" for="calendario-mes">{{ t('calendario.mes') }}</label>
+      <select id="calendario-mes" class="select-mes" (change)="cambiarMesDesdeSelector($event)">
+        @for (nombre of nombresMeses(); track $index) {
+          <option [value]="$index" [selected]="$index === mes()">{{ nombre }}</option>
+        }
+      </select>
+
+      <label class="sr-only" for="calendario-anyo">{{ t('calendario.anyo') }}</label>
+      <input
+        id="calendario-anyo"
+        class="campo-anyo"
+        type="number"
+        inputmode="numeric"
+        [min]="anyoMin"
+        [max]="anyoMax"
+        [value]="anyo()"
+        (change)="cambiarAnyoDesdeCampo($event)"
+      />
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-ghost btn-icon"
+      [attr.aria-label]="t('calendario.mesSiguiente')"
+      [attr.title]="t('calendario.mesSiguiente')"
+      [disabled]="siguienteDeshabilitado()"
+      (click)="cambiarMes(1)"
+    >
+      <app-icono nombre="derecha" [tamanyo]="20" />
+    </button>
+  </div>
+
+  <table class="rejilla" role="grid" [attr.aria-label]="nombresMeses()[mes()] + ' ' + anyo()">
+    <thead>
+      <tr>
+        @for (dia of diasSemana(); track $index) {
+          <th scope="col" [attr.abbr]="dia.largo">{{ dia.corto }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (semana of semanas(); track $index) {
+        <tr>
+          @for (dia of semana; track dia.iso) {
+            <td>
+              <button
+                type="button"
+                class="dia"
+                [attr.data-dia]="dia.iso"
+                [class.fuera]="!dia.delMes"
+                [class.hoy]="dia.iso === hoy"
+                [class.elegido]="dia.iso === seleccionada()"
+                [class.marcado]="conAcontecimiento().has(dia.iso)"
+                [attr.tabindex]="dia.iso === enfocada() ? 0 : -1"
+                [attr.aria-selected]="dia.iso === seleccionada()"
+                [attr.aria-current]="dia.iso === hoy ? 'date' : null"
+                [attr.aria-label]="etiquetaDia(dia)"
+                (click)="elegir(dia.iso)"
+                (keydown)="teclaEnDia($event)"
+                (focus)="enfocada.set(dia.iso)"
+              >
+                {{ dia.numero }}
+              </button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="pie-calendario">
+    <button type="button" class="btn btn-outline btn-hoy" (click)="irAHoy()">
+      <app-icono nombre="sol" [tamanyo]="16" />
+      {{ t('calendario.hoy') }}
+    </button>
+
+    <label class="escribir-fecha">
+      <span>{{ t('calendario.escribirFecha') }}</span>
+      <input
+        class="input"
+        type="date"
+        [min]="fechaMin"
+        [max]="fechaMax"
+        [value]="seleccionada()"
+        (change)="escribirFecha($event)"
+      />
+    </label>
+  </div>
+
+  @if (conAcontecimiento().size > 0) {
+    <p class="leyenda subtle">
+      <span class="punto" aria-hidden="true"></span>
+      {{ t('calendario.leyendaAcontecimiento') }}
+    </p>
+  }
+  <p class="sr-only">{{ t('calendario.instrucciones') }}</p>
+</div>

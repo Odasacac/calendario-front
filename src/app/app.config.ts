@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import {
   TitleStrategy,
   provideRouter,
@@ -7,6 +7,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { routes } from './app.routes';
+import { authInterceptor } from './guardias/auth.interceptor';
 import { TituloTraducidoStrategy } from './servicios/titulo.service';
 
 export const appConfig: ApplicationConfig = {
@@ -19,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: TitleStrategy, useClass: TituloTraducidoStrategy },
     // `withFetch` evita el XHR heredado y reduce trabajo dentro de la zona.
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
   ],
 };
