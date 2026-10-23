@@ -205,3 +205,10 @@
     padding-right: 0;
   }
 }
+
+/* Con el avatar, el idioma y los botones no cabe el nombre: queda solo el logo. */
+@media (max-width: 26rem) {
+  .nombres {
+    display: none;
+  }
+}

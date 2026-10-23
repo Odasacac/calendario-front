@@ -4,8 +4,17 @@
   gap: var(--sp-4);
 }
 
+/* Título centrado y flecha de volver arriba a la izquierda, como en el resto de secciones */
 .cabecera-seccion {
+  position: relative;
+  padding: 0 3rem;
   text-align: center;
+}
+
+.volver-arriba {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .cabecera-seccion h2 {
@@ -51,9 +60,6 @@ form {
   gap: var(--sp-3);
 }
 
-.volver {
-  align-self: center;
-}
 
 @media (max-width: 34rem) {
   .bloque {

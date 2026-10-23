@@ -1,0 +1,380 @@
+<section class="calendario-vau" (pointerdown)="inicioGesto($event)" (pointerup)="finGesto($event)">
+  <!-- Cabecera: estaciones, mes fasal y datos de la lunación (como cada página del PDF) -->
+  <header class="cabecera">
+    <app-volver (volver)="back.emit()" />
+
+    <div class="titulos" aria-live="polite">
+      @if (lunacion(); as l) {
+        <p class="estaciones">
+          @for (estacion of l.estaciones; track estacion; let primero = $first) {
+            @if (!primero) {
+              <span class="separador" aria-hidden="true">·</span>
+            }
+            <span [class]="'estacion texto-estacion-' + estacion">{{ nombreEstacion(estacion) }}</span>
+          }
+        </p>
+        <h2 class="titulo">
+          @for (mes of l.meses; track mes.nombre; let primero = $first) {
+            @if (!primero) {
+              <span class="separador" aria-hidden="true">·</span>
+            }
+            <span class="mes" [class]="primero ? 'mes' : 'mes texto-estacion-' + mes.estacion">{{ mes.nombre }}</span>
+            @if (mes.apellido) {
+              <em class="apellido-mes">{{ mes.apellido }}</em>
+            }
+          }
+        </h2>
+        <p class="subtitulo muted">
+          {{
+            t('calendarioVau.rango', {
+              inicio: fechaLarga(l.inicio),
+              fin: fechaLarga(l.fin),
+              dias: numeroDias(l)
+            })
+          }}
+        </p>
+        <div class="datos-lunacion">
+          @if (l.anyo) {
+            <span class="chip chip-primary">
+              {{
+                l.anyoFinal && l.anyoFinal !== l.anyo
+                  ? t('calendarioVau.anyoCambio', { de: l.anyo, a: l.anyoFinal })
+                  : t('calendarioVau.anyoVau', { anyo: l.anyo })
+              }}
+            </span>
+          }
+          @if (l.metono !== null) {
+            <span class="chip">
+              {{ t('calendarioVau.metonoVau', { numero: l.metono }) }}
+              @if (l.apellidoMetono) {
+                {{ l.apellidoMetono }}
+              }
+            </span>
+          }
+          @if (l.estaciones.length > 1) {
+            <span class="chip chip-accent">
+              {{
+                t('calendarioVau.hibrido', {
+                  de: nombreEstacion(l.estaciones[0]),
+                  a: nombreEstacion(l.estaciones[l.estaciones.length - 1])
+                })
+              }}
+            </span>
+          }
+          @if (l.cambioDeAnyo) {
+            <span class="chip chip-accent">{{ t('calendarioVau.cambioAnyo', { fecha: fechaLarga(l.cambioDeAnyo) }) }}</span>
+          }
+        </div>
+      } @else {
+        <h2 class="titulo">{{ t('calendarioVau.titulo') }}</h2>
+      }
+    </div>
+  </header>
+
+  <!-- Navegación: mes a mes, hoy y selector métono > año > mes -->
+  <nav class="navegacion" [attr.aria-label]="t('calendarioVau.titulo')">
+    <div class="pasos">
+      <button
+        type="button"
+        class="btn btn-icon"
+        [attr.aria-label]="t('calendarioVau.anterior')"
+        [attr.title]="t('calendarioVau.anterior')"
+        [disabled]="!lunacion()?.anterior"
+        (click)="irA(lunacion()?.anterior ?? null)"
+      >
+        <app-icono nombre="izquierda" [tamanyo]="20" />
+      </button>
+      <button type="button" class="btn btn-outline" [disabled]="contieneHoy()" (click)="irAHoy()">
+        <app-icono nombre="sol" [tamanyo]="16" />
+        {{ t('calendarioVau.hoy') }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-icon"
+        [attr.aria-label]="t('calendarioVau.siguiente')"
+        [attr.title]="t('calendarioVau.siguiente')"
+        [disabled]="!lunacion()?.siguiente"
+        (click)="irA(lunacion()?.siguiente ?? null)"
+      >
+        <app-icono nombre="derecha" [tamanyo]="20" />
+      </button>
+      @if (cargando() && lunacion()) {
+        <span class="spinner" role="status" [attr.aria-label]="t('comun.cargando')"></span>
+      }
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      aria-controls="selector-lunacion"
+      [attr.aria-expanded]="selectorAbierto()"
+      (click)="alternarSelector()"
+    >
+      <app-icono nombre="calendario" [tamanyo]="18" />
+      {{ selectorAbierto() ? t('calendarioVau.ocultarSelector') : t('calendarioVau.elegirMes') }}
+    </button>
+  </nav>
+
+  @if (selectorAbierto()) {
+    <div class="panel selector" id="selector-lunacion">
+      <div class="campos-selector">
+        <label class="field">
+          <span>{{ t('calendarioVau.metono') }}</span>
+          <select class="input" [disabled]="metonos().length === 0" (change)="cambiarMetono($event)">
+            @for (metono of metonos(); track metono.id) {
+              <option [value]="metono.id" [selected]="metono.id === metonoElegido()?.id">
+                {{ t('calendarioVau.metonoOpcion', { numero: metono.numero }) }}
+                {{ metono.apellido ?? '' }} ({{ metono.inicio.slice(0, 4) }})
+              </option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>{{ t('calendarioVau.anyo') }}</span>
+          <select class="input" [disabled]="anyos().length === 0" (change)="cambiarAnyo($event)">
+            @for (anyo of anyos(); track anyo.numero) {
+              <option [value]="anyo.numero" [selected]="anyo.numero === anyoElegido()?.numero">
+                {{ t('calendarioVau.anyoOpcion', { numero: anyo.numero }) }} ({{ anyo.inicio.slice(0, 4) }}–{{ anyo.fin.slice(0, 4) }})
+              </option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>{{ t('calendarioVau.mes') }}</span>
+          <select class="input" [disabled]="meses().length === 0" (change)="cambiarMes($event)">
+            @for (mes of meses(); track mes.fecha) {
+              <option [value]="mes.fecha" [selected]="mes.fecha === mesElegido()?.fecha">
+                {{ mes.nombre }}{{ mes.apellido ? ' ' + mes.apellido : '' }}
+              </option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="pie-selector">
+        @if (cargandoIndice()) {
+          <span class="muted cargando-indice">
+            <span class="spinner" aria-hidden="true"></span>
+            {{ t('comun.cargando') }}
+          </span>
+        } @else if (errorIndice()) {
+          <span class="field-error">
+            <app-icono nombre="alerta" [tamanyo]="14" />
+            {{ t('calendarioVau.errorIndice') }}
+          </span>
+        }
+        <button type="button" class="btn btn-accent" [disabled]="!mesElegido() || cargandoIndice()" (click)="irAlMesElegido()">
+          {{ t('calendarioVau.ir') }}
+          <app-icono nombre="derecha" [tamanyo]="18" />
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Rejilla -->
+  @if (rejilla(); as r) {
+    @if (lunacion(); as l) {
+      <div class="contenedor-rejilla" [class.actualizando]="cargando()">
+        <table class="rejilla">
+          <thead>
+            <tr>
+              <th class="col-semana" scope="col"><span class="sr-only">{{ t('calendarioVau.semana') }}</span></th>
+              @for (nombre of l.diasSemana; track nombre) {
+                <th scope="col" [attr.abbr]="nombre">
+                  <span class="largo">{{ nombre }}</span>
+                  <span class="corto" aria-hidden="true">{{ nombre.slice(0, 2) }}</span>
+                </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @if (r.terra; as terra) {
+              <tr class="fila-terra">
+                <th scope="row">{{ l.semanas[0] }}</th>
+                <td colspan="7">
+                  <button
+                    type="button"
+                    class="dia terra"
+                    [class]="'dia terra ' + claseFondo(terra)"
+                    [class.hoy]="terra.fecha === hoy"
+                    [class.marcado]="conAcontecimiento().has(terra.fecha)"
+                    [attr.aria-label]="etiquetaDia(terra)"
+                    [attr.aria-current]="terra.fecha === hoy ? 'date' : null"
+                    (click)="abrirDia.emit(terra.fecha)"
+                  >
+                    <strong class="nombre">{{ l.semanas[0] }}</strong>
+                    <span class="civil-terra">{{ fechaLarga(terra.fecha) }}</span>
+                    @if (terra.festividad) {
+                      <span class="linea festividad">{{ terra.festividad }}</span>
+                    }
+                    <span class="linea evento" [class.resenyable]="terra.eventoResenyable">
+                      {{ eventoVisible(terra) ?? t('calendarioVau.lunaNueva') }}
+                    </span>
+                    @if (conAcontecimiento().has(terra.fecha)) {
+                      <app-icono class="estrella" nombre="estrella" [tamanyo]="16" />
+                    }
+                  </button>
+                </td>
+              </tr>
+            }
+
+            @for (fila of r.filas; track fila.semana) {
+              <tr>
+                <th scope="row">
+                  <span class="largo">{{ l.semanas[fila.semana] }}</span>
+                  <span class="corto" aria-hidden="true">{{ l.semanas[fila.semana].slice(0, 3) }}</span>
+                </th>
+                @for (celda of fila.celdas; track $index) {
+                  <td>
+                    @if (celda) {
+                      <button
+                        type="button"
+                        [class]="'dia ' + claseFondo(celda)"
+                        [class.hoy]="celda.fecha === hoy"
+                        [class.marcado]="conAcontecimiento().has(celda.fecha)"
+                        [attr.aria-label]="etiquetaDia(celda)"
+                        [attr.aria-current]="celda.fecha === hoy ? 'date' : null"
+                        (click)="abrirDia.emit(celda.fecha)"
+                      >
+                        <span class="cabeza">
+                          <strong class="nombre">{{ celda.dia }}</strong>
+                          <span class="civil">{{ fechaCivil(celda.fecha) }}</span>
+                        </span>
+                        @if (celda.apellidoDia) {
+                          <span class="apellido-dia">{{ celda.apellidoDia }}</span>
+                        }
+                        @if (celda.festividad) {
+                          <span class="linea festividad">{{ celda.festividad }}</span>
+                        }
+                        @if (eventoVisible(celda); as evento) {
+                          <span class="linea evento" [class.resenyable]="celda.eventoResenyable">{{ evento }}</span>
+                        }
+                        @if (conAcontecimiento().has(celda.fecha)) {
+                          <app-icono class="estrella" nombre="estrella" [tamanyo]="16" />
+                        }
+
+                        <!-- Versión compacta (móvil) -->
+                        <span class="numero" aria-hidden="true">{{ numeroDia(celda.fecha) }}</span>
+                        <span class="puntos" aria-hidden="true">
+                          @if (celda.festividad) {
+                            <span class="punto punto-festividad"></span>
+                          }
+                          @if (eventoVisible(celda)) {
+                            <span class="punto" [class.punto-resenyable]="celda.eventoResenyable"></span>
+                          }
+                        </span>
+                      </button>
+                    }
+                  </td>
+                }
+              </tr>
+            }
+
+            @if (r.sinPosicion.length > 0) {
+              <tr>
+                <th scope="row">{{ t('calendarioVau.sinDatos') }}</th>
+                <td colspan="7">
+                  <div class="sin-datos">
+                    @for (dia of r.sinPosicion; track dia.fecha) {
+                      <button type="button" class="chip" (click)="abrirDia.emit(dia.fecha)">{{ fechaCivil(dia.fecha) }}</button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Leyenda y días señalados -->
+      <div class="pie">
+        <section class="panel bloque-pie">
+          <h3>{{ t('calendarioVau.diasSenyalados') }}</h3>
+          @if (senyalados().length === 0) {
+            <p class="muted">{{ t('calendarioVau.sinDiasSenyalados') }}</p>
+          } @else {
+            <ul class="senyalados">
+              @for (dia of senyalados(); track dia.fecha) {
+                <li>
+                  <button type="button" class="senyalado" (click)="abrirDia.emit(dia.fecha)">
+                    <span [class]="'marca ' + claseFondo(dia)" aria-hidden="true"></span>
+                    <span class="cuando">
+                      <strong>{{ fechaCivil(dia.fecha) }}</strong>
+                      <span class="subtle">{{ dia.terra ? l.semanas[0] : dia.dia }}</span>
+                    </span>
+                    <span class="que">
+                      @if (dia.festividad) {
+                        <span class="festividad">{{ dia.festividad }}</span>
+                      }
+                      @if (eventoVisible(dia); as evento) {
+                        <span class="evento" [class.resenyable]="dia.eventoResenyable">{{ evento }}</span>
+                      }
+                      @if (conAcontecimiento().has(dia.fecha)) {
+                        <span class="acontecimiento">
+                          <app-icono nombre="estrella" [tamanyo]="14" />
+                          {{ t('calendarioVau.leyendaAcontecimiento') }}
+                        </span>
+                      }
+                    </span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+
+        <section class="panel bloque-pie">
+          <h3>{{ t('calendarioVau.leyenda') }}</h3>
+          <ul class="leyenda">
+            @for (estacion of [1, 2, 3, 4]; track estacion) {
+              <li><span [class]="'muestra estacion-' + estacion"></span>{{ nombreEstacion(estacion) }}</li>
+            }
+            <li><span class="muestra festivo"></span>{{ t('calendarioVau.leyendaFestividad') }}</li>
+            <li><span class="muestra eclipse"></span>{{ t('calendarioVau.leyendaEclipse') }}</li>
+            <li><span class="muestra hoy"></span>{{ t('calendarioVau.leyendaHoy') }}</li>
+            @if (registrado()) {
+              <li>
+                <app-icono class="estrella" nombre="estrella" [tamanyo]="16" />
+                {{ t('calendarioVau.leyendaAcontecimiento') }}
+              </li>
+            }
+          </ul>
+          <p class="subtle instrucciones">{{ t('calendarioVau.instrucciones') }}</p>
+        </section>
+      </div>
+    }
+  } @else if (hayError()) {
+    <div class="alerta alerta-error" role="alert">
+      <app-icono nombre="alerta" [tamanyo]="18" />
+      <div class="alerta-cuerpo">
+        <span>{{ t('calendarioVau.errorCarga') }}</span>
+        <button type="button" class="btn btn-outline reintentar" (click)="reintentar()">
+          {{ t('comun.reintentar') }}
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="esqueleto" role="status" [attr.aria-label]="t('comun.cargando')">
+      <div class="skeleton linea-esqueleto"></div>
+      <div class="rejilla-esqueleto">
+        @for (hueco of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]; track hueco) {
+          <div class="skeleton"></div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (hayError() && lunacion()) {
+    <div class="alerta alerta-error" role="alert">
+      <app-icono nombre="alerta" [tamanyo]="18" />
+      <div class="alerta-cuerpo">
+        <span>{{ t('calendarioVau.errorCarga') }}</span>
+        <button type="button" class="btn btn-outline reintentar" (click)="reintentar()">
+          {{ t('comun.reintentar') }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

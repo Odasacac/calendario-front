@@ -6,6 +6,7 @@
 }
 
 .cabecera-seccion {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,6 +20,12 @@
 
 .cabecera-seccion p {
   font-size: var(--fs-sm);
+}
+
+.volver-arriba {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .avatar-grande {
@@ -174,10 +181,6 @@ form {
   border-radius: var(--radius-md);
   background: var(--danger-soft);
   animation: pop-in 200ms ease-out;
-}
-
-.volver {
-  align-self: center;
 }
 
 @media (max-width: 34rem) {

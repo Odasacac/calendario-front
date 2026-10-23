@@ -7,6 +7,18 @@
   margin: 0 auto;
 }
 
+/* El calendario necesita sitio para 7 columnas con texto: usa el ancho de la cabecera. */
+.home.ancho {
+  max-width: 72rem;
+}
+
+.estado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
 .barra {
   display: flex;
   align-items: center;

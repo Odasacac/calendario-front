@@ -109,7 +109,7 @@ describe('DateVAUComponent', () => {
         fixture.detectChanges();
 
         const bloque = elemento.querySelector('.acontecimiento')!;
-        expect(bloque.textContent).toContain('Tu acontecimiento destacado');
+        expect(bloque.textContent).toContain('Acontecimiento destacado');
         expect(bloque.textContent).toContain('Nació mi sobrina');
         // Justo después de la cabecera con la fecha y antes de los datos VAU.
         const fecha = elemento.querySelector('.navegador')!;

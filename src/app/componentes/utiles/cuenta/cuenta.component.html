@@ -1,6 +1,7 @@
 @if (usuario(); as u) {
   <section class="cuenta">
     <header class="cabecera-seccion">
+      <app-volver class="volver-arriba" (volver)="back.emit()" />
       <span class="avatar-grande" aria-hidden="true">{{ inicial() }}</span>
       <h2>{{ t('cuenta.saludo', { nombre: u.nombre }) }}</h2>
       <p class="muted">
@@ -359,9 +360,5 @@
       }
     </article>
 
-    <button type="button" class="btn btn-ghost volver" (click)="back.emit()">
-      <app-icono nombre="izquierda" [tamanyo]="16" />
-      {{ t('comun.volver') }}
-    </button>
   </section>
 }

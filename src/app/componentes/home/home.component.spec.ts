@@ -24,7 +24,11 @@ describe('HomeComponent', () => {
     sessionStorage.removeItem('vau.sesion');
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideRouter([{ path: 'home', children: [] }]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     }).compileComponents();
   });
 
@@ -62,6 +66,30 @@ describe('HomeComponent', () => {
       const textos = Array.from(elemento.querySelectorAll('[role="menuitem"]')).map((b) => b.textContent);
       expect(textos.join()).toContain('Descargar documentos');
       expect(textos.join()).not.toContain('Mi cuenta');
+      expect(textos.join()).toContain('Calendario VAU');
+    });
+
+    it('puede abrir el Calendario VAU, sin el chip «Hoy» de la fecha VAU', async () => {
+      await crear('calendario');
+      expect(elemento.querySelector('app-calendario-vau')).not.toBeNull();
+      expect(elemento.querySelector('.estado')!.textContent!.trim()).toBe('');
+    });
+
+    it('al abrir un día desde el calendario, la fecha VAU ofrece volver a él', async () => {
+      await crear('calendario');
+      fixture.componentInstance['abrirDiaDelCalendario']('2026-10-23');
+      fixture.componentRef.setInput('seccion', undefined);
+      fixture.detectChanges();
+
+      expect(elemento.querySelector('app-date-vau')).not.toBeNull();
+      expect(elemento.querySelector('.volver-calendario')!.textContent).toContain('Volver al calendario');
+    });
+
+    it('la posición del calendario no cambia al convertir una fecha en la fecha VAU', async () => {
+      await crear();
+      const posicion = fixture.componentInstance['fechaCalendario']();
+      fixture.componentInstance['seleccionarFecha']('1999-01-01');
+      expect(fixture.componentInstance['fechaCalendario']()).toBe(posicion);
     });
   });
 

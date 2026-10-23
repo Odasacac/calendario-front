@@ -1,9 +1,15 @@
-<div class="home">
+<div class="home" [class.ancho]="vista() === 'calendario'">
   <div class="barra no-print">
     <!-- «Hoy» / «Volver a hoy» solo tienen sentido en la fecha VAU; el
          contenedor se mantiene para que el menú no cambie de sitio. -->
     <div class="estado">
       @if (vista() === 'vau') {
+        @if (desdeCalendario()) {
+          <button type="button" class="btn btn-ghost volver-calendario" (click)="volverAlCalendario()">
+            <app-icono nombre="izquierda" [tamanyo]="18" />
+            {{ t('home.volverAlCalendario') }}
+          </button>
+        }
         @if (esHoy()) {
           <span class="chip chip-primary">
             <app-icono nombre="sol" [tamanyo]="14" />
@@ -68,6 +74,14 @@
     @switch (vista()) {
       @case ('vau') {
         <app-date-vau [fecha]="fecha()" (fechaChange)="cambiarFecha($event)" />
+      }
+      @case ('calendario') {
+        <app-calendario-vau
+          [fecha]="fechaCalendario()"
+          (fechaChange)="fechaCalendario.set($event)"
+          (abrirDia)="abrirDiaDelCalendario($event)"
+          (back)="irAVau()"
+        />
       }
       @case ('descargas') {
         <app-descargas (back)="irAVau()" />

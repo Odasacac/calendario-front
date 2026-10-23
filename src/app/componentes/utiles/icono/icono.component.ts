@@ -24,7 +24,8 @@ export type NombreIcono =
   | 'editar'
   | 'correo'
   | 'pausa'
-  | 'papelera';
+  | 'papelera'
+  | 'rejilla';
 
 /** Trazos SVG de 24x24 dibujados con `currentColor`, sin fuentes de iconos. */
 const TRAZOS: Record<NombreIcono, string> = {
@@ -58,6 +59,8 @@ const TRAZOS: Record<NombreIcono, string> = {
   correo: 'M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm-.5 1 8.5 6 8.5-6',
   pausa: 'M10 9v6m4-6v6M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z',
   papelera: 'M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v6m4-6v6',
+  rejilla:
+    'M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm-1 5.5h16M4 15h16M9.3 9.5V20M14.7 9.5V20',
 };
 
 @Component({

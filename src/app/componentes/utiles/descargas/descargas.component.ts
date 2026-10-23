@@ -10,11 +10,12 @@ import {
   FicheroDescargado,
 } from '../../../servicios/download.service';
 import { IconoComponent } from '../icono/icono.component';
+import { VolverComponent } from '../volver/volver.component';
 
 @Component({
   selector: 'app-descargas',
   standalone: true,
-  imports: [ReactiveFormsModule, IconoComponent],
+  imports: [ReactiveFormsModule, IconoComponent, VolverComponent],
   templateUrl: './descargas.component.html',
   styleUrl: './descargas.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

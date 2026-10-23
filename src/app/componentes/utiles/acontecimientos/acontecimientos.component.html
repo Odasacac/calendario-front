@@ -1,14 +1,6 @@
 <section class="acontecimientos">
   <header class="cabecera-lista">
-    <button
-      type="button"
-      class="btn btn-ghost btn-icon"
-      [attr.aria-label]="t('acontecimientos.volver')"
-      [attr.title]="t('acontecimientos.volver')"
-      (click)="back.emit()"
-    >
-      <app-icono nombre="izquierda" [tamanyo]="22" />
-    </button>
+    <app-volver (volver)="back.emit()" />
     <div class="titulos">
       <h2>{{ t('acontecimientos.titulo') }}</h2>
       <p class="muted">{{ t('acontecimientos.subtitulo') }}</p>

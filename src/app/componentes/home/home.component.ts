@@ -19,9 +19,13 @@ import { DateVAUComponent } from '../utiles/date-vau/date-vau.component';
 import { DescargasComponent } from '../utiles/descargas/descargas.component';
 import { AcontecimientosComponent } from '../utiles/acontecimientos/acontecimientos.component';
 import { CalendarioComponent } from '../utiles/calendario/calendario.component';
+import { CalendarioVAUComponent } from '../utiles/calendario-vau/calendario-vau.component';
 import { IconoComponent } from '../utiles/icono/icono.component';
 
-type Vista = 'vau' | 'descargas' | 'cuenta' | 'acontecimientos';
+type Vista = 'vau' | 'calendario' | 'descargas' | 'cuenta' | 'acontecimientos';
+
+/** Secciones abiertas a cualquiera (invitados incluidos). */
+const VISTAS_PUBLICAS: ReadonlySet<Vista> = new Set<Vista>(['calendario', 'descargas']);
 
 /** Secciones que solo ven los usuarios registrados. */
 const VISTAS_PRIVADAS: ReadonlySet<Vista> = new Set<Vista>(['cuenta', 'acontecimientos']);
@@ -31,6 +35,12 @@ const OPCIONES: Readonly<Record<AccionOpcion, Opcion>> = {
     accion: 'fecha-vau',
     clave: 'home.opcionFechaVau',
     icono: 'calendario',
+    soloRegistrados: false,
+  },
+  calendario: {
+    accion: 'calendario',
+    clave: 'home.opcionCalendario',
+    icono: 'rejilla',
     soloRegistrados: false,
   },
   descargas: {
@@ -55,6 +65,7 @@ const OPCIONES: Readonly<Record<AccionOpcion, Opcion>> = {
 
 const VISTA_DE_OPCION: Readonly<Record<AccionOpcion, Vista>> = {
   'fecha-vau': 'vau',
+  calendario: 'calendario',
   descargas: 'descargas',
   acontecimientos: 'acontecimientos',
   cuenta: 'cuenta',
@@ -66,6 +77,7 @@ const VISTA_DE_OPCION: Readonly<Record<AccionOpcion, Vista>> = {
   imports: [
     AcontecimientosComponent,
     CalendarioComponent,
+    CalendarioVAUComponent,
     CuentaComponent,
     DateVAUComponent,
     DescargasComponent,
@@ -96,10 +108,18 @@ export class HomeComponent {
   protected readonly menuAbierto = signal(false);
   protected readonly selectorAbierto = signal(false);
 
+  /**
+   * Posición del Calendario VAU, independiente de la fecha VAU: convertir una
+   * fecha no mueve el calendario, y volver a él lo deja donde estaba.
+   */
+  protected readonly fechaCalendario = signal(hoyIso());
+  /** La fecha VAU se abrió pulsando un día del calendario: ofrece volver a él. */
+  protected readonly desdeCalendario = signal(false);
+
   /** Una sección desconocida, o privada sin sesión de usuario, cae en la fecha VAU. */
   protected readonly vista = computed<Vista>(() => {
     const seccion = this.seccion() as Vista | undefined;
-    const conocida = seccion === 'descargas' || (seccion && VISTAS_PRIVADAS.has(seccion));
+    const conocida = seccion && (VISTAS_PUBLICAS.has(seccion) || VISTAS_PRIVADAS.has(seccion));
     if (!seccion || !conocida) {
       return 'vau';
     }
@@ -139,6 +159,9 @@ export class HomeComponent {
     if (vista !== 'vau') {
       this.selectorAbierto.set(false);
     }
+    if (vista !== 'vau' && vista !== 'calendario') {
+      this.desdeCalendario.set(false);
+    }
     void this.router.navigate(['/home'], {
       queryParams: { seccion: vista === 'vau' ? null : vista },
     });
@@ -146,6 +169,17 @@ export class HomeComponent {
 
   protected irAVau(): void {
     this.irA('vau');
+  }
+
+  /** Pulsar un día del calendario abre su detalle: la fecha VAU de ese día. */
+  protected abrirDiaDelCalendario(fecha: string): void {
+    this.fecha.set(fecha === hoyIso() ? null : fecha);
+    this.desdeCalendario.set(true);
+    this.irA('vau');
+  }
+
+  protected volverAlCalendario(): void {
+    this.irA('calendario');
   }
 
   /** Desde la lista de acontecimientos: abre la fecha VAU en el día del acontecimiento. */

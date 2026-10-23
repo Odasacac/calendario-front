@@ -1,5 +1,6 @@
 <section class="descargas">
   <header class="cabecera-seccion">
+    <app-volver class="volver-arriba" (volver)="volver()" />
     <h2>{{ t('descargas.titulo') }}</h2>
     <p class="muted">{{ t('descargas.subtitulo') }}</p>
   </header>
@@ -72,8 +73,4 @@
     </form>
   </article>
 
-  <button type="button" class="btn btn-ghost volver" (click)="volver()">
-    <app-icono nombre="izquierda" [tamanyo]="18" />
-    {{ t('comun.volver') }}
-  </button>
 </section>

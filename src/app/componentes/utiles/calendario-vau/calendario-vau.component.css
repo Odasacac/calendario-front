@@ -1,0 +1,637 @@
+.calendario-vau {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+/* ------------------------------- Cabecera ------------------------------- */
+.cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.titulos {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.estaciones {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.apellido-mes {
+  margin-left: var(--sp-1);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  text-transform: none;
+  color: var(--text-muted);
+}
+
+.separador {
+  margin: 0 var(--sp-2);
+  color: var(--border-strong);
+  font-weight: 400;
+}
+
+.subtitulo {
+  font-size: var(--fs-sm);
+}
+
+.datos-lunacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}
+
+.datos-lunacion .chip {
+  white-space: normal;
+}
+
+.texto-estacion-0 { color: var(--text-muted); }
+.texto-estacion-1 { color: var(--est-invierno-fg); }
+.texto-estacion-2 { color: var(--est-primavera-fg); }
+.texto-estacion-3 { color: var(--est-verano-fg); }
+.texto-estacion-4 { color: var(--est-otonyo-fg); }
+
+/* ------------------------------ Navegación ------------------------------ */
+.navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.pasos {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  animation: pop-in 160ms ease-out;
+}
+
+.campos-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+.campos-selector .field > span {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pie-selector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-3);
+}
+
+.cargando-indice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-right: auto;
+  font-size: var(--fs-sm);
+}
+
+.pie-selector .field-error {
+  margin-right: auto;
+}
+
+/* -------------------------------- Rejilla ------------------------------- */
+.contenedor-rejilla {
+  overflow-x: auto;
+  transition: opacity var(--transition);
+}
+
+/* Mientras llega la lunación siguiente se ve la anterior atenuada, sin saltos. */
+.contenedor-rejilla.actualizando {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.rejilla {
+  width: 100%;
+  min-width: 46rem;
+  border-collapse: separate;
+  border-spacing: 3px;
+  table-layout: fixed;
+}
+
+.rejilla thead th {
+  padding: var(--sp-2) var(--sp-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rejilla .col-semana {
+  width: 5.5rem;
+  background: transparent;
+}
+
+.rejilla tbody th {
+  padding: var(--sp-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rejilla td {
+  padding: 0;
+  vertical-align: top;
+}
+
+.corto {
+  display: none;
+}
+
+/* --------------------------------- Días --------------------------------- */
+.dia {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  min-height: 6.5rem;
+  padding: var(--sp-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.dia:hover {
+  z-index: 1;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+  border-color: var(--border-strong);
+}
+
+.dia:focus-visible {
+  z-index: 1;
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.estacion-1 { background: var(--est-invierno-bg); }
+.estacion-2 { background: var(--est-primavera-bg); }
+.estacion-3 { background: var(--est-verano-bg); }
+.estacion-4 { background: var(--est-otonyo-bg); }
+
+/* Festividades, solsticios y equinoccios en amarillo; eclipses en morado; con borde grueso como en el PDF */
+.festivo {
+  border: 2px solid var(--festivo-fg);
+  background: var(--festivo-bg);
+}
+
+.eclipse {
+  border: 2px solid var(--eclipse-fg);
+  background: var(--eclipse-bg);
+}
+
+.dia.hoy {
+  box-shadow: 0 0 0 3px var(--primary);
+}
+
+.cabeza {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-1);
+}
+
+.nombre {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.civil {
+  flex: none;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.dia.hoy .civil {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.apellido-dia {
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-style: italic;
+}
+
+.linea {
+  font-size: var(--fs-xs);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.festividad {
+  color: var(--festivo-fg);
+  font-weight: 700;
+}
+
+.evento {
+  color: var(--text-muted);
+}
+
+.evento.resenyable {
+  color: var(--eclipse-fg);
+  font-weight: 700;
+}
+
+.dia .estrella {
+  position: absolute;
+  right: var(--sp-2);
+  bottom: var(--sp-2);
+  color: var(--accent);
+}
+
+.numero,
+.puntos {
+  display: none;
+}
+
+/* Terra: una sola franja a lo ancho de la semana */
+.dia.terra {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+  min-height: 0;
+  padding: var(--sp-2) var(--sp-3);
+  padding-right: 2rem;
+}
+
+.dia.terra .nombre {
+  font-size: var(--fs-md);
+}
+
+.civil-terra {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.dia.terra .linea {
+  font-size: var(--fs-sm);
+}
+
+.dia.terra .estrella {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+.sin-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+}
+
+/* ----------------------- Leyenda y días señalados ----------------------- */
+.pie {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--sp-3);
+}
+
+.bloque-pie {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+
+.bloque-pie h3 {
+  font-size: var(--fs-md);
+}
+
+.senyalados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.senyalado {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.senyalado:hover,
+.senyalado:focus-visible {
+  outline: none;
+  background: var(--surface-3);
+}
+
+.marca {
+  flex: none;
+  width: 10px;
+  height: 2.25rem;
+  border-width: 1px;
+  border-radius: var(--radius-full);
+}
+
+.cuando {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: 5.5rem;
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+}
+
+.que {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+
+.acontecimiento {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.leyenda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+}
+
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.leyenda .estrella {
+  color: var(--accent);
+}
+
+.muestra {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: var(--radius-sm);
+}
+
+.muestra.hoy {
+  border: 0;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 3px var(--primary);
+}
+
+.instrucciones {
+  font-size: var(--fs-xs);
+}
+
+.reintentar {
+  align-self: flex-start;
+}
+
+/* ------------------------------- Esqueleto ------------------------------ */
+.esqueleto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.linea-esqueleto {
+  width: 45%;
+  height: 2rem;
+}
+
+.rejilla-esqueleto {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.rejilla-esqueleto .skeleton {
+  height: 5rem;
+}
+
+/* ------------------------------ Responsive ------------------------------ */
+@media (max-width: 64rem) {
+  .pie {
+    grid-template-columns: 1fr;
+  }
+
+  .leyenda {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-4);
+  }
+}
+
+/* Tablet y móvil: celdas compactas (número civil + puntos); el detalle está en la lista y al pulsar el día */
+@media (max-width: 48rem) {
+  .titulo {
+    font-size: var(--fs-xl);
+  }
+
+  .campos-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .rejilla {
+    min-width: 0;
+    border-spacing: 2px;
+  }
+
+  .rejilla .col-semana {
+    width: 2.6rem;
+  }
+
+  .largo {
+    display: none;
+  }
+
+  .corto {
+    display: inline;
+  }
+
+  .rejilla thead th {
+    padding: var(--sp-1) 0;
+    letter-spacing: 0;
+  }
+
+  .rejilla tbody th {
+    padding: 0;
+    font-size: 0.7rem;
+  }
+
+  .dia:not(.terra) {
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    aspect-ratio: 1;
+    padding: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .dia:not(.terra) .cabeza,
+  .dia:not(.terra) .apellido-dia,
+  .dia:not(.terra) .linea {
+    display: none;
+  }
+
+  .dia:not(.terra) .numero {
+    display: block;
+    font-size: var(--fs-md);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dia.hoy .numero {
+    color: var(--primary);
+  }
+
+  .dia:not(.terra) .puntos {
+    display: flex;
+    gap: 3px;
+    min-height: 6px;
+  }
+
+  .punto {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--text-muted);
+  }
+
+  .punto-festividad {
+    background: var(--festivo-fg);
+  }
+
+  .punto-resenyable {
+    background: var(--eclipse-fg);
+  }
+
+  .dia:not(.terra) .estrella {
+    top: 2px;
+    right: 2px;
+    bottom: auto;
+    width: 12px;
+    height: 12px;
+  }
+
+  .dia.hoy {
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+
+  .festivo,
+  .eclipse {
+    border-width: 1.5px;
+  }
+
+  .dia.terra {
+    padding: var(--sp-2);
+    padding-right: 1.75rem;
+  }
+
+  .civil-terra,
+  .dia.terra .linea {
+    font-size: var(--fs-xs);
+  }
+
+  .rejilla-esqueleto .skeleton {
+    height: auto;
+    aspect-ratio: 1;
+  }
+}
+
+@media (max-width: 30rem) {
+  .navegacion {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pasos {
+    justify-content: space-between;
+  }
+
+  .pasos .btn-outline {
+    flex: 1 1 auto;
+  }
+
+  .navegacion > .btn {
+    width: 100%;
+  }
+
+  .apellido-mes {
+    display: block;
+    margin-left: 0;
+  }
+
+  .dia:not(.terra) .numero {
+    font-size: var(--fs-sm);
+  }
+}

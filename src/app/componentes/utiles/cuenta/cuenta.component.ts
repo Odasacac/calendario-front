@@ -23,6 +23,7 @@ import {
   fechaNacimientoValidator,
 } from '../../../utiles/validadores';
 import { IconoComponent } from '../icono/icono.component';
+import { VolverComponent } from '../volver/volver.component';
 
 /** Bloque de la pantalla que está abierto para editar o confirmar. */
 type Panel = 'perfil' | 'contrasenya' | 'suspender' | 'eliminar' | null;
@@ -35,7 +36,7 @@ type Panel = 'perfil' | 'contrasenya' | 'suspender' | 'eliminar' | null;
 @Component({
   selector: 'app-cuenta',
   standalone: true,
-  imports: [ReactiveFormsModule, IconoComponent],
+  imports: [ReactiveFormsModule, IconoComponent, VolverComponent],
   templateUrl: './cuenta.component.html',
   styleUrl: './cuenta.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

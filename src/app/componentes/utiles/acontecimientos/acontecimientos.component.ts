@@ -11,6 +11,7 @@ import { I18nService } from '../../../servicios/i18n.service';
 import { AcontecimientosService } from '../../../servicios/acontecimientos.service';
 import { formatearFechaLarga } from '../../../utiles/fechas';
 import { IconoComponent } from '../icono/icono.component';
+import { VolverComponent } from '../volver/volver.component';
 import { ModoAcontecimiento, AcontecimientoPopupComponent } from './acontecimiento-popup.component';
 
 interface PopupAbierto {
@@ -22,7 +23,7 @@ interface PopupAbierto {
 @Component({
   selector: 'app-acontecimientos',
   standalone: true,
-  imports: [IconoComponent, AcontecimientoPopupComponent],
+  imports: [IconoComponent, AcontecimientoPopupComponent, VolverComponent],
   templateUrl: './acontecimientos.component.html',
   styleUrl: './acontecimientos.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
