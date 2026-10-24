@@ -340,4 +340,15 @@ export const ca: Diccionario = {
     estacion3: 'Estiu',
     estacion4: 'Tardor',
   },
+  paginador: {
+    navegacion: 'Paginació',
+    porPagina: 'Per pàgina',
+    rango: '{desde}–{hasta} de {total}',
+    primera: 'Primera pàgina',
+    anterior: 'Pàgina anterior',
+    siguiente: 'Pàgina següent',
+    ultima: 'Última pàgina',
+    pagina: 'Pàgina {n}',
+    paginaDe: 'Pàgina {pagina} de {total}',
+  },
 };

@@ -11,7 +11,7 @@ import { hoyIso } from '../../../utiles/fechas';
 import { CalendarioVAUComponent } from './calendario-vau.component';
 
 const API = `${environment.apiBaseUrl}/calendario`;
-const ACONTECIMIENTOS = `${environment.apiBaseUrl}/usuarios/me/acontecimientos`;
+const ACONTECIMIENTOS = `${environment.apiBaseUrl}/usuarios/me/acontecimientos/fechas`;
 
 describe('CalendarioVAUComponent', () => {
   let fixture: ComponentFixture<CalendarioVAUComponent>;
@@ -139,17 +139,7 @@ describe('CalendarioVAUComponent', () => {
   it('un usuario registrado ve estrella en los días con acontecimiento', () => {
     TestBed.inject(UsuarioService).iniciarSesion(sesionDePrueba());
     crear();
-    backend.expectOne(ACONTECIMIENTOS).flush([
-      {
-        id: 1,
-        fecha: '2026-10-26',
-        descripcion: 'x',
-        fechaCreacion: '',
-        fechaModificacion: '',
-        notableEvent: false,
-        notableEventType: null,
-      },
-    ]);
+    backend.expectOne(ACONTECIMIENTOS).flush(['2026-10-26']);
     responderLunacion();
 
     expect(celda('26 de octubre').querySelector('.estrella')).not.toBeNull();

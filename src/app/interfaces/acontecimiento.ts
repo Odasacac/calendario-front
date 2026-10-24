@@ -20,3 +20,16 @@ export interface DatosAcontecimiento {
 export const FECHA_ACONTECIMIENTO_MIN = '0001-01-01';
 export const FECHA_ACONTECIMIENTO_MAX = '2099-12-31';
 export const DESCRIPCION_ACONTECIMIENTO_MAX = 1000;
+
+/** Tamaños de página que ofrece la lista (el back admite de 5 a 50). */
+export const TAMANYOS_PAGINA = [5, 10, 20, 50] as const;
+export const TAMANYO_PAGINA_POR_DEFECTO = 10;
+
+/** Página de resultados del back (`PaginaDTO`). `pagina` empieza en 0. */
+export interface Pagina<T> {
+  contenido: T[];
+  pagina: number;
+  tamanyo: number;
+  totalElementos: number;
+  totalPaginas: number;
+}

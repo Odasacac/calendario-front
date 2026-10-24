@@ -57,6 +57,12 @@
 .contenedor-tabla {
   overflow: hidden;
   padding: 0;
+  transition: opacity var(--transition);
+}
+
+.contenedor-tabla.actualizando {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .tabla {

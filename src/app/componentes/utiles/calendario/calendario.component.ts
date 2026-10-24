@@ -118,8 +118,8 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
     this.enfocada.set(this.seleccionada());
 
     if (this.usuarios.esRegistrado()) {
-      this.acontecimientos.listar().subscribe({
-        next: (lista) => this.conAcontecimiento.set(new Set(lista.map((a) => a.fecha))),
+      this.acontecimientos.fechas().subscribe({
+        next: (fechas) => this.conAcontecimiento.set(new Set(fechas)),
         error: () => {
           /* sin marcas: el calendario sigue funcionando */
         },

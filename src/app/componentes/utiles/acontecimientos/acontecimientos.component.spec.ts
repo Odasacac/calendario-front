@@ -1,15 +1,16 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpRequest, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpTestingController, TestRequest, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { authInterceptor } from '../../../guardias/auth.interceptor';
-import { Acontecimiento } from '../../../interfaces/acontecimiento';
+import { Acontecimiento, Pagina } from '../../../interfaces/acontecimiento';
 import { UsuarioService } from '../../../servicios/usuario.service';
 import { sesionDePrueba } from '../../../testing/datos-usuario';
 import { AcontecimientosComponent } from './acontecimientos.component';
 
 const API = `${environment.apiBaseUrl}/usuarios/me/acontecimientos`;
+const CLAVE_TAMANYO = 'vau.acontecimientos.tamanyo';
 
 function acontecimiento(id: number, fecha: string): Acontecimiento {
   return {
@@ -23,10 +24,36 @@ function acontecimiento(id: number, fecha: string): Acontecimiento {
   };
 }
 
+function pagina(
+  contenido: Acontecimiento[],
+  numero = 0,
+  tamanyo = 10,
+  totalElementos = contenido.length,
+): Pagina<Acontecimiento> {
+  return {
+    contenido,
+    pagina: numero,
+    tamanyo,
+    totalElementos,
+    totalPaginas: Math.ceil(totalElementos / tamanyo),
+  };
+}
+
 describe('AcontecimientosComponent', () => {
   let fixture: ComponentFixture<AcontecimientosComponent>;
   let elemento: HTMLElement;
   let backend: HttpTestingController;
+
+  /** Petición del listado; comprueba la página y el tamaño pedidos. */
+  function peticion(numero: number, tamanyo: number): TestRequest {
+    return backend.expectOne(
+      (r: HttpRequest<unknown>) =>
+        r.method === 'GET' &&
+        r.url === API &&
+        r.params.get('pagina') === String(numero) &&
+        r.params.get('tamanyo') === String(tamanyo),
+    );
+  }
 
   function filas(): string[] {
     return Array.from(elemento.querySelectorAll('tbody tr td:first-child')).map((td) =>
@@ -40,6 +67,7 @@ describe('AcontecimientosComponent', () => {
 
   beforeEach(async () => {
     sessionStorage.removeItem('vau.sesion');
+    localStorage.removeItem(CLAVE_TAMANYO);
     await TestBed.configureTestingModule({
       imports: [AcontecimientosComponent],
       providers: [
@@ -56,26 +84,80 @@ describe('AcontecimientosComponent', () => {
     fixture.detectChanges();
   });
 
-  afterEach(() => backend.verify());
+  afterEach(() => {
+    backend.verify();
+    localStorage.removeItem(CLAVE_TAMANYO);
+  });
 
-  it('lista los acontecimientos con columnas Fecha y Acciones', () => {
-    backend.expectOne(API).flush([acontecimiento(2, '2026-10-23'), acontecimiento(1, '2025-01-05')]);
+  it('lista la primera página con columnas Fecha y Acciones', () => {
+    peticion(0, 10).flush(pagina([acontecimiento(2, '2026-10-23'), acontecimiento(1, '2025-01-05')]));
     fixture.detectChanges();
 
     const cabeceras = Array.from(elemento.querySelectorAll('th')).map((th) => th.textContent!.trim());
     expect(cabeceras).toEqual(['Fecha', 'Acciones']);
     expect(filas()).toEqual(['23 de octubre de 2026', '5 de enero de 2025']);
     expect(elemento.querySelectorAll('tbody tr:first-child button').length).toBe(3);
+    expect(elemento.querySelector('app-paginador')!.textContent).toContain('1–2 de 2');
   });
 
-  it('sin acontecimientos muestra un aviso', () => {
-    backend.expectOne(API).flush([]);
+  it('sin acontecimientos muestra un aviso y no el paginador', () => {
+    peticion(0, 10).flush(pagina([]));
     fixture.detectChanges();
     expect(elemento.textContent).toContain('Todavía no has apuntado ningún acontecimiento destacado.');
+    expect(elemento.querySelector('app-paginador')).toBeNull();
+  });
+
+  it('el paginador pide la página elegida', () => {
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2026-10-23')], 0, 10, 25));
+    fixture.detectChanges();
+
+    elemento.querySelector<HTMLButtonElement>('[aria-label="Página siguiente"]')!.click();
+    peticion(1, 10).flush(pagina([acontecimiento(11, '2026-01-01')], 1, 10, 25));
+    fixture.detectChanges();
+
+    expect(filas()).toEqual(['1 de enero de 2026']);
+    expect(elemento.querySelector('app-paginador')!.textContent).toContain('11–20 de 25');
+  });
+
+  it('al cambiar el tamaño mantiene a la vista el primer elemento y lo recuerda', () => {
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2026-10-23')], 0, 10, 60));
+    fixture.detectChanges();
+    elemento.querySelector<HTMLButtonElement>('[aria-label="Página siguiente"]')!.click();
+    peticion(1, 10).flush(pagina([acontecimiento(11, '2026-01-01')], 1, 10, 60));
+    fixture.detectChanges();
+    elemento.querySelector<HTMLButtonElement>('[aria-label="Página siguiente"]')!.click();
+    peticion(2, 10).flush(pagina([acontecimiento(21, '2026-01-01')], 2, 10, 60));
+    fixture.detectChanges();
+
+    const select = elemento.querySelector<HTMLSelectElement>('.select-tamanyo')!;
+    select.value = '5';
+    select.dispatchEvent(new Event('change'));
+    // Se veía desde el elemento 21 (índice 20): con 5 por página es la página de índice 4.
+    peticion(4, 5).flush(pagina([acontecimiento(21, '2026-01-01')], 4, 5, 60));
+
+    expect(localStorage.getItem(CLAVE_TAMANYO)).toBe('5');
+  });
+
+  it('usa el tamaño guardado si es válido', () => {
+    peticion(0, 10).flush(pagina([]));
+    localStorage.setItem(CLAVE_TAMANYO, '20');
+    TestBed.createComponent(AcontecimientosComponent).detectChanges();
+    peticion(0, 20).flush(pagina([]));
+  });
+
+  it('si falla la carga muestra un error y permite reintentar', () => {
+    peticion(0, 10).flush(null, { status: 500, statusText: 'Error' });
+    fixture.detectChanges();
+    expect(elemento.querySelector('[role="alert"]')).not.toBeNull();
+
+    boton('Reintentar').click();
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2026-10-23')]));
+    fixture.detectChanges();
+    expect(filas()).toEqual(['23 de octubre de 2026']);
   });
 
   it('«Añadir acontecimiento destacado» está en la cabecera y abre el formulario', () => {
-    backend.expectOne(API).flush([]);
+    peticion(0, 10).flush(pagina([]));
     fixture.detectChanges();
 
     boton('Añadir acontecimiento destacado').click();
@@ -84,7 +166,7 @@ describe('AcontecimientosComponent', () => {
   });
 
   it('cada acción abre su popup', () => {
-    backend.expectOne(API).flush([acontecimiento(1, '2026-10-23')]);
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2026-10-23')]));
     fixture.detectChanges();
 
     boton('Ver').click();
@@ -98,31 +180,35 @@ describe('AcontecimientosComponent', () => {
     expect(elemento.querySelector('[role="dialog"] h2')!.textContent).toContain('Eliminar acontecimiento destacado');
   });
 
-  it('al eliminar desaparece de la lista', () => {
-    backend.expectOne(API).flush([acontecimiento(2, '2026-10-23'), acontecimiento(1, '2025-01-05')]);
+  it('al eliminar recarga la página actual', () => {
+    peticion(0, 10).flush(pagina([acontecimiento(2, '2026-10-23'), acontecimiento(1, '2025-01-05')]));
     fixture.detectChanges();
 
     (elemento.querySelectorAll('tbody tr')[0].querySelectorAll('button')[2] as HTMLButtonElement).click();
     fixture.detectChanges();
     boton('Sí, eliminar').click();
     backend.expectOne(`${API}/2`).flush(null, { status: 204, statusText: 'No Content' });
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2025-01-05')]));
     fixture.detectChanges();
 
+    expect(elemento.querySelector('[role="dialog"]')).toBeNull();
     expect(filas()).toEqual(['5 de enero de 2025']);
   });
 
-  it('al guardar uno nuevo lo coloca en su sitio por fecha', () => {
-    backend.expectOne(API).flush([acontecimiento(2, '2026-10-23'), acontecimiento(1, '2025-01-05')]);
+  it('al guardar recarga la página en la que se estaba', () => {
+    peticion(0, 10).flush(pagina([acontecimiento(1, '2026-10-23')], 0, 10, 25));
     fixture.detectChanges();
+    elemento.querySelector<HTMLButtonElement>('[aria-label="Página 2"]')!.click();
+    peticion(1, 10).flush(pagina([acontecimiento(11, '2026-01-01')], 1, 10, 25));
 
-    fixture.componentInstance['alGuardar'](acontecimiento(3, '2026-01-01'));
+    fixture.componentInstance['alCambiar']();
+    peticion(1, 10).flush(pagina([acontecimiento(11, '2026-01-01')], 1, 10, 26));
     fixture.detectChanges();
-
-    expect(filas()).toEqual(['23 de octubre de 2026', '1 de enero de 2026', '5 de enero de 2025']);
+    expect(elemento.querySelector('app-paginador')!.textContent).toContain('11–20 de 26');
   });
 
   it('la flecha emite `back`', () => {
-    backend.expectOne(API).flush([]);
+    peticion(0, 10).flush(pagina([]));
     let atras = false;
     fixture.componentInstance.back.subscribe(() => (atras = true));
 

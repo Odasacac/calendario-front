@@ -107,18 +107,8 @@ describe('CalendarioComponent', () => {
     TestBed.inject(UsuarioService).iniciarSesion(sesionDePrueba());
     crear('2026-10-23');
     TestBed.inject(HttpTestingController)
-      .expectOne(`${environment.apiBaseUrl}/usuarios/me/acontecimientos`)
-      .flush([
-        {
-          id: 1,
-          fecha: '2026-10-12',
-          descripcion: 'x',
-          fechaCreacion: '',
-          fechaModificacion: '',
-          notableEvent: false,
-          notableEventType: null,
-        },
-      ]);
+      .expectOne(`${environment.apiBaseUrl}/usuarios/me/acontecimientos/fechas`)
+      .flush(['2026-10-12']);
     fixture.detectChanges();
 
     expect(dia('2026-10-12').classList).toContain('marcado');
@@ -128,6 +118,6 @@ describe('CalendarioComponent', () => {
 
   it('un invitado no pide acontecimientos', () => {
     crear('2026-10-23');
-    TestBed.inject(HttpTestingController).expectNone(`${environment.apiBaseUrl}/usuarios/me/acontecimientos`);
+    TestBed.inject(HttpTestingController).expectNone(`${environment.apiBaseUrl}/usuarios/me/acontecimientos/fechas`);
   });
 });

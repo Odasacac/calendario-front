@@ -155,8 +155,8 @@ export class CalendarioVAUComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.usuarios.esRegistrado()) {
-      this.acontecimientos.listar().subscribe({
-        next: (lista) => this.conAcontecimiento.set(new Set(lista.map((a) => a.fecha))),
+      this.acontecimientos.fechas().subscribe({
+        next: (fechas) => this.conAcontecimiento.set(new Set(fechas)),
         error: () => {
           /* sin estrellas: el calendario sigue funcionando */
         },

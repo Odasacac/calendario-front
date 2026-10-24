@@ -1,0 +1,84 @@
+<nav class="paginador" [attr.aria-label]="t('paginador.navegacion')">
+  <div class="resumen">
+    <span class="rango muted" aria-live="polite">
+      {{ t('paginador.rango', { desde: desde(), hasta: hasta(), total: totalElementos() }) }}
+    </span>
+    <label class="tamanyo">
+      <span>{{ t('paginador.porPagina') }}</span>
+      <select class="select-tamanyo" [disabled]="deshabilitado()" (change)="cambiarTamanyo($event)">
+        @for (opcion of tamanyos(); track opcion) {
+          <option [value]="opcion" [selected]="opcion === tamanyo()">{{ opcion }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if (totalPaginas() > 1) {
+    <div class="paginas">
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon extremo"
+        [attr.aria-label]="t('paginador.primera')"
+        [attr.title]="t('paginador.primera')"
+        [disabled]="esPrimera() || deshabilitado()"
+        (click)="irA(0)"
+      >
+        <app-icono nombre="izquierda" [tamanyo]="14" /><app-icono nombre="izquierda" [tamanyo]="14" />
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon"
+        [attr.aria-label]="t('paginador.anterior')"
+        [attr.title]="t('paginador.anterior')"
+        [disabled]="esPrimera() || deshabilitado()"
+        (click)="irA(pagina() - 1)"
+      >
+        <app-icono nombre="izquierda" [tamanyo]="18" />
+      </button>
+
+      <ol class="numeros">
+        @for (numero of numeros(); track $index) {
+          <li>
+            @if (numero === null) {
+              <span class="hueco" aria-hidden="true">…</span>
+            } @else {
+              <button
+                type="button"
+                class="numero"
+                [class.actual]="numero === pagina()"
+                [attr.aria-current]="numero === pagina() ? 'page' : null"
+                [attr.aria-label]="t('paginador.pagina', { n: numero + 1 })"
+                [disabled]="deshabilitado()"
+                (click)="irA(numero)"
+              >
+                {{ numero + 1 }}
+              </button>
+            }
+          </li>
+        }
+      </ol>
+      <span class="pagina-movil">{{ t('paginador.paginaDe', { pagina: pagina() + 1, total: totalPaginas() }) }}</span>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon"
+        [attr.aria-label]="t('paginador.siguiente')"
+        [attr.title]="t('paginador.siguiente')"
+        [disabled]="esUltima() || deshabilitado()"
+        (click)="irA(pagina() + 1)"
+      >
+        <app-icono nombre="derecha" [tamanyo]="18" />
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost btn-icon extremo"
+        [attr.aria-label]="t('paginador.ultima')"
+        [attr.title]="t('paginador.ultima')"
+        [disabled]="esUltima() || deshabilitado()"
+        (click)="irA(totalPaginas() - 1)"
+      >
+        <app-icono nombre="derecha" [tamanyo]="14" /><app-icono nombre="derecha" [tamanyo]="14" />
+      </button>
+    </div>
+  }
+</nav>

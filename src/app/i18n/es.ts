@@ -343,6 +343,17 @@ export const es = {
     estacion3: 'Verano',
     estacion4: 'Otoño',
   },
+  paginador: {
+    navegacion: 'Paginación',
+    porPagina: 'Por página',
+    rango: '{desde}–{hasta} de {total}',
+    primera: 'Primera página',
+    anterior: 'Página anterior',
+    siguiente: 'Página siguiente',
+    ultima: 'Última página',
+    pagina: 'Página {n}',
+    paginaDe: 'Página {pagina} de {total}',
+  },
 };
 
 export type Diccionario = typeof es;

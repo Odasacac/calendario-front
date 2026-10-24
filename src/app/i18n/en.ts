@@ -340,4 +340,15 @@ export const en: Diccionario = {
     estacion3: 'Summer',
     estacion4: 'Autumn',
   },
+  paginador: {
+    navegacion: 'Pagination',
+    porPagina: 'Per page',
+    rango: '{desde}–{hasta} of {total}',
+    primera: 'First page',
+    anterior: 'Previous page',
+    siguiente: 'Next page',
+    ultima: 'Last page',
+    pagina: 'Page {n}',
+    paginaDe: 'Page {pagina} of {total}',
+  },
 };

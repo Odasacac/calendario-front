@@ -1,0 +1,142 @@
+.paginador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.resumen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+}
+
+.rango {
+  font-variant-numeric: tabular-nums;
+}
+
+.tamanyo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-muted);
+}
+
+.select-tamanyo {
+  min-height: 36px;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.select-tamanyo:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.paginas {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.paginas .btn-icon {
+  min-width: 38px;
+  min-height: 38px;
+}
+
+.extremo {
+  gap: 0;
+}
+
+.extremo app-icono + app-icono {
+  margin-left: -6px;
+}
+
+.numeros {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.numero {
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 var(--sp-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.numero:hover:not(:disabled) {
+  background: var(--surface-3);
+}
+
+.numero:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.numero.actual {
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+}
+
+.hueco {
+  display: inline-block;
+  min-width: 1.5rem;
+  color: var(--text-subtle);
+  text-align: center;
+}
+
+.pagina-movil {
+  display: none;
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* En móvil: «Página X de Y» en lugar de la lista de números, y todo a lo ancho */
+@media (max-width: 34rem) {
+  .paginador {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resumen {
+    justify-content: space-between;
+  }
+
+  .paginas {
+    justify-content: space-between;
+  }
+
+  .numeros {
+    display: none;
+  }
+
+  .pagina-movil {
+    display: inline;
+  }
+}

@@ -18,12 +18,7 @@
     </button>
   </header>
 
-  @if (cargando()) {
-    <div class="estado-lista" aria-busy="true">
-      <span class="spinner" aria-hidden="true"></span>
-      {{ t('comun.cargando') }}
-    </div>
-  } @else if (hayError()) {
+  @if (hayError()) {
     <div class="alerta alerta-error" role="alert">
       <app-icono nombre="alerta" [tamanyo]="18" />
       <div class="alerta-cuerpo">
@@ -33,64 +28,85 @@
         </button>
       </div>
     </div>
-  } @else if (acontecimientos().length === 0) {
-    <div class="vacio">
-      <span class="emblema" aria-hidden="true">
-        <app-icono nombre="estrella" [tamanyo]="24" />
-      </span>
-      <p><strong>{{ t('acontecimientos.vacio') }}</strong></p>
-      <p class="muted">{{ t('acontecimientos.vacioTexto') }}</p>
-    </div>
-  } @else {
-    <div class="panel contenedor-tabla">
-      <table class="tabla">
-        <thead>
-          <tr>
-            <th scope="col">{{ t('acontecimientos.columnaFecha') }}</th>
-            <th scope="col" class="columna-acciones">{{ t('acontecimientos.columnaAcciones') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (acontecimiento of acontecimientos(); track acontecimiento.id) {
+  }
+
+  @if (pagina(); as p) {
+    @if (p.totalElementos === 0) {
+      <div class="vacio">
+        <span class="emblema" aria-hidden="true">
+          <app-icono nombre="estrella" [tamanyo]="24" />
+        </span>
+        <p><strong>{{ t('acontecimientos.vacio') }}</strong></p>
+        <p class="muted">{{ t('acontecimientos.vacioTexto') }}</p>
+      </div>
+    } @else {
+      <!-- Mientras llega otra página se ve la anterior atenuada, sin saltos de altura -->
+      <div class="panel contenedor-tabla" [class.actualizando]="cargando()" [attr.aria-busy]="cargando()">
+        <table class="tabla">
+          <thead>
             <tr>
-              <td>
-                <span class="fecha">{{ fecha(acontecimiento.fecha) }}</span>
-              </td>
-              <td class="columna-acciones">
-                <div class="acciones-fila">
-                  <button
-                    type="button"
-                    class="btn btn-ghost accion"
-                    [attr.aria-label]="t('acontecimientos.verAria', { fecha: fecha(acontecimiento.fecha) })"
-                    (click)="abrir('ver', acontecimiento)"
-                  >
-                    <app-icono nombre="ojo" [tamanyo]="16" />
-                    <span class="texto-accion">{{ t('acontecimientos.ver') }}</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost accion"
-                    [attr.aria-label]="t('acontecimientos.modificarAria', { fecha: fecha(acontecimiento.fecha) })"
-                    (click)="abrir('modificar', acontecimiento)"
-                  >
-                    <app-icono nombre="editar" [tamanyo]="16" />
-                    <span class="texto-accion">{{ t('acontecimientos.modificar') }}</span>
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost accion peligro"
-                    [attr.aria-label]="t('acontecimientos.eliminarAria', { fecha: fecha(acontecimiento.fecha) })"
-                    (click)="abrir('eliminar', acontecimiento)"
-                  >
-                    <app-icono nombre="papelera" [tamanyo]="16" />
-                    <span class="texto-accion">{{ t('acontecimientos.eliminar') }}</span>
-                  </button>
-                </div>
-              </td>
+              <th scope="col">{{ t('acontecimientos.columnaFecha') }}</th>
+              <th scope="col" class="columna-acciones">{{ t('acontecimientos.columnaAcciones') }}</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (acontecimiento of p.contenido; track acontecimiento.id) {
+              <tr>
+                <td>
+                  <span class="fecha">{{ fecha(acontecimiento.fecha) }}</span>
+                </td>
+                <td class="columna-acciones">
+                  <div class="acciones-fila">
+                    <button
+                      type="button"
+                      class="btn btn-ghost accion"
+                      [attr.aria-label]="t('acontecimientos.verAria', { fecha: fecha(acontecimiento.fecha) })"
+                      (click)="abrir('ver', acontecimiento)"
+                    >
+                      <app-icono nombre="ojo" [tamanyo]="16" />
+                      <span class="texto-accion">{{ t('acontecimientos.ver') }}</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-ghost accion"
+                      [attr.aria-label]="t('acontecimientos.modificarAria', { fecha: fecha(acontecimiento.fecha) })"
+                      (click)="abrir('modificar', acontecimiento)"
+                    >
+                      <app-icono nombre="editar" [tamanyo]="16" />
+                      <span class="texto-accion">{{ t('acontecimientos.modificar') }}</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-ghost accion peligro"
+                      [attr.aria-label]="t('acontecimientos.eliminarAria', { fecha: fecha(acontecimiento.fecha) })"
+                      (click)="abrir('eliminar', acontecimiento)"
+                    >
+                      <app-icono nombre="papelera" [tamanyo]="16" />
+                      <span class="texto-accion">{{ t('acontecimientos.eliminar') }}</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-paginador
+        [pagina]="p.pagina"
+        [totalPaginas]="p.totalPaginas"
+        [totalElementos]="p.totalElementos"
+        [tamanyo]="tamanyo()"
+        [tamanyos]="tamanyos"
+        [deshabilitado]="cargando()"
+        (paginaChange)="cargar($event)"
+        (tamanyoChange)="cambiarTamanyo($event)"
+      />
+    }
+  } @else if (cargando()) {
+    <div class="estado-lista" aria-busy="true">
+      <span class="spinner" aria-hidden="true"></span>
+      {{ t('comun.cargando') }}
     </div>
   }
 </section>
@@ -100,8 +116,8 @@
     [modo]="abierto.modo"
     [acontecimiento]="abierto.acontecimiento"
     [mostrarIrAFecha]="true"
-    (guardado)="alGuardar($event)"
-    (eliminado)="alEliminar($event)"
+    (guardado)="alCambiar()"
+    (eliminado)="alCambiar()"
     (irAFecha)="irA($event)"
     (cerrar)="cerrarPopup()"
   />
