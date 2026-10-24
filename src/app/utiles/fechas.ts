@@ -9,6 +9,13 @@
 
 const ISO = /^(\d{1,6})-(\d{1,2})-(\d{1,2})$/;
 
+/**
+ * Fechas que se pueden consultar (igual que `CalendarioVAUService` en el back):
+ * desde el primer eclípeno invernal apofasal remoto, el 21-12-1433, incluido.
+ */
+export const FECHA_VAU_MIN = '1433-12-21';
+export const FECHA_VAU_MAX = '2099-12-31';
+
 export function esFechaIso(valor: string | null | undefined): boolean {
   return !!valor && ISO.test(valor);
 }
@@ -24,6 +31,16 @@ export function isoADate(iso: string): Date | null {
   fecha.setUTCFullYear(Number(anyo));
 
   return Number.isNaN(fecha.getTime()) ? null : fecha;
+}
+
+/** `true` si la fecha es válida y está entre `FECHA_VAU_MIN` y `FECHA_VAU_MAX`. */
+export function enRangoVau(iso: string): boolean {
+  const fecha = isoADate(iso);
+  if (!fecha) {
+    return false;
+  }
+  const normalizada = dateAIso(fecha);
+  return normalizada >= FECHA_VAU_MIN && normalizada <= FECHA_VAU_MAX;
 }
 
 export function dateAIso(fecha: Date): string {

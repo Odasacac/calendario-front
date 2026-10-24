@@ -23,7 +23,7 @@ import { AcontecimientosService } from '../../../servicios/acontecimientos.servi
 import { CalendarioService } from '../../../servicios/calendario.service';
 import { I18nService } from '../../../servicios/i18n.service';
 import { UsuarioService } from '../../../servicios/usuario.service';
-import { formatearFechaLarga, hoyIso, isoADate } from '../../../utiles/fechas';
+import { enRangoVau, formatearFechaLarga, hoyIso, isoADate } from '../../../utiles/fechas';
 import { IconoComponent } from '../icono/icono.component';
 import { VolverComponent } from '../volver/volver.component';
 
@@ -68,6 +68,8 @@ export class CalendarioVAUComponent implements OnInit {
 
   protected readonly t = this.i18n.t;
   protected readonly hoy = hoyIso();
+  /** La primera lunación empieza el 20-12-1433, un día antes del rango: ese día no se abre. */
+  protected readonly enRango = enRangoVau;
   private readonly recarga = signal(0);
 
   private readonly estado$ = toObservable(

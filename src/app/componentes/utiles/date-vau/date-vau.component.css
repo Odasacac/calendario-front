@@ -243,6 +243,13 @@
   margin-top: var(--sp-2);
 }
 
+.acciones-error {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2);
+}
+
 /* ------------------------------- Esqueleto ------------------------------ */
 .esqueleto {
   display: flex;

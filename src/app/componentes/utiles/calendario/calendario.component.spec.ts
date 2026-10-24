@@ -98,6 +98,34 @@ describe('CalendarioComponent', () => {
     expect(elegido).toBe('2026-11-30');
   }));
 
+  it('el día más lejano que se puede elegir es el 21-12-1433', () => {
+    crear('1433-12-25');
+    expect(elemento.querySelector<HTMLButtonElement>('[aria-label="Mes anterior"]')!.disabled).toBeTrue();
+    expect(dia('1433-12-20').disabled).toBeTrue();
+    expect(dia('1433-12-21').disabled).toBeFalse();
+
+    let elegido = '';
+    fixture.componentInstance.seleccionar.subscribe((iso) => (elegido = iso));
+    dia('1433-12-20').click();
+    expect(elegido).toBe('');
+    dia('1433-12-21').click();
+    expect(elegido).toBe('1433-12-21');
+  });
+
+  it('escribir un año anterior lleva al 21-12-1433', () => {
+    crear('1500-06-15');
+    const campo = elemento.querySelector<HTMLInputElement>('.campo-anyo')!;
+    campo.value = '1433';
+    campo.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(dia('1433-12-21').getAttribute('tabindex')).toBe('0');
+
+    campo.value = '1200';
+    campo.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(campo.value).toBe('1433');
+  });
+
   it('no deja pasar de 2099', () => {
     crear('2099-12-15');
     expect(elemento.querySelector<HTMLButtonElement>('[aria-label="Mes siguiente"]')!.disabled).toBeTrue();

@@ -13,12 +13,20 @@ import {
 import { AcontecimientosService } from '../../../servicios/acontecimientos.service';
 import { I18nService } from '../../../servicios/i18n.service';
 import { UsuarioService } from '../../../servicios/usuario.service';
-import { dateAIso, esFechaIso, hoyIso, isoADate } from '../../../utiles/fechas';
+import {
+  FECHA_VAU_MAX,
+  FECHA_VAU_MIN,
+  dateAIso,
+  enRangoVau,
+  esFechaIso,
+  hoyIso,
+  isoADate,
+} from '../../../utiles/fechas';
 import { IconoComponent } from '../icono/icono.component';
 
 /** Rango que admite la conversión a fecha VAU. */
-const ANYO_MIN = 1;
-const ANYO_MAX = 2099;
+const ANYO_MIN = isoADate(FECHA_VAU_MIN)!.getUTCFullYear();
+const ANYO_MAX = isoADate(FECHA_VAU_MAX)!.getUTCFullYear();
 
 interface Dia {
   readonly iso: string;
@@ -55,9 +63,12 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
   protected readonly t = this.i18n.t;
   protected readonly anyoMin = ANYO_MIN;
   protected readonly anyoMax = ANYO_MAX;
-  protected readonly fechaMin = '0001-01-01';
-  protected readonly fechaMax = '2099-12-31';
+  protected readonly fechaMin = FECHA_VAU_MIN;
+  protected readonly fechaMax = FECHA_VAU_MAX;
+  protected readonly enRango = enRangoVau;
   protected readonly hoy = hoyIso();
+  /** Solo pasaría con el reloj del equipo mal puesto. */
+  protected readonly hoyFueraDeRango = !enRangoVau(this.hoy);
 
   /** Día con el foco del teclado; también decide qué mes se ve. */
   protected readonly enfocada = signal(hoyIso());
@@ -107,15 +118,16 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
     return semanas;
   });
 
+  /** El límite cae a mitad de mes (21-12-1433): se mira el primer y el último día del mes visible. */
   protected readonly anteriorDeshabilitado = computed(
-    () => this.anyo() <= ANYO_MIN && this.mes() === 0,
+    () => dateAIso(fechaUtc(this.anyo(), this.mes(), 1)) <= FECHA_VAU_MIN,
   );
   protected readonly siguienteDeshabilitado = computed(
-    () => this.anyo() >= ANYO_MAX && this.mes() === 11,
+    () => dateAIso(fechaUtc(this.anyo(), this.mes() + 1, 0)) >= FECHA_VAU_MAX,
   );
 
   ngOnInit(): void {
-    this.enfocada.set(this.seleccionada());
+    this.enfocada.set(alRango(this.seleccionada()));
 
     if (this.usuarios.esRegistrado()) {
       this.acontecimientos.fechas().subscribe({
@@ -153,7 +165,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
   }
 
   protected cambiarMes(meses: number): void {
-    this.moverA(sumarMeses(this.enfocada(), meses));
+    this.moverA(alRango(sumarMeses(this.enfocada(), meses)));
   }
 
   protected irAHoy(): void {
@@ -162,13 +174,16 @@ export class CalendarioComponent implements OnInit, AfterViewInit {
 
   protected cambiarMesDesdeSelector(evento: Event): void {
     const mes = Number((evento.target as HTMLSelectElement).value);
-    this.moverA(conMesYAnyo(this.enfocada(), mes, this.anyo()));
+    this.moverA(alRango(conMesYAnyo(this.enfocada(), mes, this.anyo())));
   }
 
   protected cambiarAnyoDesdeCampo(evento: Event): void {
-    const anyo = Number((evento.target as HTMLInputElement).value);
+    const campo = evento.target as HTMLInputElement;
+    const anyo = Number(campo.value);
     if (Number.isInteger(anyo) && anyo >= ANYO_MIN && anyo <= ANYO_MAX) {
-      this.moverA(conMesYAnyo(this.enfocada(), this.mes(), anyo));
+      this.moverA(alRango(conMesYAnyo(this.enfocada(), this.mes(), anyo)));
+    } else {
+      campo.value = String(this.anyo());
     }
   }
 
@@ -252,8 +267,16 @@ function fechaUtc(anyo: number, mes: number, dia: number): Date {
 }
 
 function enRango(iso: string): boolean {
-  const anyo = isoADate(iso)?.getUTCFullYear() ?? 0;
-  return anyo >= ANYO_MIN && anyo <= ANYO_MAX;
+  return enRangoVau(iso);
+}
+
+/** Lleva al extremo más cercano una fecha fuera del rango (enero de 1433 → 21 de diciembre de 1433). */
+function alRango(iso: string): string {
+  if (enRango(iso)) {
+    return iso;
+  }
+  const fecha = isoADate(iso);
+  return !fecha || dateAIso(fecha) < FECHA_VAU_MIN ? FECHA_VAU_MIN : FECHA_VAU_MAX;
 }
 
 function sumarDiasIso(iso: string, dias: number): string {

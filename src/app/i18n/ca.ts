@@ -179,6 +179,8 @@ export const ca: Diccionario = {
     errorTitulo: 'No s’han pogut obtenir les dades',
     errorApi: 'No hi ha resposta de l’API. Comprova que el servidor estigui engegat.',
     errorPersiste: 'Si el problema continua, si us plau informa-nos.',
+    informar: 'Informar',
+    informeEnviado: "Informe d'error de connexió amb l'API enviat",
     fechaNoEncontrada: 'Data no trobada',
     casaleroEclipelar: 'Eclipelar',
     casaleroEclipelarSol: 'Eclipelar de sol',

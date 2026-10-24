@@ -103,8 +103,14 @@
     border-color var(--transition);
 }
 
-.dia:hover {
+.dia:hover:not(:disabled) {
   background: var(--surface-3);
+}
+
+/* Fuera del rango (antes del 21-12-1433): no se puede elegir. */
+.dia:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .dia:focus-visible {

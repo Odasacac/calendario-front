@@ -69,6 +69,7 @@
                 [attr.aria-selected]="dia.iso === seleccionada()"
                 [attr.aria-current]="dia.iso === hoy ? 'date' : null"
                 [attr.aria-label]="etiquetaDia(dia)"
+                [disabled]="!enRango(dia.iso)"
                 (click)="elegir(dia.iso)"
                 (keydown)="teclaEnDia($event)"
                 (focus)="enfocada.set(dia.iso)"
@@ -83,7 +84,7 @@
   </table>
 
   <div class="pie-calendario">
-    <button type="button" class="btn btn-outline btn-hoy" (click)="irAHoy()">
+    <button type="button" class="btn btn-outline btn-hoy" [disabled]="hoyFueraDeRango" (click)="irAHoy()">
       <app-icono nombre="sol" [tamanyo]="16" />
       {{ t('calendario.hoy') }}
     </button>

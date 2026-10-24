@@ -201,7 +201,12 @@
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
-.dia:hover {
+.dia:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.dia:hover:not(:disabled) {
   z-index: 1;
   transform: translateY(-1px);
   box-shadow: var(--shadow-2);

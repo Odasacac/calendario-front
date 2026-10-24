@@ -14,9 +14,11 @@ import { Acontecimiento } from '../../../interfaces/acontecimiento';
 import { VAUResponse } from '../../../interfaces/vau-response';
 import { DatesService } from '../../../servicios/dates.service';
 import { I18nService } from '../../../servicios/i18n.service';
+import { NotificacionesService } from '../../../servicios/notificaciones.service';
 import { AcontecimientosService } from '../../../servicios/acontecimientos.service';
 import { UsuarioService } from '../../../servicios/usuario.service';
 import {
+  enRangoVau,
   formatearDiaSemana,
   formatearFechaCorta,
   formatearFechaLarga,
@@ -49,6 +51,7 @@ export class DateVAUComponent {
   private readonly acontecimientos = inject(AcontecimientosService);
   private readonly usuarios = inject(UsuarioService);
   private readonly i18n = inject(I18nService);
+  private readonly avisos = inject(NotificacionesService);
 
   protected readonly t = this.i18n.t;
   protected readonly detalles = signal(false);
@@ -188,9 +191,13 @@ export class DateVAUComponent {
     return '';
   });
 
+  /** Las flechas no dejan salir del rango consultable (desde el 21-12-1433). */
+  protected readonly hayDiaAnterior = computed(() => enRangoVau(sumarDias(this.fechaResuelta(), -1) ?? ''));
+  protected readonly hayDiaSiguiente = computed(() => enRangoVau(sumarDias(this.fechaResuelta(), 1) ?? ''));
+
   protected cambiarDia(dias: number): void {
     const nueva = sumarDias(this.fechaResuelta(), dias);
-    if (!nueva) {
+    if (!nueva || !enRangoVau(nueva)) {
       return;
     }
 
@@ -200,6 +207,11 @@ export class DateVAUComponent {
 
   protected reintentar(): void {
     this.recarga.update((valor) => valor + 1);
+  }
+
+  /** Como en el resto de peticiones, de momento solo se confirma con un aviso. */
+  protected informar(): void {
+    this.avisos.exito(this.t('vau.informeEnviado'));
   }
 
   protected alternarDetalles(): void {

@@ -182,6 +182,8 @@ export const es = {
     errorTitulo: 'No se han podido obtener los datos',
     errorApi: 'No hay respuesta de la API. Comprueba que el servidor esté levantado.',
     errorPersiste: 'Si el problema persiste, por favor infórmanos.',
+    informar: 'Informar',
+    informeEnviado: 'Informe de error en conexión con API enviado',
     fechaNoEncontrada: 'Fecha no encontrada',
     casaleroEclipelar: 'Eclipelar',
     casaleroEclipelarSol: 'Eclipelar de sol',

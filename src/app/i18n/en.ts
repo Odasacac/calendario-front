@@ -179,6 +179,8 @@ export const en: Diccionario = {
     errorTitulo: 'Could not load the data',
     errorApi: 'No response from the API. Check that the server is running.',
     errorPersiste: 'If the problem persists, please let us know.',
+    informar: 'Report',
+    informeEnviado: 'API connection error report sent',
     fechaNoEncontrada: 'Date not found',
     casaleroEclipelar: 'Eclipelar',
     casaleroEclipelarSol: 'Solar eclipelar',

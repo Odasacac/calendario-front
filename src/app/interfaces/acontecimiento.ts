@@ -17,7 +17,7 @@ export interface DatosAcontecimiento {
 }
 
 /** Mismo rango que acepta el back (`AcontecimientoDestacadoService`). */
-export const FECHA_ACONTECIMIENTO_MIN = '0001-01-01';
+export const FECHA_ACONTECIMIENTO_MIN = '1433-12-21';
 export const FECHA_ACONTECIMIENTO_MAX = '2099-12-31';
 export const DESCRIPCION_ACONTECIMIENTO_MAX = 1000;
 

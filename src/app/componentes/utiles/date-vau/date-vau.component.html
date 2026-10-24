@@ -10,6 +10,7 @@
       class="btn btn-ghost btn-icon no-print"
       [attr.aria-label]="t('vau.diaAnterior')"
       [attr.title]="t('vau.diaAnterior')"
+      [disabled]="!hayDiaAnterior()"
       (click)="cambiarDia(-1)"
     >
       <app-icono nombre="izquierda" [tamanyo]="22" />
@@ -26,6 +27,7 @@
       class="btn btn-ghost btn-icon no-print"
       [attr.aria-label]="t('vau.diaSiguiente')"
       [attr.title]="t('vau.diaSiguiente')"
+      [disabled]="!hayDiaSiguiente()"
       (click)="cambiarDia(1)"
     >
       <app-icono nombre="derecha" [tamanyo]="22" />
@@ -84,9 +86,14 @@
       <h3>{{ t('vau.errorTitulo') }}</h3>
       <p>{{ t('vau.errorApi') }}</p>
       <p class="subtle">{{ t('vau.errorPersiste') }}</p>
-      <button type="button" class="btn btn-accent" (click)="reintentar()">
-        {{ t('comun.reintentar') }}
-      </button>
+      <div class="acciones-error">
+        <button type="button" class="btn btn-accent" (click)="reintentar()">
+          {{ t('comun.reintentar') }}
+        </button>
+        <button type="button" class="btn btn-outline" (click)="informar()">
+          {{ t('vau.informar') }}
+        </button>
+      </div>
     </div>
   } @else if (noEncontrada()) {
     <div class="aviso-bloque" role="alert">

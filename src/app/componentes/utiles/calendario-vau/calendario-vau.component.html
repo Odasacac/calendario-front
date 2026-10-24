@@ -202,6 +202,7 @@
                     [class.marcado]="conAcontecimiento().has(terra.fecha)"
                     [attr.aria-label]="etiquetaDia(terra)"
                     [attr.aria-current]="terra.fecha === hoy ? 'date' : null"
+                    [disabled]="!enRango(terra.fecha)"
                     (click)="abrirDia.emit(terra.fecha)"
                   >
                     <strong class="nombre">{{ l.semanas[0] }}</strong>
@@ -236,6 +237,7 @@
                         [class.marcado]="conAcontecimiento().has(celda.fecha)"
                         [attr.aria-label]="etiquetaDia(celda)"
                         [attr.aria-current]="celda.fecha === hoy ? 'date' : null"
+                        [disabled]="!enRango(celda.fecha)"
                         (click)="abrirDia.emit(celda.fecha)"
                       >
                         <span class="cabeza">
@@ -278,7 +280,7 @@
                 <td colspan="7">
                   <div class="sin-datos">
                     @for (dia of r.sinPosicion; track dia.fecha) {
-                      <button type="button" class="chip" (click)="abrirDia.emit(dia.fecha)">{{ fechaCivil(dia.fecha) }}</button>
+                      <button type="button" class="chip" [disabled]="!enRango(dia.fecha)" (click)="abrirDia.emit(dia.fecha)">{{ fechaCivil(dia.fecha) }}</button>
                     }
                   </div>
                 </td>
@@ -298,7 +300,7 @@
             <ul class="senyalados">
               @for (dia of senyalados(); track dia.fecha) {
                 <li>
-                  <button type="button" class="senyalado" (click)="abrirDia.emit(dia.fecha)">
+                  <button type="button" class="senyalado" [disabled]="!enRango(dia.fecha)" (click)="abrirDia.emit(dia.fecha)">
                     <span [class]="'marca ' + claseFondo(dia)" aria-hidden="true"></span>
                     <span class="cuando">
                       <strong>{{ fechaCivil(dia.fecha) }}</strong>
